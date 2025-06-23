@@ -1,0 +1,17 @@
+interface PageHeaderProps {
+  title: string;
+  description: string;
+}
+
+export const PageHeader = ({ title, description }: PageHeaderProps) => {
+  return (
+    <div className='border-b border-zinc-800 bg-zinc-950'>
+      <div className='max-w-4xl mx-auto px-6 py-8'>
+        <h1 className='text-3xl md:text-4xl font-bold text-white mb-2'>
+          {title}
+        </h1>
+        <p className='text-gray-50'>{description}</p>
+      </div>
+    </div>
+  );
+};
