@@ -1,4 +1,6 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Asana Junio Frontend Developer preparation (team call + last technical interview)
+
+This is just in a sam way notes for me, and playground for me to practice.
 
 ## Getting Started
 
