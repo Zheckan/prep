@@ -75,7 +75,7 @@ export default function HomeComponent() {
             Learn more →
           </div>
         </div>
-        <div className='bg-zinc-900 shadow-lg hover:shadow-xl transition-shadow duration-300 p-6 border border-zinc-800 cursor-pointer hover:border-zinc-600'>
+        {/* <div className='bg-zinc-900 shadow-lg hover:shadow-xl transition-shadow duration-300 p-6 border border-zinc-800 cursor-pointer hover:border-zinc-600'>
           <h2 className='text-xl font-bold text-zinc-100 mb-3'>
             Algorithmic Practice{' '}
             <span className='text-red-400'>(in progress)</span>
@@ -86,7 +86,7 @@ export default function HomeComponent() {
           <div className='flex items-center text-zinc-500 font-medium text-sm'>
             Learn more →
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   );
