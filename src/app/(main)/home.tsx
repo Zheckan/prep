@@ -10,6 +10,9 @@ export default function HomeComponent() {
         <h1 className='text-2xl md:text-3xl lg:text-4xl font-bold font-sans text-balance'>
           Asana Junior Frontend Developer Preparation
         </h1>
+        <p className='text-sm text-zinc-400 mb-4 leading-relaxed'>
+          (in development, &apos;in progress&apos; parts are not completed)
+        </p>
       </div>
       <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl px-4'>
         <div
@@ -27,7 +30,8 @@ export default function HomeComponent() {
         </div>
         <div className='bg-zinc-900 shadow-lg hover:shadow-xl transition-shadow duration-300 p-6 border border-zinc-800 cursor-pointer hover:border-zinc-600'>
           <h2 className='text-xl font-bold text-zinc-100 mb-3'>
-            JavaScript Fundamentals
+            JavaScript Fundamentals{' '}
+            <span className='text-red-400'>(in progress)</span>
           </h2>
           <p className='text-sm text-zinc-400 mb-4 leading-relaxed'>
             ES6+ syntax, scope, closures, async patterns, DOM APIs
@@ -38,7 +42,7 @@ export default function HomeComponent() {
         </div>
         <div className='bg-zinc-900 shadow-lg hover:shadow-xl transition-shadow duration-300 p-6 border border-zinc-800 cursor-pointer hover:border-zinc-600'>
           <h2 className='text-xl font-bold text-zinc-100 mb-3'>
-            API Integration
+            API Integration <span className='text-red-400'>(in progress)</span>
           </h2>
           <p className='text-sm text-zinc-400 mb-4 leading-relaxed'>
             fetch/axios, REST, GraphQL, error handling, loading states
@@ -49,7 +53,8 @@ export default function HomeComponent() {
         </div>
         <div className='bg-zinc-900 shadow-lg hover:shadow-xl transition-shadow duration-300 p-6 border border-zinc-800 cursor-pointer hover:border-zinc-600'>
           <h2 className='text-xl font-bold text-zinc-100 mb-3'>
-            Framework Basics (React)
+            Framework Basics (React){' '}
+            <span className='text-red-400'>(in progress)</span>
           </h2>
           <p className='text-sm text-zinc-400 mb-4 leading-relaxed'>
             Components, props, state, hooks, Context API, lifecycle
@@ -60,7 +65,8 @@ export default function HomeComponent() {
         </div>
         <div className='bg-zinc-900 shadow-lg hover:shadow-xl transition-shadow duration-300 p-6 border border-zinc-800 cursor-pointer hover:border-zinc-600'>
           <h2 className='text-xl font-bold text-zinc-100 mb-3'>
-            Tooling & Debugging
+            Tooling & Debugging{' '}
+            <span className='text-red-400'>(in progress)</span>
           </h2>
           <p className='text-sm text-zinc-400 mb-4 leading-relaxed'>
             Chrome DevTools, ESLint/Prettier, npm scripts, build tools
@@ -71,7 +77,8 @@ export default function HomeComponent() {
         </div>
         <div className='bg-zinc-900 shadow-lg hover:shadow-xl transition-shadow duration-300 p-6 border border-zinc-800 cursor-pointer hover:border-zinc-600'>
           <h2 className='text-xl font-bold text-zinc-100 mb-3'>
-            Algorithmic Practice
+            Algorithmic Practice{' '}
+            <span className='text-red-400'>(in progress)</span>
           </h2>
           <p className='text-sm text-zinc-400 mb-4 leading-relaxed'>
             Arrays/strings, time/space complexity, LeetCode problems
