@@ -1,5 +1,5 @@
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { oneDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import { coldarkDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
 interface CodeBlockProps {
   comment?: string;
@@ -88,8 +88,8 @@ export const CodeBlock = ({
         display: 'block',
         backgroundColor,
         borderLeft,
-        paddingLeft: isHighlighted || isHighlightedEnd ? '1rem' : '0',
-        marginLeft: isHighlighted || isHighlightedEnd ? '-1rem' : '0',
+        paddingLeft: isHighlighted || isHighlightedEnd ? '0.75rem' : '0',
+        marginLeft: isHighlighted || isHighlightedEnd ? '-0.75rem' : '0',
       },
     };
   };
@@ -103,7 +103,7 @@ export const CodeBlock = ({
       )}
       <SyntaxHighlighter
         language={language}
-        style={oneDark}
+        style={coldarkDark}
         showLineNumbers={showLineNumbers}
         wrapLines={highlightedLines.length > 0}
         lineProps={getLineProps}
