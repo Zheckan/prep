@@ -13,7 +13,7 @@ const sections: Section[] = [
     href: '/html&css',
     title: 'HTML & CSS',
     description:
-      'Semantic HTML, accessibility basics, Flexbox, Grid, responsive design',
+      'Semantic HTML, accessibility basics, Flexbox, Grid, responsive designSemantic HTML, accessibility basics, Flexbox, Grid, responsive design',
     inProgress: false,
   },
   {
@@ -40,12 +40,12 @@ const sections: Section[] = [
     description: 'Chrome DevTools, ESLint/Prettier, npm scripts, build tools',
     inProgress: true,
   },
-  {
-    href: '#',
-    title: 'Algorithmic Practice',
-    description: 'Arrays/strings, time/space complexity, LeetCode problems',
-    inProgress: true,
-  },
+  // {
+  //   href: '#',
+  //   title: 'Algorithmic Practice',
+  //   description: 'Arrays/strings, time/space complexity, LeetCode problems',
+  //   inProgress: true,
+  // },
 ];
 
 export default function HomeComponent() {
@@ -90,17 +90,19 @@ export default function HomeComponent() {
             <div
               key={section.title}
               onClick={() => router.push(section.href)}
-              className={className}
+              className={`${className} flex flex-col`}
             >
-              <h2 className='text-xl font-bold text-zinc-100 mb-3'>
-                {section.title}{' '}
-                {section.inProgress && (
-                  <span className='text-red-400'>(in progress)</span>
-                )}
-              </h2>
-              <p className='text-sm text-zinc-400 mb-4 leading-relaxed'>
-                {section.description}
-              </p>
+              <div className='flex-grow'>
+                <h2 className='text-xl font-bold text-zinc-100 mb-3'>
+                  {section.title}{' '}
+                  {section.inProgress && (
+                    <span className='text-red-400'>(in progress)</span>
+                  )}
+                </h2>
+                <p className='text-sm text-zinc-400 mb-4 leading-relaxed'>
+                  {section.description}
+                </p>
+              </div>
               <div className='flex items-center text-zinc-500 font-medium text-sm'>
                 Learn more →
               </div>
