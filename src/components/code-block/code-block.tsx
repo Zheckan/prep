@@ -1,6 +1,12 @@
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { coldarkDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
+// Move regex patterns to top level for better performance
+const COMMENT_REGEX = /^\/\*\s*\w+\s*\*\/\s*\n?/;
+const LEADING_SPACES_REGEX = /^\s+/;
+const TRAILING_SPACES_REGEX = /\s+$/;
+const INDENTATION_REGEX = /^(\s*)/;
+
 interface CodeBlockProps {
   comment?: string;
   children?: React.ReactNode;
@@ -23,45 +29,50 @@ export const CodeBlock = ({
   let codeToHighlight = code || (typeof children === 'string' ? children : '');
 
   codeToHighlight = codeToHighlight
-    .replace(/^\/\*\s*\w+\s*\*\/\s*\n?/, '')
-    .replace(/^\s+/, '')
-    .replace(/\s+$/, '');
+    .replace(COMMENT_REGEX, '')
+    .replace(LEADING_SPACES_REGEX, '')
+    .replace(TRAILING_SPACES_REGEX, '');
 
   const lines = codeToHighlight.split('\n');
-  const nonEmptyLines = lines.filter(line => line.trim().length > 0);
+  const nonEmptyLines = lines.filter((line) => line.trim().length > 0);
 
   if (nonEmptyLines.length > 0) {
     const minIndent = Math.min(
-      ...nonEmptyLines.map(line => {
-        const match = line.match(/^(\s*)/);
+      ...nonEmptyLines.map((line) => {
+        const match = line.match(INDENTATION_REGEX);
         return match ? match[1].length : 0;
       })
     );
 
     codeToHighlight = lines
-      .map(line => line.slice(minIndent))
+      .map((line) => line.slice(minIndent))
       .join('\n')
       .trim();
   }
 
   const parseHighlightLines = (highlightStr?: string): number[] => {
-    if (!highlightStr) return [];
+    if (!highlightStr) {
+      return [];
+    }
 
-    const lines: number[] = [];
+    const highlightedLineNumbers: number[] = [];
     const parts = highlightStr.split(',');
 
-    parts.forEach(part => {
+    // Use for...of instead of forEach for better performance
+    for (const part of parts) {
       if (part.includes('-')) {
-        const [start, end] = part.split('-').map(n => parseInt(n.trim()));
+        const [start, end] = part
+          .split('-')
+          .map((n) => Number.parseInt(n.trim(), 10)); // Add radix parameter
         for (let i = start; i <= end; i++) {
-          lines.push(i);
+          highlightedLineNumbers.push(i);
         }
       } else {
-        lines.push(parseInt(part.trim()));
+        highlightedLineNumbers.push(Number.parseInt(part.trim(), 10)); // Add radix parameter
       }
-    });
+    }
 
-    return lines;
+    return highlightedLineNumbers;
   };
 
   const highlightedLines = parseHighlightLines(highlightLines);
@@ -95,18 +106,18 @@ export const CodeBlock = ({
   };
 
   return (
-    <div className='bg-zinc-900 border border-zinc-700 rounded-lg overflow-hidden mb-4'>
+    <div className='mb-4 overflow-hidden rounded-lg border border-zinc-700 bg-zinc-900'>
       {comment && (
-        <div className='bg-zinc-800 px-4 py-2 text-sm text-gray-400 border-b border-zinc-700'>
+        <div className='border-zinc-700 border-b bg-zinc-800 px-4 py-2 text-gray-400 text-sm'>
           {`/* ${comment} */`}
         </div>
       )}
       <SyntaxHighlighter
-        language={language}
-        style={coldarkDark}
-        showLineNumbers={showLineNumbers}
-        wrapLines={highlightedLines.length > 0}
-        lineProps={getLineProps}
+        codeTagProps={{
+          style: {
+            fontFamily: `ui-monospace, SFMono-Regular, 'SF Mono', Consolas, 'Liberation Mono', Menlo, monospace`,
+          },
+        }}
         customStyle={{
           margin: 0,
           padding: '1rem',
@@ -114,12 +125,11 @@ export const CodeBlock = ({
           fontSize: '0.875rem',
           lineHeight: '1.5',
         }}
-        codeTagProps={{
-          style: {
-            fontFamily:
-              'ui-monospace, SFMono-Regular, "SF Mono", Consolas, "Liberation Mono", Menlo, monospace',
-          },
-        }}
+        language={language}
+        lineProps={getLineProps}
+        showLineNumbers={showLineNumbers}
+        style={coldarkDark}
+        wrapLines={highlightedLines.length > 0}
       >
         {codeToHighlight}
       </SyntaxHighlighter>

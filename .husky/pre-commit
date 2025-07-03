@@ -1,1 +1,7 @@
-npx lint-staged
+#!/bin/sh
+
+# Format files and fix linting issues
+npx ultracite format
+
+# Add any formatting changes back to the staging area
+git add .

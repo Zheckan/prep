@@ -1,3 +1,4 @@
 {
-  "cSpell.words": ["HTMLCSS"]
+  "cSpell.words": ["HTMLCSS", "ultracite"],
+  "css.lint.unknownAtRules": "ignore"
 }

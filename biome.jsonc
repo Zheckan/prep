@@ -1,0 +1,20 @@
+{
+  "$schema": "https://biomejs.dev/schemas/2.0.6/schema.json",
+  "extends": ["ultracite"],
+  "linter": {
+    "rules": {
+      "nursery": {
+        "noUnknownAtRule": "off"
+      },
+      "style": {
+        "noExportedImports": "off"
+      }
+    }
+  },
+  "javascript": {
+    "formatter": {
+      "quoteStyle": "single",
+      "jsxQuoteStyle": "single"
+    }
+  }
+}
