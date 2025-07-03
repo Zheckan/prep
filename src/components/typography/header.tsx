@@ -6,7 +6,7 @@ interface HeaderProps {
 export const Header = ({ children, className = '' }: HeaderProps) => {
   return (
     <h3
-      className={`text-xl font-bold mb-3 underline decoration-2 underline-offset-4 ${className}`}
+      className={`mb-3 font-bold text-xl underline decoration-2 underline-offset-4 ${className}`}
     >
       {children}
     </h3>

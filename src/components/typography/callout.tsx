@@ -6,7 +6,7 @@ interface CalloutProps {
 export const Callout = ({ children, className = '' }: CalloutProps) => {
   return (
     <p
-      className={`mb-3 bg-zinc-800/50 p-3 rounded border-l-4 border-white ${className}`}
+      className={`mb-3 rounded border-white border-l-4 bg-zinc-800/50 p-3 ${className}`}
     >
       {children}
     </p>

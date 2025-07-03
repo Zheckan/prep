@@ -13,7 +13,7 @@ export const CodeSpan = ({
 
   return (
     <code
-      className={`bg-zinc-800 px-2 py-1 rounded font-mono ${sizeClass} ${className}`}
+      className={`rounded bg-zinc-800 px-2 py-1 font-mono ${sizeClass} ${className}`}
     >
       {children}
     </code>

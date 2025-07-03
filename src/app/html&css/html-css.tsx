@@ -1,31 +1,31 @@
 'use client';
 
-import {
-  PageHeader,
-  SectionCard,
-  CodeBlock,
-  Header,
-  Subheader,
-  CodeSpan,
-  Callout,
-  Text,
-} from '@/components';
 import dedent from 'dedent';
 import { useRouter } from 'next/navigation';
+import {
+  Callout,
+  CodeBlock,
+  CodeSpan,
+  Header,
+  PageHeader,
+  SectionCard,
+  Subheader,
+  Text,
+} from '@/components';
 
 export default function HTMLCSSComponent() {
   const router = useRouter();
   return (
     <div className='min-h-screen bg-black text-white'>
       <PageHeader
-        title='HTML & CSS Notes'
         description='Semantic HTML, accessibility basics, Flexbox, Grid, responsive design'
+        title='HTML & CSS Notes'
       />
 
       {/* Spacer to account for fixed header */}
       <div className='h-[140px]' />
 
-      <div className='max-w-4xl mx-auto px-6 py-8'>
+      <div className='mx-auto max-w-4xl px-6 py-8'>
         <div className='prose prose-invert prose-zinc max-w-none'>
           <SectionCard title='Semantic HTML & Accessibility'>
             <div className='space-y-6'>
@@ -54,7 +54,7 @@ export default function HTMLCSSComponent() {
 
               <div>
                 <Subheader>Key Semantic Elements:</Subheader>
-                <ul className='list-disc list-inside space-y-2 text-gray-50'>
+                <ul className='list-inside list-disc space-y-2 text-gray-50'>
                   <li>
                     <CodeSpan>&lt;header&gt;</CodeSpan> - Site/page header with
                     navigation
@@ -86,7 +86,7 @@ export default function HTMLCSSComponent() {
               </div>
 
               {(() => {
-                const semanticHtmlCode = dedent /* HTML */ `<!DOCTYPE html>
+                const semanticHtmlCode = dedent /* HTML */`<!DOCTYPE html>
                   <html lang="en">
                     <body>
                       <header>
@@ -117,12 +117,12 @@ export default function HTMLCSSComponent() {
 
                 return (
                   <CodeBlock
+                    code={semanticHtmlCode}
                     comment='Semantic HTML Page Structure'
-                    language='html'
-                    showLineNumbers={true}
                     highlightLines='4,5,10,13,15,20,24'
                     highlightLinesEnd='10,11,18,19,22,23,26'
-                    code={semanticHtmlCode}
+                    language='html'
+                    showLineNumbers={true}
                   />
                 );
               })()}
@@ -143,7 +143,7 @@ export default function HTMLCSSComponent() {
                     describe. For example, a button with an icon and no text
                     would be difficult to understand for a screen reader.
                   </Text>
-                  <ul className='list-disc list-inside space-y-1 text-gray-50 ml-4'>
+                  <ul className='ml-4 list-inside list-disc space-y-1 text-gray-50'>
                     <li>
                       <CodeSpan>aria-label</CodeSpan> - Accessible name for
                       elements
@@ -164,7 +164,7 @@ export default function HTMLCSSComponent() {
                 </div>
 
                 {(() => {
-                  const ariaExamplesCode = dedent /* HTML */ `<!-- Button with accessible label -->
+                  const ariaExamplesCode = dedent /* HTML */`<!-- Button with accessible label -->
                     <!-- Does not rely on a text of the button, but have a helpful label that explains what the button does -->
                     <button aria-label="Close dialog">×</button>
 
@@ -181,10 +181,10 @@ export default function HTMLCSSComponent() {
 
                   return (
                     <CodeBlock
+                      code={ariaExamplesCode}
                       comment='ARIA Examples'
                       language='html'
                       showLineNumbers={true}
-                      code={ariaExamplesCode}
                     />
                   );
                 })()}
@@ -194,7 +194,7 @@ export default function HTMLCSSComponent() {
                   <Text variant='muted'>
                     Ensures users can navigate your site using only a keyboard.
                   </Text>
-                  <ul className='list-disc list-inside space-y-1 text-gray-50 ml-4'>
+                  <ul className='ml-4 list-inside list-disc space-y-1 text-gray-50'>
                     <li>
                       Use <CodeSpan>tabindex=&quot;0&quot;</CodeSpan> to make
                       elements focusable
@@ -218,7 +218,7 @@ export default function HTMLCSSComponent() {
                   </ul>
                   <Callout className='mt-4'>
                     <strong>Important:</strong>{' '}
-                    <strong className='text-red-400 font-semibold'>
+                    <strong className='font-semibold text-red-400'>
                       Do not use custom tab sequences!
                     </strong>{' '}
                     The browser&apos;s natural tab order follows DOM structure,
@@ -232,7 +232,7 @@ export default function HTMLCSSComponent() {
                 </div>
 
                 {(() => {
-                  const tabOrderCode = dedent /* HTML */ `<!-- Custom focusable element -->
+                  const tabOrderCode = dedent /* HTML */`<!-- Custom focusable element -->
                     <div tabindex="0" role="button">Custom Button</div>
 
                     <!-- Skip to main content link -->
@@ -254,10 +254,10 @@ export default function HTMLCSSComponent() {
 
                   return (
                     <CodeBlock
+                      code={tabOrderCode}
                       comment='Tab Order Examples'
                       language='html'
                       showLineNumbers={true}
-                      code={tabOrderCode}
                     />
                   );
                 })()}
@@ -272,7 +272,7 @@ export default function HTMLCSSComponent() {
                     <CodeSpan>alt=&quot;&quot;</CodeSpan> so screen readers skip
                     them.
                   </Text>
-                  <ul className='list-disc list-inside space-y-1 text-gray-50 ml-4'>
+                  <ul className='ml-4 list-inside list-disc space-y-1 text-gray-50'>
                     <li>
                       Descriptive:{' '}
                       <CodeSpan size='small'>
@@ -294,7 +294,7 @@ export default function HTMLCSSComponent() {
                   </ul>
 
                   {(() => {
-                    const altTextCode = dedent /* HTML */ `<!-- Descriptive alt text -->
+                    const altTextCode = dedent /* HTML */`<!-- Descriptive alt text -->
                       <img
                         src="sales-chart.png"
                         alt="Sales increased 40% from Q1 to Q2 2024"
@@ -330,10 +330,10 @@ export default function HTMLCSSComponent() {
                     return (
                       <div className='mt-4'>
                         <CodeBlock
+                          code={altTextCode}
                           comment='Alt Text Examples'
                           language='html'
                           showLineNumbers={true}
-                          code={altTextCode}
                         />
                       </div>
                     );
@@ -362,7 +362,7 @@ export default function HTMLCSSComponent() {
 
               <div>
                 <Subheader>Key Concepts:</Subheader>
-                <ul className='list-disc list-inside space-y-2 text-gray-50'>
+                <ul className='list-inside list-disc space-y-2 text-gray-50'>
                   <li>
                     <strong>Flex Container</strong> - The parent element with{' '}
                     <CodeSpan>display: flex</CodeSpan>
@@ -398,7 +398,7 @@ export default function HTMLCSSComponent() {
               </Callout>
 
               {(() => {
-                const flexBasicsCode = dedent /* CSS */ `/* Basic Flexbox Setup */
+                const flexBasicsCode = dedent /* CSS */`/* Basic Flexbox Setup */
                   .container {
                     display: flex;
                     /* Creates a flex container - all direct children become flex items */
@@ -413,10 +413,10 @@ export default function HTMLCSSComponent() {
                 return (
                   <div className='mb-4'>
                     <CodeBlock
+                      code={flexBasicsCode}
                       comment='Flexbox Basics'
                       language='css'
                       showLineNumbers={true}
-                      code={flexBasicsCode}
                     />
                   </div>
                 );
@@ -430,7 +430,7 @@ export default function HTMLCSSComponent() {
                     <strong>Main Axis Alignment</strong> -{' '}
                     <CodeSpan>justify-content</CodeSpan>
                   </Text>
-                  <ul className='list-disc list-inside space-y-1 text-gray-50 ml-4'>
+                  <ul className='ml-4 list-inside list-disc space-y-1 text-gray-50'>
                     <li>
                       <CodeSpan>flex-start</CodeSpan> - Pack items at the start
                     </li>
@@ -459,7 +459,7 @@ export default function HTMLCSSComponent() {
                     <strong>Cross Axis Alignment</strong> -{' '}
                     <CodeSpan>align-items</CodeSpan>
                   </Text>
-                  <ul className='list-disc list-inside space-y-1 text-gray-50 ml-4'>
+                  <ul className='ml-4 list-inside list-disc space-y-1 text-gray-50'>
                     <li>
                       <CodeSpan>stretch</CodeSpan> - Stretch to fill container
                       (default)
@@ -485,11 +485,11 @@ export default function HTMLCSSComponent() {
                     <strong>Multiple Lines Alignment</strong> -{' '}
                     <CodeSpan>align-content</CodeSpan>
                   </Text>
-                  <p className='text-sm text-gray-400 mb-4'>
+                  <p className='mb-4 text-gray-400 text-sm'>
                     Used when you have multiple rows/columns (when items wrap).
                     Controls spacing between lines, not individual items.
                   </p>
-                  <ul className='list-disc list-inside space-y-1 text-gray-50 ml-4'>
+                  <ul className='ml-4 list-inside list-disc space-y-1 text-gray-50'>
                     <li>
                       <CodeSpan>stretch</CodeSpan> - Stretch lines to fill
                       container (default)
@@ -521,11 +521,11 @@ export default function HTMLCSSComponent() {
                     <strong>Individual Item (Child) Alignment</strong> -{' '}
                     <CodeSpan>align-self</CodeSpan>
                   </Text>
-                  <p className='text-sm text-gray-400 mb-4'>
+                  <p className='mb-4 text-gray-400 text-sm'>
                     Overrides <CodeSpan>align-items</CodeSpan> for a single item
                     (child).
                   </p>
-                  <ul className='list-disc list-inside space-y-1 text-gray-50 ml-4'>
+                  <ul className='ml-4 list-inside list-disc space-y-1 text-gray-50'>
                     <li>
                       <CodeSpan>auto</CodeSpan> - Use parent&apos;s align-items
                       value (default)
@@ -550,7 +550,7 @@ export default function HTMLCSSComponent() {
                 </div>
 
                 {(() => {
-                  const alignmentCode = dedent /* CSS */ `/* Centering content - Most common use case */
+                  const alignmentCode = dedent /* CSS */`/* Centering content - Most common use case */
                     .center-everything {
                       display: flex;
                       justify-content: center;  /* Center horizontally */
@@ -575,11 +575,11 @@ export default function HTMLCSSComponent() {
 
                   return (
                     <CodeBlock
+                      code={alignmentCode}
                       comment='Common Alignment Patterns'
+                      highlightLines='4,5,12,13,20'
                       language='css'
                       showLineNumbers={true}
-                      highlightLines='4,5,12,13,20'
-                      code={alignmentCode}
                     />
                   );
                 })()}
@@ -588,7 +588,7 @@ export default function HTMLCSSComponent() {
               <div>
                 <Subheader>Flex Item Properties:</Subheader>
 
-                <ul className='list-disc list-inside space-y-2 text-gray-50'>
+                <ul className='list-inside list-disc space-y-2 text-gray-50'>
                   <li>
                     <CodeSpan>flex-grow</CodeSpan> - How much an item should
                     grow (0 = don&apos;t grow, 1 = grow equally)
@@ -612,7 +612,7 @@ export default function HTMLCSSComponent() {
                 </ul>
 
                 {(() => {
-                  const flexItemsCode = dedent /* CSS */ `/* Flexible sidebar layout */
+                  const flexItemsCode = dedent /* CSS */`/* Flexible sidebar layout */
                     .layout {
                       display: flex;
                       height: 100vh;
@@ -650,11 +650,11 @@ export default function HTMLCSSComponent() {
                   return (
                     <div className='mt-4'>
                       <CodeBlock
+                        code={flexItemsCode}
                         comment='Flex Item Control'
+                        highlightLines='8,13,24,28,33'
                         language='css'
                         showLineNumbers={true}
-                        highlightLines='8,13,24,28,33'
-                        code={flexItemsCode}
                       />
                     </div>
                   );
@@ -665,7 +665,7 @@ export default function HTMLCSSComponent() {
                 <Subheader>Practical Examples:</Subheader>
 
                 {(() => {
-                  const practicalCode = dedent /* HTML */ `<!-- Complete responsive card layout -->
+                  const practicalCode = dedent /* HTML */`<!-- Complete responsive card layout -->
                     <div class="card-grid">
                       <div class="card">Card 1</div>
                       <div class="card">Card 2</div>
@@ -728,10 +728,10 @@ export default function HTMLCSSComponent() {
 
                   return (
                     <CodeBlock
+                      code={practicalCode}
                       comment='Real-World Examples'
                       language='html'
                       showLineNumbers={true}
-                      code={practicalCode}
                     />
                   );
                 })()}
@@ -739,7 +739,7 @@ export default function HTMLCSSComponent() {
                 <Callout className='mt-4'>
                   <strong>Pro Tips:</strong>
                 </Callout>
-                <ul className='list-disc list-inside mt-2 space-y-1'>
+                <ul className='mt-2 list-inside list-disc space-y-1'>
                   <li>
                     Use <CodeSpan>gap</CodeSpan> property instead of margins for
                     spacing between flex items
@@ -776,19 +776,20 @@ export default function HTMLCSSComponent() {
                   <strong>Perfect for:</strong> Page layouts, card grids,
                   dashboards, magazine-style layouts, and any design where you
                   need precise control over both rows and columns. (see{' '}
-                  <span
-                    className='cursor-pointer text-yellow-500 hover:text-yellow-400'
+                  <button
+                    className='cursor-pointer text-yellow-500 underline hover:text-yellow-400'
                     onClick={() => router.push('/')}
+                    type='button'
                   >
                     main page
-                  </span>{' '}
+                  </button>{' '}
                   as an example of grid layout)
                 </Callout>
               </div>
 
               <div>
                 <Subheader>Key Concepts:</Subheader>
-                <ul className='list-disc list-inside space-y-2 text-gray-50'>
+                <ul className='list-inside list-disc space-y-2 text-gray-50'>
                   <li>
                     <strong>Grid Container</strong> - The parent element with{' '}
                     <CodeSpan>display: grid</CodeSpan>
@@ -817,7 +818,7 @@ export default function HTMLCSSComponent() {
               </div>
 
               {(() => {
-                const gridBasicsCode = dedent /* CSS */ `/* Basic Grid Setup */
+                const gridBasicsCode = dedent /* CSS */`/* Basic Grid Setup */
                   .container {
                     display: grid;
                     /* Creates a grid container - all direct children become grid items */
@@ -834,10 +835,10 @@ export default function HTMLCSSComponent() {
 
                 return (
                   <CodeBlock
+                    code={gridBasicsCode}
                     comment='Grid Basics'
                     language='css'
                     showLineNumbers={true}
-                    code={gridBasicsCode}
                   />
                 );
               })()}
@@ -850,7 +851,7 @@ export default function HTMLCSSComponent() {
                     <strong>Fractional Units (fr)</strong> - Represents a
                     fraction of available space
                   </Text>
-                  <ul className='list-disc list-inside space-y-1 text-gray-50 ml-4'>
+                  <ul className='ml-4 list-inside list-disc space-y-1 text-gray-50'>
                     <li>
                       <CodeSpan>1fr</CodeSpan> - Takes 1 fraction of available
                       space
@@ -871,7 +872,7 @@ export default function HTMLCSSComponent() {
                     <strong>Repeat Function</strong> - Simplifies repetitive
                     patterns
                   </Text>
-                  <ul className='list-disc list-inside space-y-1 text-gray-50 ml-4'>
+                  <ul className='ml-4 list-inside list-disc space-y-1 text-gray-50'>
                     <li>
                       <CodeSpan>repeat(3, 1fr)</CodeSpan> - 3 equal columns
                     </li>
@@ -891,7 +892,7 @@ export default function HTMLCSSComponent() {
                     <strong>Sizing Functions</strong> - Control minimum and
                     maximum sizes
                   </Text>
-                  <ul className='list-disc list-inside space-y-1 text-gray-50 ml-4'>
+                  <ul className='ml-4 list-inside list-disc space-y-1 text-gray-50'>
                     <li>
                       <CodeSpan>minmax(100px, 1fr)</CodeSpan> - Minimum 100px,
                       maximum flexible
@@ -910,7 +911,7 @@ export default function HTMLCSSComponent() {
                 </div>
 
                 {(() => {
-                  const gridSizingCode = dedent /* CSS */ `/* Responsive card grid */
+                  const gridSizingCode = dedent /* CSS */`/* Responsive card grid */
                     .card-grid {
                       display: grid;
                       grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -935,11 +936,11 @@ export default function HTMLCSSComponent() {
 
                   return (
                     <CodeBlock
+                      code={gridSizingCode}
                       comment='Grid Sizing Examples'
+                      highlightLines='4,12,16'
                       language='css'
                       showLineNumbers={true}
-                      highlightLines='4,12,16'
-                      code={gridSizingCode}
                     />
                   );
                 })()}
@@ -947,11 +948,11 @@ export default function HTMLCSSComponent() {
 
               <div>
                 <Subheader>Grid Item Placement:</Subheader>
-                <Text variant='muted' className='text-gray-200'>
+                <Text className='text-gray-200' variant='muted'>
                   In other words, select specific grid items and do what you
                   want with them.
                 </Text>
-                <ul className='list-disc list-inside space-y-2 text-gray-50'>
+                <ul className='list-inside list-disc space-y-2 text-gray-50'>
                   <li>
                     <CodeSpan>grid-column</CodeSpan> - Shorthand for
                     grid-column-start/end
@@ -970,7 +971,7 @@ export default function HTMLCSSComponent() {
                 </ul>
 
                 {(() => {
-                  const gridPlacementCode = dedent /* CSS */ `/* Grid item placement */
+                  const gridPlacementCode = dedent /* CSS */`/* Grid item placement */
                     .grid-container {
                       display: grid;
                       grid-template-columns: repeat(4, 1fr);
@@ -1007,11 +1008,11 @@ export default function HTMLCSSComponent() {
                   return (
                     <div className='mt-4'>
                       <CodeBlock
+                        code={gridPlacementCode}
                         comment='Grid Item Placement'
+                        highlightLines='10,15,16,20,21,25,26,31,32'
                         language='css'
                         showLineNumbers={true}
-                        highlightLines='10,15,16,20,21,25,26,31,32'
-                        code={gridPlacementCode}
                       />
                     </div>
                   );
@@ -1026,7 +1027,7 @@ export default function HTMLCSSComponent() {
                 </Text>
 
                 {(() => {
-                  const namedAreasCode = dedent /* CSS */ `/* Define layout with named areas */
+                  const namedAreasCode = dedent /* CSS */`/* Define layout with named areas */
                     .page-layout {
                       display: grid;
                       grid-template-columns: 200px 1fr 200px;
@@ -1061,11 +1062,11 @@ export default function HTMLCSSComponent() {
 
                   return (
                     <CodeBlock
+                      code={namedAreasCode}
                       comment='Named Grid Areas'
+                      highlightLines='6,7,8,9,15,16,17,18,19,23,24,25,26,27,28,29,30'
                       language='css'
                       showLineNumbers={true}
-                      highlightLines='6,7,8,9,15,16,17,18,19,23,24,25,26,27,28,29,30'
-                      code={namedAreasCode}
                     />
                   );
                 })()}
@@ -1079,7 +1080,7 @@ export default function HTMLCSSComponent() {
                     <strong>Item Alignment</strong> - Controls individual grid
                     items within their cells
                   </Text>
-                  <ul className='list-disc list-inside space-y-1 text-gray-50 ml-4'>
+                  <ul className='ml-4 list-inside list-disc space-y-1 text-gray-50'>
                     <li>
                       <CodeSpan>justify-items</CodeSpan> - Align items
                       horizontally (start, end, center, stretch)
@@ -1090,7 +1091,6 @@ export default function HTMLCSSComponent() {
                     </li>
                     <li>
                       <CodeSpan>place-items</CodeSpan> - Shorthand for both
-                      (align-items justify-items)
                     </li>
                   </ul>
                 </div>
@@ -1100,7 +1100,7 @@ export default function HTMLCSSComponent() {
                     <strong>Content Alignment</strong> - Controls the entire
                     grid within the container
                   </Text>
-                  <ul className='list-disc list-inside space-y-1 text-gray-50 ml-4'>
+                  <ul className='ml-4 list-inside list-disc space-y-1 text-gray-50'>
                     <li>
                       <CodeSpan>justify-content</CodeSpan> - Align grid
                       horizontally
@@ -1119,7 +1119,7 @@ export default function HTMLCSSComponent() {
                     <strong>Individual Item Override</strong> - Override
                     alignment for specific items
                   </Text>
-                  <ul className='list-disc list-inside space-y-1 text-gray-50 ml-4'>
+                  <ul className='ml-4 list-inside list-disc space-y-1 text-gray-50'>
                     <li>
                       <CodeSpan>justify-self</CodeSpan> - Align single item
                       horizontally
@@ -1135,7 +1135,7 @@ export default function HTMLCSSComponent() {
                 </div>
 
                 {(() => {
-                  const gridAlignmentCode = dedent /* CSS */ `/* Grid alignment examples */
+                  const gridAlignmentCode = dedent /* CSS */`/* Grid alignment examples */
                     .center-items {
                       display: grid;
                       grid-template-columns: repeat(3, 100px);
@@ -1159,10 +1159,10 @@ export default function HTMLCSSComponent() {
 
                   return (
                     <CodeBlock
+                      code={gridAlignmentCode}
                       comment='Grid Alignment'
                       language='css'
                       showLineNumbers={true}
-                      code={gridAlignmentCode}
                     />
                   );
                 })()}
@@ -1172,7 +1172,7 @@ export default function HTMLCSSComponent() {
                 <Subheader>Practical Examples:</Subheader>
 
                 {(() => {
-                  const practicalGridCode = dedent /* HTML */ `<!-- Complete responsive photo gallery -->
+                  const practicalGridCode = dedent /* HTML */`<!-- Complete responsive photo gallery -->
                     <div class="photo-gallery">
                       <div class="photo large">Photo 1</div>
                       <div class="photo">Photo 2</div>
@@ -1253,10 +1253,10 @@ export default function HTMLCSSComponent() {
 
                   return (
                     <CodeBlock
+                      code={practicalGridCode}
                       comment='Real-World Grid Examples'
                       language='html'
                       showLineNumbers={true}
-                      code={practicalGridCode}
                     />
                   );
                 })()}
@@ -1264,7 +1264,7 @@ export default function HTMLCSSComponent() {
                 <Callout className='mt-4'>
                   <strong>Pro Tips:</strong>
                 </Callout>
-                <ul className='list-disc list-inside mt-2 space-y-1'>
+                <ul className='mt-2 list-inside list-disc space-y-1'>
                   <li>
                     Use <CodeSpan>auto-fit</CodeSpan> for responsive grids that
                     collapse empty columns
@@ -1311,7 +1311,7 @@ export default function HTMLCSSComponent() {
 
               <div>
                 <Subheader>Key Concepts:</Subheader>
-                <ul className='list-disc list-inside space-y-2 text-gray-50'>
+                <ul className='list-inside list-disc space-y-2 text-gray-50'>
                   <li>
                     <strong>Mobile-First</strong> - Start with mobile design,
                     add features for larger screens
@@ -1340,7 +1340,7 @@ export default function HTMLCSSComponent() {
               </div>
 
               {(() => {
-                const mobileFirstCode = dedent /* CSS */ `/* Mobile-First Approach */
+                const mobileFirstCode = dedent /* CSS */`/* Mobile-First Approach */
                   /* Base styles for mobile (no media query needed) */
                   .container {
                     padding: 1rem;
@@ -1376,11 +1376,11 @@ export default function HTMLCSSComponent() {
 
                 return (
                   <CodeBlock
+                    code={mobileFirstCode}
                     comment='Mobile-First CSS Structure'
+                    highlightLines='15,29'
                     language='css'
                     showLineNumbers={true}
-                    highlightLines='15,29'
-                    code={mobileFirstCode}
                   />
                 );
               })()}
@@ -1393,7 +1393,7 @@ export default function HTMLCSSComponent() {
                     <strong>Standard Breakpoints</strong> - Based on common
                     device sizes (width)
                   </Text>
-                  <ul className='list-disc list-inside space-y-1 text-gray-50 ml-4'>
+                  <ul className='ml-4 list-inside list-disc space-y-1 text-gray-50'>
                     <li>
                       <CodeSpan>320px+</CodeSpan> - Small phones (base mobile)
                     </li>
@@ -1414,14 +1414,14 @@ export default function HTMLCSSComponent() {
                     </li>
                   </ul>
                 </div>
-                <Text variant='muted' className='text-gray-200'>
+                <Text className='text-gray-200' variant='muted'>
                   Bigger or smaller screen sizes are not considered standard.
                   After all, there are a lot of devices out there. And 99% of
                   them are in this range. We can&apos;t make it work for all of
                   them. So, we need to use breakpoints.
                 </Text>
                 {(() => {
-                  const breakpointsCode = dedent /* CSS */ `/* Responsive Breakpoints System */
+                  const breakpointsCode = dedent /* CSS */`/* Responsive Breakpoints System */
                     /* Mobile first - no media query */
                     .card-grid {
                       display: grid;
@@ -1465,11 +1465,11 @@ export default function HTMLCSSComponent() {
 
                   return (
                     <CodeBlock
+                      code={breakpointsCode}
                       comment='Responsive Breakpoints'
+                      highlightLines='5,11,19,27,36'
                       language='css'
                       showLineNumbers={true}
-                      highlightLines='5,11,19,27,36'
-                      code={breakpointsCode}
                     />
                   );
                 })()}
@@ -1482,7 +1482,7 @@ export default function HTMLCSSComponent() {
                   <Text variant='muted'>
                     <strong>Relative Units</strong> - Scale with context
                   </Text>
-                  <ul className='list-disc list-inside space-y-1 text-gray-50 ml-4'>
+                  <ul className='ml-4 list-inside list-disc space-y-1 text-gray-50'>
                     <li>
                       <CodeSpan>%</CodeSpan> - Percentage of parent element
                     </li>
@@ -1506,7 +1506,7 @@ export default function HTMLCSSComponent() {
                     <strong>Viewport Units</strong> - Based on browser window
                     size
                   </Text>
-                  <ul className='list-disc list-inside space-y-1 text-gray-50 ml-4'>
+                  <ul className='ml-4 list-inside list-disc space-y-1 text-gray-50'>
                     <li>
                       <CodeSpan>vw</CodeSpan> - 1% of viewport width
                     </li>
@@ -1529,7 +1529,7 @@ export default function HTMLCSSComponent() {
                 </div>
 
                 {(() => {
-                  const flexibleUnitsCode = dedent /* CSS */ `/* Flexible Typography */
+                  const flexibleUnitsCode = dedent /* CSS */`/* Flexible Typography */
                   html {
                     font-size: 16px;  /* Base size for rem calculations */
                   }
@@ -1571,10 +1571,10 @@ export default function HTMLCSSComponent() {
 
                   return (
                     <CodeBlock
+                      code={flexibleUnitsCode}
                       comment='Flexible Units Examples'
                       language='css'
                       showLineNumbers={true}
-                      code={flexibleUnitsCode}
                     />
                   );
                 })()}
@@ -1588,7 +1588,7 @@ export default function HTMLCSSComponent() {
                 </Text>
 
                 {(() => {
-                  const responsiveMediaCode = dedent /* HTML */ `<!-- Basic responsive image -->
+                  const responsiveMediaCode = dedent /* HTML */`<!-- Basic responsive image -->
                     <img
                       src="image.jpg"
                       alt="Description"
@@ -1652,11 +1652,11 @@ export default function HTMLCSSComponent() {
 
                   return (
                     <CodeBlock
+                      code={responsiveMediaCode}
                       comment='Responsive Images & Media'
+                      highlightLines='5,27,28,29,30,31,34,35,36,37,38,39,41,42,43,44,45'
                       language='html'
                       showLineNumbers={true}
-                      highlightLines='5,27,28,29,30,31,34,35,36,37,38,39,41,42,43,44,45'
-                      code={responsiveMediaCode}
                     />
                   );
                 })()}
@@ -1670,7 +1670,7 @@ export default function HTMLCSSComponent() {
                     <strong>Container Queries</strong> - Style based on
                     container size, not viewport
                   </Text>
-                  <ul className='list-disc list-inside space-y-1 text-gray-50 ml-4'>
+                  <ul className='ml-4 list-inside list-disc space-y-1 text-gray-50'>
                     <li>
                       More precise than media queries for component-based design
                     </li>
@@ -1688,7 +1688,7 @@ export default function HTMLCSSComponent() {
                   <Text variant='muted'>
                     <strong>CSS Functions for Responsiveness</strong>
                   </Text>
-                  <ul className='list-disc list-inside space-y-1 text-gray-50 ml-4'>
+                  <ul className='ml-4 list-inside list-disc space-y-1 text-gray-50'>
                     <li>
                       <CodeSpan>clamp(min, preferred, max)</CodeSpan> -
                       Responsive values with limits
@@ -1709,7 +1709,7 @@ export default function HTMLCSSComponent() {
                 </div>
 
                 {(() => {
-                  const modernCSSCode = dedent /* CSS */ `/* Container Queries (Modern browsers) */
+                  const modernCSSCode = dedent /* CSS */`/* Container Queries (Modern browsers) */
                   .card-container {
                     container-type: inline-size;  /* Enable container queries */
                   }
@@ -1756,11 +1756,11 @@ export default function HTMLCSSComponent() {
 
                   return (
                     <CodeBlock
+                      code={modernCSSCode}
                       comment='Modern Responsive CSS'
+                      highlightLines='3,11,12,13,14,15,21,26,27,32'
                       language='css'
                       showLineNumbers={true}
-                      highlightLines='3,11,12,13,14,15,21,26,27,32'
-                      code={modernCSSCode}
                     />
                   );
                 })()}
@@ -1770,7 +1770,7 @@ export default function HTMLCSSComponent() {
                 <Subheader>Practical Examples:</Subheader>
 
                 {(() => {
-                  const practicalResponsiveCode = dedent /* HTML */ `<!-- Complete responsive landing page -->
+                  const practicalResponsiveCode = dedent /* HTML */`<!-- Complete responsive landing page -->
                     <!DOCTYPE html>
                     <html lang="en">
                       <head>
@@ -1915,10 +1915,10 @@ export default function HTMLCSSComponent() {
 
                   return (
                     <CodeBlock
+                      code={practicalResponsiveCode}
                       comment='Complete Responsive Page'
                       language='html'
                       showLineNumbers={true}
-                      code={practicalResponsiveCode}
                     />
                   );
                 })()}
@@ -1926,7 +1926,7 @@ export default function HTMLCSSComponent() {
                 <Callout className='mt-4'>
                   <strong>Pro Tips:</strong>
                 </Callout>
-                <ul className='list-disc list-inside mt-2 space-y-1'>
+                <ul className='mt-2 list-inside list-disc space-y-1'>
                   <li>
                     Always include the viewport meta tag:{' '}
                     <CodeSpan>

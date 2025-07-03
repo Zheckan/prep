@@ -7,10 +7,9 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "lint:fix": "next lint --fix",
-    "format": "prettier --write .",
-    "format:check": "prettier --check .",
+    "lint": "npx ultracite@latest lint",
+    "format": "npx ultracite@latest format",
+    "format:check": "npx ultracite@latest format --check .",
     "prepare": "husky"
   },
   "dependencies": {
@@ -23,27 +22,16 @@
     "react-syntax-highlighter": "^15.6.1"
   },
   "devDependencies": {
-    "@eslint/eslintrc": "^3",
+    "@biomejs/biome": "2.0.6",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "@types/react-syntax-highlighter": "^15.5.13",
-    "eslint": "^9",
-    "eslint-config-next": "15.3.4",
     "husky": "^9.1.7",
-    "lint-staged": "^16.1.2",
     "prettier": "^3.6.0",
     "tailwindcss": "^4",
-    "typescript": "^5"
-  },
-  "lint-staged": {
-    "*.{js,jsx,ts,tsx}": [
-      "eslint --fix",
-      "prettier --write"
-    ],
-    "*.{json,css,md}": [
-      "prettier --write"
-    ]
+    "typescript": "^5",
+    "ultracite": "5.0.31"
   }
 }

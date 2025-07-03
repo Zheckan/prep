@@ -61,16 +61,16 @@ export default function HomeComponent() {
   };
 
   return (
-    <div className='min-h-screen flex flex-col items-center py-8 md:justify-center lg:justify-center gap-8'>
-      <div className='text-center max-w-6xl px-4'>
-        <h1 className='text-2xl md:text-3xl lg:text-4xl font-bold font-sans text-balance'>
+    <div className='flex min-h-screen flex-col items-center gap-8 py-8 md:justify-center lg:justify-center'>
+      <div className='max-w-6xl px-4 text-center'>
+        <h1 className='text-balance font-bold font-sans text-2xl md:text-3xl lg:text-4xl'>
           Junior Frontend Developer Preparation
         </h1>
-        <p className='text-sm text-zinc-400 mb-4 leading-relaxed'>
+        <p className='mb-4 text-sm text-zinc-400 leading-relaxed'>
           (in development, &apos;in progress&apos; parts are not completed)
         </p>
       </div>
-      <div className='grid grid-cols-1 md:grid-cols-6 gap-6 max-w-6xl px-4'>
+      <div className='grid max-w-6xl grid-cols-1 gap-6 px-4 md:grid-cols-6'>
         {sections.map((section, index) => {
           const rowNumber = Math.floor(index / columns);
           const isLastRow =
@@ -87,26 +87,27 @@ export default function HomeComponent() {
           }`;
 
           return (
-            <div
+            <button
+              className={`${className} flex flex-col text-left`}
               key={section.title}
               onClick={() => router.push(section.href)}
-              className={`${className} flex flex-col`}
+              type='button'
             >
               <div className='flex-grow'>
-                <h2 className='text-xl font-bold text-zinc-100 mb-3'>
+                <h2 className='mb-3 font-bold text-xl text-zinc-100'>
                   {section.title}{' '}
                   {section.inProgress && (
                     <span className='text-red-400'>(in progress)</span>
                   )}
                 </h2>
-                <p className='text-sm text-zinc-400 mb-4 leading-relaxed'>
+                <p className='mb-4 text-sm text-zinc-400 leading-relaxed'>
                   {section.description}
                 </p>
               </div>
-              <div className='flex items-center text-zinc-500 font-medium text-sm'>
+              <div className='flex items-center font-medium text-sm text-zinc-500'>
                 Learn more →
               </div>
-            </div>
+            </button>
           );
         })}
       </div>
