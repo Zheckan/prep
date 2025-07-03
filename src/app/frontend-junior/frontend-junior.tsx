@@ -6,21 +6,43 @@ type Section = {
   title: string;
   description: string;
   inProgress: boolean;
-  level?: string;
 };
 
 const sections: Section[] = [
   {
-    href: '/frontend-junior',
-    title: 'Frontend Development',
-    level: 'Junior Level',
+    href: '/html&css',
+    title: 'HTML & CSS',
     description:
-      'HTML & CSS, JavaScript fundamentals, React basics, API integration, and essential debugging tools',
+      'Semantic HTML, accessibility basics, Flexbox, Grid, responsive designSemantic HTML, accessibility basics, Flexbox, Grid, responsive design',
     inProgress: false,
+  },
+  {
+    href: '#',
+    title: 'JavaScript Fundamentals',
+    description: 'ES6+ syntax, scope, closures, async patterns, DOM APIs',
+    inProgress: true,
+  },
+  {
+    href: '#',
+    title: 'API Integration',
+    description: 'fetch/axios, REST, GraphQL, error handling, loading states',
+    inProgress: true,
+  },
+  {
+    href: '#',
+    title: 'Framework Basics (React)',
+    description: 'Components, props, state, hooks, Context API, lifecycle',
+    inProgress: true,
+  },
+  {
+    href: '#',
+    title: 'Tooling & Debugging',
+    description: 'Chrome DevTools, ESLint/Prettier, npm scripts, build tools',
+    inProgress: true,
   },
 ];
 
-export default function HomeComponent() {
+export default function FrontendJunior() {
   const router = useRouter();
 
   const totalItems = sections.length;
@@ -36,8 +58,11 @@ export default function HomeComponent() {
     <div className='flex min-h-screen flex-col items-center gap-8 py-8 md:justify-center lg:justify-center'>
       <div className='max-w-6xl px-4 text-center'>
         <h1 className='text-balance font-bold font-sans text-2xl md:text-3xl lg:text-4xl'>
-          Any interview prep
+          Junior Frontend Developer Preparation
         </h1>
+        <p className='mb-4 text-sm text-zinc-400 leading-relaxed'>
+          (in development, &apos;in progress&apos; parts are not completed)
+        </p>
       </div>
       <div className='grid max-w-6xl grid-cols-1 gap-6 px-4 md:grid-cols-6'>
         {sections.map((section, index) => {
@@ -58,33 +83,23 @@ export default function HomeComponent() {
           return (
             <button
               className={`${className} flex flex-col text-left`}
-              disabled={section.inProgress}
-              key={`${section.title}-${section.level}`}
+              key={section.title}
               onClick={() => router.push(section.href)}
               type='button'
             >
               <div className='flex-grow'>
-                <div className='mb-2'>
-                  <h2 className='font-bold text-xl text-zinc-100'>
-                    {section.title}
-                  </h2>
-                  {section.level && (
-                    <span className='font-medium text-blue-400 text-sm'>
-                      {section.level}
-                    </span>
-                  )}
+                <h2 className='mb-3 font-bold text-xl text-zinc-100'>
+                  {section.title}{' '}
                   {section.inProgress && (
-                    <span className='ml-2 text-red-400 text-sm'>
-                      (in progress)
-                    </span>
+                    <span className='text-red-400'>(in progress)</span>
                   )}
-                </div>
+                </h2>
                 <p className='mb-4 text-sm text-zinc-400 leading-relaxed'>
                   {section.description}
                 </p>
               </div>
               <div className='flex items-center font-medium text-sm text-zinc-500'>
-                {section.inProgress ? 'Coming soon...' : 'Start learning →'}
+                Learn more →
               </div>
             </button>
           );
