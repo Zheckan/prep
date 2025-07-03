@@ -1,10 +1,12 @@
 # Repository where will be stored all the notes for preparing for some interviews and playground for me to practice frontend.
 
-**Main goal of this repository is for me to prepare for Frontend Junior position. So this is a preatty note and at the same time playground for me to practice.**
+**Main goal of this repository is for me to prepare for Frontend Junior position. So this is a pretty note and at the same time playground for me to practice.**
 
 Currently information prepared is for Frontend Junior position, in future will be updated for other positions (Frontend Developer, Backend Developer, etc.). Other types of interviews (technical, behavioral, etc.). Other levels of experience (Mid, Senior, etc.).
 
 Feel free to use this information for your own preparation, but be aware that I am stupid student trying to lend my first full time job. So I will do mistakes and I will explain some things in a weird way understandable for me.
+
+If you need just to read, this site is hosted on [Vercel](https://vercel.com/) and you can find it [here](https://prep-info.vercel.app/).
 
 Feel free to contribute to this repository. Really well know DevOps? Contribute to this repository. Find some mistakes? Contribute to this repository. Do anything? Contribute to this repository. Do not want contribute to this repo? Contribute to other projects. See [Getting Started](#getting-started) section for more information.
 
