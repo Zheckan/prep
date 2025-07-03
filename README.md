@@ -1,4 +1,4 @@
-# Repository where will be stored all the notes for preparing for some interviews and playground for me to practice frontend.
+# This is a repository where will be stored all the notes for preparing for some interviews and playground for me to practice it.
 
 **Main goal of this repository is for me to prepare for Frontend Junior position. So this is a pretty note and at the same time playground for me to practice.**
 
@@ -12,7 +12,7 @@ Feel free to contribute to this repository. Really well know DevOps? Contribute 
 
 ## Table of contents
 
-- [Repository where will be stored all the notes for preparing for some interviews and playground for me to practice frontend.](#repository-where-will-be-stored-all-the-notes-for-preparing-for-some-interviews-and-playground-for-me-to-practice-frontend)
+- [This is a repository where will be stored all the notes for preparing for some interviews and playground for me to practice it.](#this-is-a-repository-where-will-be-stored-all-the-notes-for-preparing-for-some-interviews-and-playground-for-me-to-practice-it)
   - [Table of contents](#table-of-contents)
   - [Junior Frontend Developer preparation (team call + last technical interview)](#junior-frontend-developer-preparation-team-call--last-technical-interview)
   - [Getting Started](#getting-started)
@@ -46,11 +46,23 @@ If you have dependencies installed, you can start the development server:
 
 ```bash
 npm run dev
-# or
+```
+
+or
+
+```bash
 yarn dev
-# or
+
+```
+or
+
+```bash
 pnpm dev
-# or
+```
+
+or
+
+```bash
 bun dev
 ```
 
