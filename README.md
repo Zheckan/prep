@@ -15,7 +15,8 @@ Feel free to contribute to this repository. Really well know DevOps? Contribute 
   - [Junior Frontend Developer preparation (team call + last technical interview)](#junior-frontend-developer-preparation-team-call--last-technical-interview)
   - [Getting Started](#getting-started)
   - [Learn More (standard nextjs stuff, leave it here so maybe some will find this useful)](#learn-more-standard-nextjs-stuff-leave-it-here-so-maybe-some-will-find-this-useful)
-    - [I have no idea what license to use. Just don't be cunts and russians, russians can go and fuck themselves.](#i-have-no-idea-what-license-to-use-just-dont-be-cunts-and-russians-russians-can-go-and-fuck-themselves)
+  - [License](#license)
+    - [I have no idea what license to use, probably MIT (after small research). Just don't be cunts or russians, russians can go and fuck themselves.](#i-have-no-idea-what-license-to-use-probably-mit-after-small-research-just-dont-be-cunts-or-russians-russians-can-go-and-fuck-themselves)
 
 ## Junior Frontend Developer preparation (team call + last technical interview)
 
@@ -63,4 +64,10 @@ To learn more about Next.js, take a look at the following resources:
 
 You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
-### I have no idea what license to use. Just don't be cunts and russians, russians can go and fuck themselves.
+## License
+
+### I have no idea what license to use, probably MIT (after small research). Just don't be cunts or russians, russians can go and fuck themselves.
+
+And there is small fee for using this content. Donate to [Come Back Alive](https://savelife.in.ua/en/donate-en/). Donate anything, as one [Ukrainian TV person](https://twitter.com/max_shcherbyna) said: "Donate is like a penis, there isn't small one".
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
