@@ -14,8 +14,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'Asana Junior Frontend Developer Preparation',
-  description: 'Asana Junior Frontend Developer Preparation',
+  title: 'Prep',
+  description: 'Prep for interviews and practice',
 };
 
 export default function RootLayout({

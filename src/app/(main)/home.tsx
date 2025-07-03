@@ -64,7 +64,7 @@ export default function HomeComponent() {
     <div className='min-h-screen flex flex-col items-center py-8 md:justify-center lg:justify-center gap-8'>
       <div className='text-center max-w-6xl px-4'>
         <h1 className='text-2xl md:text-3xl lg:text-4xl font-bold font-sans text-balance'>
-          Asana Junior Frontend Developer Preparation
+          Junior Frontend Developer Preparation
         </h1>
         <p className='text-sm text-zinc-400 mb-4 leading-relaxed'>
           (in development, &apos;in progress&apos; parts are not completed)
