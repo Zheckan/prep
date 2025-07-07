@@ -10,7 +10,7 @@ type Section = {
 
 const sections: Section[] = [
   {
-    href: '/html&css',
+    href: '/frontend/junior/html&css',
     title: 'HTML & CSS',
     description:
       'Semantic HTML, accessibility basics, Flexbox, Grid, responsive designSemantic HTML, accessibility basics, Flexbox, Grid, responsive design',
