@@ -208,7 +208,7 @@ export default function HTMLCSSComponent() {
                       Visible focus indicators for all interactive elements
                     </li>
                     {/* <li className='text-amber-400'>
-                      <strong>Avoid positive tabindex values</strong> (1, 2, 3...) - 
+                      <strong>Avoid positive tabindex values</strong> (1, 2, 3...) -
                       they break natural reading order and create accessibility issues
                     </li> */}
                     <li>
@@ -772,10 +772,11 @@ export default function HTMLCSSComponent() {
                   horizontal and vertical positioning simultaneously, making it
                   perfect for page layouts and complex component arrangements.
                 </Text>
-                <Callout>
-                  <strong>Perfect for:</strong> Page layouts, card grids,
-                  dashboards, magazine-style layouts, and any design where you
-                  need precise control over both rows and columns. (see{' '}
+                <Subheader>Perfect for:</Subheader>
+                <Text variant='muted'>
+                  Page layouts, card grids, dashboards, magazine-style layouts,
+                  and any design where you need precise control over both rows
+                  and columns. (see{' '}
                   <button
                     className='cursor-pointer text-yellow-500 underline hover:text-yellow-400'
                     onClick={() => router.push('/')}
@@ -784,7 +785,7 @@ export default function HTMLCSSComponent() {
                     main page
                   </button>{' '}
                   as an example of grid layout)
-                </Callout>
+                </Text>
               </div>
 
               <div>
@@ -922,11 +923,11 @@ export default function HTMLCSSComponent() {
                     /* Complex layout with mixed sizing */
                     .dashboard {
                       display: grid;
-                      grid-template-columns: 
+                      grid-template-columns:
                         200px                    /* Sidebar: fixed width */
                         1fr                      /* Main: flexible */
                         minmax(200px, 300px);    /* Aside: responsive between 200-300px */
-                      grid-template-rows: 
+                      grid-template-rows:
                         60px                     /* Header: fixed height */
                         1fr                      /* Content: fills remaining space */
                         40px;                    /* Footer: fixed height */
@@ -1141,11 +1142,11 @@ export default function HTMLCSSComponent() {
                       grid-template-columns: repeat(3, 100px);
                       grid-template-rows: repeat(3, 100px);
                       gap: 1rem;
-                      
+
                       /* Center all items within their cells */
                       place-items: center;
                       /* Same as: align-items: center; justify-items: center; */
-                      
+
                       /* Center the entire grid within container */
                       place-content: center;
                       height: 100vh;
@@ -1957,6 +1958,1597 @@ export default function HTMLCSSComponent() {
                     for different devices
                   </li>
                 </ul>
+              </div>
+            </div>
+          </SectionCard>
+
+          <SectionCard title='CSS Functions & Modern Features'>
+            <div className='space-y-6'>
+              <div>
+                <Header>CSS Functions for Design Systems</Header>
+                <Text>
+                  Modern CSS functions help create more maintainable design
+                  systems by allowing dynamic color calculations, better
+                  contrast handling, and responsive value generation.
+                </Text>
+
+                <div className='mb-4'>
+                  <Subheader>Color Functions</Subheader>
+                  <ul className='ml-4 list-inside list-disc space-y-1 text-gray-50'>
+                    <li>
+                      <CodeSpan>color-mix()</CodeSpan> - Blend two colors
+                      together
+                    </li>
+                    <li>
+                      <CodeSpan>color-contrast()</CodeSpan> - Automatically
+                      choose contrasting colors
+                    </li>
+                    <li>
+                      <CodeSpan>light-dark()</CodeSpan> - Theme-aware color
+                      selection
+                    </li>
+                  </ul>
+                </div>
+
+                {(() => {
+                  const colorFunctionsCode = dedent /* CSS */`/* Modern Color Functions */
+                    :root {
+                      --primary-color: #007acc;
+                      --secondary-color: #ff6b6b;
+
+                      /* Color mixing for variations */
+                      --primary-light: color-mix(in srgb, var(--primary-color) 80%, white);
+                      --primary-dark: color-mix(in srgb, var(--primary-color) 80%, black);
+
+                      /* Automatic contrast (when supported) */
+                      --text-on-primary: color-contrast(
+                        var(--primary-color)
+                        vs white, black
+                      );
+
+                      /* Theme-aware colors */
+                      --background: light-dark(white, #1a1a1a);
+                      --text: light-dark(black, white);
+                    }
+
+                    .button {
+                      background: var(--primary-color);
+                      color: var(--text-on-primary);
+                      border: 2px solid var(--primary-dark);
+                    }
+
+                    .button:hover {
+                      background: var(--primary-light);
+                    }`;
+
+                  return (
+                    <CodeBlock
+                      code={colorFunctionsCode}
+                      comment='Modern Color Functions'
+                      language='css'
+                      showLineNumbers={true}
+                    />
+                  );
+                })()}
+              </div>
+
+              <div>
+                <Header>Cascade Layers & Design Tokens</Header>
+                <Text>
+                  Cascade layers provide explicit control over CSS specificity,
+                  making it easier to manage design tokens and prevent
+                  specificity wars. Think of layers as a way to organize your
+                  CSS into priority levels - styles in later layers always win
+                  over earlier layers, regardless of specificity.
+                </Text>
+
+                <div className='mb-4'>
+                  <Subheader>Why Use Cascade Layers?</Subheader>
+                  <ul className='ml-4 list-inside list-disc space-y-1 text-gray-50'>
+                    <li>
+                      <strong>Predictable specificity:</strong> No more{' '}
+                      <CodeSpan>!important</CodeSpan> hacks or ultra-specific
+                      selectors
+                    </li>
+                    <li>
+                      <strong>Better organization:</strong> Separate reset
+                      styles, design tokens, components, and utilities
+                    </li>
+                    <li>
+                      <strong>Third-party integration:</strong> Easily control
+                      where external CSS fits in your cascade
+                    </li>
+                    <li>
+                      <strong>Team collaboration:</strong> Clear rules about
+                      which styles take precedence
+                    </li>
+                  </ul>
+                </div>
+
+                <div className='mb-4'>
+                  <Subheader>How Layers Work</Subheader>
+                  <Text className='text-gray-50'>
+                    CSS applies all layers in order (Layer 1, then Layer 2,
+                    etc.). Each later layer only{' '}
+                    <strong>
+                      updates/overrides the specific properties it declares
+                    </strong>{' '}
+                    - properties not mentioned in later layers remain from
+                    earlier layers. It's like updating an object - only the keys
+                    you specify get changed, the rest stay the same.
+                  </Text>
+
+                  <Callout>
+                    <strong>Example:</strong> If Layer 1 sets{' '}
+                    <CodeSpan>color: blue; font-size: 16px;</CodeSpan> and Layer
+                    2 only sets <CodeSpan>color: red;</CodeSpan>, the final
+                    result will be <CodeSpan>color: red;</CodeSpan> (overridden)
+                    and <CodeSpan>font-size: 16px;</CodeSpan> (inherited from
+                    Layer 1).
+                  </Callout>
+                </div>
+
+                <Callout className='!border-yellow-500 !bg-yellow-900/50 !p-3 mt-4'>
+                  <strong>Senior Note:</strong> Cascade layers also support
+                  nesting and anonymous layers. You can create sub-layers like{' '}
+                  <CodeSpan>@layer components.buttons</CodeSpan> for even more
+                  granular control. Anonymous layers (just{' '}
+                  <CodeSpan>@layer</CodeSpan> without a name) are useful for
+                  isolating third-party CSS without affecting your named layer
+                  order.
+                </Callout>
+
+                {(() => {
+                  const cascadeLayersCode = dedent /* CSS */`/* Cascade Layers for Design System */
+                    @layer reset, design-tokens, components, utilities;
+
+                    @layer design-tokens {
+                      :root {
+                        /* Color tokens */
+                        --color-primary: #007acc;
+                        --color-secondary: #ff6b6b;
+                        --color-neutral-100: #f8f9fa;
+                        --color-neutral-900: #1a1a1a;
+
+                        /* Spacing tokens */
+                        --space-xs: 0.25rem;
+                        --space-sm: 0.5rem;
+                        --space-md: 1rem;
+                        --space-lg: 1.5rem;
+                        --space-xl: 2rem;
+
+                        /* Typography tokens */
+                        --font-size-sm: 0.875rem;
+                        --font-size-base: 1rem;
+                        --font-size-lg: 1.125rem;
+                        --font-size-xl: 1.25rem;
+
+                        /* Border radius tokens */
+                        --radius-sm: 0.25rem;
+                        --radius-md: 0.5rem;
+                        --radius-lg: 1rem;
+                      }
+                    }
+
+                    @layer components {
+                      .card {
+                        background: var(--color-neutral-100);
+                        padding: var(--space-lg);
+                        border-radius: var(--radius-md);
+                        margin-bottom: var(--space-md);
+                      }
+
+                      .button {
+                        background: var(--color-primary);
+                        color: white;
+                        padding: var(--space-sm) var(--space-md);
+                        border: none;
+                        border-radius: var(--radius-sm);
+                        font-size: var(--font-size-base);
+                      }
+                    }
+
+                    @layer utilities {
+                      .text-center { text-align: center; }
+                      .mb-0 { margin-bottom: 0; }
+                      .p-0 { padding: 0; }
+                    }`;
+
+                  return (
+                    <CodeBlock
+                      code={cascadeLayersCode}
+                      comment='Cascade Layers with Design Tokens'
+                      language='css'
+                      showLineNumbers={true}
+                    />
+                  );
+                })()}
+              </div>
+
+              <div>
+                <Header>Print Styles & Color Scheme</Header>
+
+                <Text>
+                  CSS allows you to adapt your website for different contexts,
+                  such as printing or user color preferences (light/dark mode).
+                  This ensures your site is accessible, readable, and visually
+                  appealing in all scenarios.
+                </Text>
+                <Text>
+                  <b>Print styles</b> let you hide navigation or interactive
+                  elements, optimize typography for paper, and even show link
+                  URLs so users can reference them offline.{' '}
+                </Text>
+                <Text>
+                  <b>Color scheme media queries</b> let your site automatically
+                  match the user's system preference for light or dark mode,
+                  improving comfort and accessibility.
+                </Text>
+
+                {(() => {
+                  const printStylesCode = dedent /* CSS */`/* Print Styles */
+                    @media print {
+                      /* Hide navigation and interactive elements */
+                      .navbar,
+                      .sidebar,
+                      .floating-action-button {
+                        display: none;
+                      }
+
+                      /* Optimize typography for print */
+                      body {
+                        font-size: 12pt;
+                        line-height: 1.4;
+                        color: black;
+                        background: white;
+                      }
+
+                      /* Show link URLs in print */
+                      a[href]:after {
+                        content: " (" attr(href) ")";
+                        color: #666;
+                        font-size: 0.8em;
+                      }
+
+                      /* Page breaks */
+                      .page-break {
+                        page-break-before: always;
+                      }
+                    }
+
+                    /* Color Scheme Preferences */
+                    @media (prefers-color-scheme: dark) {
+                      :root {
+                        --background: #1a1a1a;
+                        --text: #ffffff;
+                        --border: #333333;
+                      }
+                    }
+
+                    @media (prefers-color-scheme: light) {
+                      :root {
+                        --background: #ffffff;
+                        --text: #000000;
+                        --border: #e0e0e0;
+                      }
+                    }`;
+
+                  const printExampleCode = dedent /* HTML */`
+                    <!-- Example HTML for print styles and color scheme -->
+                    <nav class="navbar">Site Navigation</nav>
+                    <aside class="sidebar">Sidebar</aside>
+                    <button class="floating-action-button" type="button">+</button>
+                    <main>
+                      <h1>Article Title</h1>
+                      <p>Read more at <a href="https://example.com">example.com</a></p>
+                      <div class="page-break"></div>
+                      <p>Next page content...</p>
+                    </main>
+                  `;
+
+                  return (
+                    <>
+                      <CodeBlock
+                        code={printStylesCode}
+                        comment='Print Styles & Color Scheme'
+                        language='css'
+                        showLineNumbers={true}
+                      />
+                      <CodeBlock
+                        code={printExampleCode}
+                        comment='Example HTML'
+                        language='html'
+                        showLineNumbers={true}
+                      />
+                    </>
+                  );
+                })()}
+              </div>
+
+              <div>
+                <Header>Interactive Demo: :has() Selector</Header>
+                <Text>
+                  The <CodeSpan>:has()</CodeSpan> selector allows parent
+                  elements to be styled based on their children, creating
+                  powerful interactive patterns. For example, you can style a
+                  card to change color when a checkbox is checked. This is
+                  useful for creating interactive components like accordions or
+                  collapsible sections.
+                </Text>
+                <Text>
+                  Here is an example of such a card. When the checkbox is
+                  checked, the card changes color and scales up.
+                </Text>
+
+                <div className='not-prose mt-6'>
+                  <div className='interactive-card-demo'>
+                    <div className='interactive-card'>
+                      <input
+                        className='card-checkbox'
+                        id='card-toggle'
+                        type='checkbox'
+                      />
+                      <label className='card-label' htmlFor='card-toggle'>
+                        <h3 className='mb-2 font-semibold text-lg'>
+                          Interactive Card
+                        </h3>
+                        <p className='text-gray-300'>
+                          Check the box to see the card transform!
+                        </p>
+                      </label>
+                    </div>
+                  </div>
+
+                  <style jsx>{`
+                    .interactive-card {
+                      background: #3f3f46;
+                      border: 2px solid #52525b;
+                      border-radius: 0.5rem;
+                      padding: 1.5rem;
+                      transition: all 0.3s ease;
+                      cursor: pointer;
+                      margin: 1rem 0;
+                    }
+
+                    /* Reduce motion for users who prefer it */
+                    @media (prefers-reduced-motion: reduce) {
+                      .interactive-card {
+                        transition: none;
+                      }
+                    }
+
+                    .card-checkbox {
+                      position: absolute;
+                      opacity: 0;
+                      pointer-events: none;
+                    }
+
+                    .card-label {
+                      display: block;
+                      cursor: pointer;
+                    }
+
+                    /* Style card when checkbox is checked using :has() */
+                    .interactive-card:has(.card-checkbox:checked) {
+                      background: #eab308;
+                      color: #18181b;
+                      transform: scale(1.02);
+                      box-shadow: 0 8px 32px rgba(234, 179, 8, 0.3);
+                      border-color: #facc15;
+                    }
+
+                    .interactive-card:has(.card-checkbox:checked) h3 {
+                      color: #18181b;
+                    }
+
+                    .interactive-card:has(.card-checkbox:checked) p {
+                      color: #27272a;
+                    }
+
+                    /* Fallback for browsers without :has() support */
+                    @supports not selector(:has(*)) {
+                      .card-checkbox:checked + .card-label {
+                        background: #eab308;
+                        color: #18181b;
+                        border-radius: 0.5rem;
+                        padding: 1.5rem;
+                        margin: -1.5rem;
+                      }
+                    }
+
+                    /* Focus styles for accessibility */
+                    .card-checkbox:focus + .card-label {
+                      outline: 2px solid #eab308;
+                      outline-offset: 2px;
+                    }
+                  `}</style>
+                </div>
+
+                <Text className='mb-4' variant='muted'>
+                  <strong>How it works:</strong> The <CodeSpan>:has()</CodeSpan>{' '}
+                  selector checks if the parent element contains a specific
+                  child element in a certain state. In this case,{' '}
+                  <CodeSpan>
+                    .interactive-card:has(.card-checkbox:checked)
+                  </CodeSpan>{' '}
+                  means "style the card when it contains a checked checkbox".
+                  This lets parent elements react to their children's state
+                  without JavaScript.
+                </Text>
+
+                {(() => {
+                  const hasDemo = dedent /* HTML */`<!-- Interactive Card Demo - Click the card to see it transform -->
+                    <div class="interactive-card-demo">
+                      <div class="interactive-card">
+                        <input type="checkbox" id="card-toggle" class="card-checkbox" />
+                        <label for="card-toggle" class="card-label">
+                          <h3>Interactive Card</h3>
+                          <p>Check the box to see the card transform!</p>
+                        </label>
+                      </div>
+                    </div>
+
+                    <style>
+                      .interactive-card {
+                        background: #3f3f46;          /* zinc-700 */
+                        border: 2px solid #52525b;    /* zinc-600 */
+                        border-radius: 0.5rem;
+                        padding: 1.5rem;
+                        transition: all 0.3s ease;
+                        cursor: pointer;
+                        margin: 1rem 0;
+                      }
+
+                      /* Hide the actual checkbox - we use the label for clicking */
+                      .card-checkbox {
+                        position: absolute;
+                        opacity: 0;
+                        pointer-events: none;
+                      }
+
+                      .card-label {
+                        display: block;
+                        cursor: pointer;
+                      }
+
+                      /* 🎯 THE MAGIC: Parent styles based on child state */
+                      .interactive-card:has(.card-checkbox:checked) {
+                        background: #eab308;                    /* yellow-500 */
+                        color: #18181b;                         /* zinc-900 for contrast */
+                        transform: scale(1.02);                 /* Slight scale up */
+                        box-shadow: 0 8px 32px rgba(234, 179, 8, 0.3);  /* Yellow glow */
+                        border-color: #facc15;                  /* yellow-400 */
+                      }
+
+                      /* Style text specifically when card is checked */
+                      .interactive-card:has(.card-checkbox:checked) h3 {
+                        color: #18181b;  /* Dark text for contrast on yellow */
+                      }
+
+                      .interactive-card:has(.card-checkbox:checked) p {
+                        color: #27272a;  /* Slightly lighter dark text */
+                      }
+
+                      /* Fallback for browsers without :has() support (older browsers) */
+                      @supports not selector(:has(*)) {
+                        .card-checkbox:checked + .card-label {
+                          background: #eab308;
+                          color: #18181b;
+                          border-radius: 0.5rem;
+                          padding: 1.5rem;
+                          margin: -1.5rem;
+                        }
+                      }
+
+                      /* Accessibility: Focus styles for keyboard navigation */
+                      .card-checkbox:focus + .card-label {
+                        outline: 2px solid #eab308;
+                        outline-offset: 2px;
+                      }
+
+                      /* Respect user motion preferences */
+                      @media (prefers-reduced-motion: reduce) {
+                        .interactive-card {
+                          transition: none;
+                        }
+                      }
+                    </style>
+
+                    <!-- Key Benefits of :has() selector:
+                         ✅ No JavaScript needed for interactivity
+                         ✅ Parent elements can react to child state
+                         ✅ Perfect for accordions, cards, form validation
+                         ✅ More semantic than complex CSS tricks
+                         ✅ Works with any form elements (checkbox, radio, input)
+                    -->`;
+
+                  return (
+                    <CodeBlock
+                      code={hasDemo}
+                      comment='Interactive :has() Demo - Actual Implementation'
+                      language='html'
+                      showLineNumbers={true}
+                    />
+                  );
+                })()}
+              </div>
+            </div>
+          </SectionCard>
+
+          <SectionCard title='CSS Fundamentals'>
+            <div className='space-y-6'>
+              <div>
+                <Header>Box Model & Reset</Header>
+                <Text>
+                  The box model defines how browsers calculate element sizes and
+                  spacing, while CSS resets eliminate inconsistent browser
+                  defaults.
+                </Text>
+
+                <div className='mb-4'>
+                  <Subheader>What is the Box Model?</Subheader>
+                  <Text variant='muted'>
+                    Every HTML element is essentially a rectangular box. The box
+                    model defines how the browser calculates the total space an
+                    element occupies, consisting of four areas:
+                  </Text>
+                  <ul className='ml-4 list-inside list-disc space-y-1 text-gray-50'>
+                    <li>
+                      <strong>Content:</strong> The actual content (text,
+                      images, etc.)
+                    </li>
+                    <li>
+                      <strong>Padding:</strong> Space between content and border
+                      (inside the element)
+                    </li>
+                    <li>
+                      <strong>Border:</strong> The border around the padding and
+                      content
+                    </li>
+                    <li>
+                      <strong>Margin:</strong> Space outside the border (between
+                      elements)
+                    </li>
+                  </ul>
+                </div>
+
+                <div className='mb-4'>
+                  <Subheader>The Problem: Two Box Models</Subheader>
+                  <Text variant='muted'>
+                    By default, browsers use the <strong>content-box</strong>{' '}
+                    model, where width/height only applies to content. This
+                    creates confusion because adding padding or borders makes
+                    elements larger than expected.
+                  </Text>
+                  <ul className='ml-4 list-inside list-disc space-y-1 text-gray-50'>
+                    <li>
+                      <strong>content-box (default):</strong> Total width =
+                      width + padding + border
+                    </li>
+                    <li>
+                      <strong>border-box (preferred):</strong> Total width =
+                      width (includes padding + border)
+                    </li>
+                  </ul>
+                  <Callout className='mt-4'>
+                    <strong>Why border-box is better:</strong> When you set
+                    width: 300px, the element is exactly 300px wide regardless
+                    of padding or borders. This makes layouts predictable and
+                    responsive design much easier.
+                  </Callout>
+                </div>
+
+                <div className='mb-4'>
+                  <Subheader>Why We Need CSS Resets</Subheader>
+                  <Text variant='muted'>
+                    Different browsers have different default styles for HTML
+                    elements. Without a reset, your site might look different
+                    across browsers because:
+                  </Text>
+                  <ul className='ml-4 list-inside list-disc space-y-1 text-gray-50'>
+                    <li>
+                      Browsers add different margins/padding to headings,
+                      paragraphs, lists
+                    </li>
+                    <li>Font sizes and line heights vary between browsers</li>
+                    <li>Some browsers style form elements differently</li>
+                    <li>
+                      Image display and sizing behavior can be inconsistent
+                    </li>
+                  </ul>
+                  <Text className='mt-2' variant='muted'>
+                    <strong>CSS resets solve this</strong> by either removing
+                    all default styles (hard reset) or applying consistent
+                    styles across browsers (normalize approach).
+                  </Text>
+                </div>
+
+                {(() => {
+                  const boxModelCode = dedent /* CSS */`/* Universal Box Model Reset - Apply to ALL elements */
+                    *,
+                    *::before,
+                    *::after {
+                      box-sizing: border-box;  /* Makes width/height include padding + border */
+                    }
+
+                    /* Modern CSS Reset (Josh Comeau style) */
+                    * {
+                      margin: 0;
+                      padding: 0;
+                    }
+
+                    body {
+                      font-family: system-ui, -apple-system, sans-serif;
+                      line-height: 1.6;
+                      color: #333;
+                      /* Improved font rendering */
+                      -webkit-font-smoothing: antialiased;
+                      -moz-osx-font-smoothing: grayscale;
+                    }
+
+                    /* Make images responsive by default */
+                    img,
+                    picture,
+                    video,
+                    canvas,
+                    svg {
+                      display: block;
+                      max-width: 100%;
+                      height: auto;  /* Maintain aspect ratio */
+                    }
+
+                    /* Form elements inherit typography */
+                    input,
+                    button,
+                    textarea,
+                    select {
+                      font: inherit;
+                      color: inherit;
+                    }
+
+                    /* Remove default list styles */
+                    ul, ol {
+                      list-style: none;
+                    }
+
+                    /* Remove default button styles */
+                    button {
+                      background: none;
+                      border: none;
+                      cursor: pointer;
+                    }
+
+                    /* Box Model Demonstration */
+                    
+                    /* ❌ content-box (default) - confusing behavior */
+                    .content-box-example {
+                      box-sizing: content-box;
+                      width: 200px;           /* Content width only */
+                      padding: 20px;          /* Added to width */
+                      border: 5px solid red;  /* Added to width */
+                      margin: 10px;           /* Doesn't affect element size */
+                      
+                      /* Total width = 200px + 40px padding + 10px border = 250px! */
+                      /* This is why layouts break when you add padding */
+                    }
+
+                    /* ✅ border-box (preferred) - predictable behavior */
+                    .border-box-example {
+                      box-sizing: border-box;
+                      width: 200px;           /* Total width including padding + border */
+                      padding: 20px;          /* Included in width */
+                      border: 5px solid green; /* Included in width */
+                      margin: 10px;           /* Still doesn't affect element size */
+                      
+                      /* Total width = exactly 200px */
+                      /* Content width = 200px - 40px padding - 10px border = 150px */
+                    }
+
+                    /* Why this matters for responsive design */
+                    .responsive-grid {
+                      display: grid;
+                      grid-template-columns: repeat(3, 1fr);
+                      gap: 20px;
+                    }
+
+                    .grid-item {
+                      /* With border-box, padding doesn't break the grid */
+                      padding: 20px;
+                      border: 2px solid #ddd;
+                      background: #f5f5f5;
+                      /* Items stay exactly 1fr wide regardless of padding/border */
+                    }`;
+
+                  return (
+                    <CodeBlock
+                      code={boxModelCode}
+                      comment='Box Model & Modern CSS Reset'
+                      language='css'
+                      showLineNumbers={true}
+                    />
+                  );
+                })()}
+              </div>
+
+              <div>
+                <Header>CSS Variables (Custom Properties)</Header>
+                <Text>
+                  CSS variables enable dynamic theming and make maintaining
+                  consistent design systems much easier.
+                </Text>
+
+                {(() => {
+                  const cssVariablesCode = dedent /* CSS */`/* CSS Variables for Theming */
+                    :root {
+                      /* Define global variables */
+                      --primary-color: #007acc;
+                      --secondary-color: #ff6b6b;
+                      --text-color: #333;
+                      --background-color: #ffffff;
+                      --border-radius: 8px;
+                      --spacing-unit: 1rem;
+
+                      /* Typography scale */
+                      --font-size-small: 0.875rem;
+                      --font-size-base: 1rem;
+                      --font-size-large: 1.25rem;
+                      --font-size-xl: 1.5rem;
+                    }
+
+                    /* Dark theme override */
+                    [data-theme="dark"] {
+                      --text-color: #ffffff;
+                      --background-color: #1a1a1a;
+                      --primary-color: #4da6ff;
+                    }
+
+                    /* Using variables */
+                    .button {
+                      background: var(--primary-color);
+                      color: var(--background-color);
+                      padding: calc(var(--spacing-unit) * 0.5) var(--spacing-unit);
+                      border: none;
+                      border-radius: var(--border-radius);
+                      font-size: var(--font-size-base);
+                    }
+
+                    .button:hover {
+                      background: var(--secondary-color);
+                    }
+
+                    /* Component-level variables */
+                    .card {
+                      --card-padding: calc(var(--spacing-unit) * 1.5);
+                      --card-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+                      padding: var(--card-padding);
+                      box-shadow: var(--card-shadow);
+                      border-radius: var(--border-radius);
+                    }`;
+
+                  return (
+                    <CodeBlock
+                      code={cssVariablesCode}
+                      comment='CSS Variables & Theming'
+                      language='css'
+                      showLineNumbers={true}
+                    />
+                  );
+                })()}
+              </div>
+
+              <div>
+                <Header>Cascade & Specificity</Header>
+                <Text>
+                  Understanding how CSS selectors are weighted helps avoid
+                  specificity conflicts and creates more maintainable code. You
+                  can try to play this game to have practical experience with
+                  selecting elements in CSS.{' '}
+                  <a
+                    className='text-yellow-500'
+                    href='https://flukeout.github.io/'
+                    rel='noopener'
+                    target='_blank'
+                  >
+                    Link
+                  </a>
+                </Text>
+
+                {(() => {
+                  const specificityCode = dedent /* CSS */`/* Specificity Weights (from lowest to highest) */
+
+                    /* Universal selector: 0 points */
+                    * {
+                      color: gray;
+                    }
+
+                    /* Element selector: 1 point */
+                    p {
+                      color: blue;
+                    }
+
+                    /* Class selector: 10 points */
+                    .text {
+                      color: green;
+                    }
+
+                    /* ID selector: 100 points */
+                    #main-text {
+                      color: red;
+                    }
+
+                    /* Inline style: 1000 points */
+                    /* style="color: purple" */
+
+                    /* !important: 10000 points (avoid when possible) */
+                    .emergency {
+                      color: orange !important;
+                    }
+
+                    /* Best practices to avoid specificity wars */
+
+                    /* ❌ Avoid deeply nested selectors */
+                    .header .navigation .menu .item .link {
+                      color: blue;
+                    }
+
+                    /* ✅ Use single class selectors */
+                    .nav-link {
+                      color: blue;
+                    }
+
+                    /* ❌ Avoid IDs for styling */
+                    #header {
+                      background: blue;
+                    }
+
+                    /* ✅ Use classes instead */
+                    .header {
+                      background: blue;
+                    }
+
+                    /* ✅ Use CSS layers for predictable cascade */
+                    @layer base, components, utilities;
+
+                    @layer base {
+                      p { color: blue; }
+                    }
+
+                    @layer components {
+                      .text { color: green; } /* This wins despite lower specificity */
+                    }`;
+
+                  return (
+                    <CodeBlock
+                      code={specificityCode}
+                      comment='Cascade & Specificity'
+                      language='css'
+                      showLineNumbers={true}
+                    />
+                  );
+                })()}
+              </div>
+
+              <div>
+                <Header>Pseudo-classes & Pseudo-elements</Header>
+                <Text>
+                  Pseudo-classes and pseudo-elements add interactivity and
+                  decorative elements without additional markup. Used for
+                  creating dynamic, accessible interfaces and reducing HTML
+                  clutter.
+                </Text>
+
+                <div className='mb-4'>
+                  <Subheader>Understanding the Difference</Subheader>
+                  <ul className='ml-4 list-inside list-disc space-y-1 text-gray-50'>
+                    <li>
+                      <strong>Pseudo-classes (single colon `:`):</strong> Target
+                      elements in specific states (hover, focus, visited, etc.)
+                    </li>
+                    <li>
+                      <strong>Pseudo-elements (double colon `::`):</strong>{' '}
+                      Create virtual elements that don't exist in HTML (before,
+                      after, first-letter, etc.)
+                    </li>
+                  </ul>
+                  <Callout className='mt-4'>
+                    <strong>Memory tip:</strong> Pseudo-classes select existing
+                    elements in different states. Pseudo-elements create new
+                    "fake" elements in your CSS.
+                  </Callout>
+                </div>
+
+                <div className='mb-4'>
+                  <Subheader>Common Pseudo-classes</Subheader>
+                  <div className='mb-3'>
+                    <Text variant='muted'>
+                      <strong>Interactive States:</strong>
+                    </Text>
+                    <ul className='ml-4 list-inside list-disc space-y-1 text-gray-50'>
+                      <li>
+                        <CodeSpan>:hover</CodeSpan> - Mouse over element
+                      </li>
+                      <li>
+                        <CodeSpan>:focus</CodeSpan> - Element has keyboard focus
+                      </li>
+                      <li>
+                        <CodeSpan>:active</CodeSpan> - Element is being clicked
+                      </li>
+                      <li>
+                        <CodeSpan>:visited</CodeSpan> - Link has been visited
+                      </li>
+                      <li>
+                        <CodeSpan>:disabled</CodeSpan> - Form element is
+                        disabled
+                      </li>
+                    </ul>
+                  </div>
+                  <div className='mb-3'>
+                    <Text variant='muted'>
+                      <strong>Structural Selectors:</strong>
+                    </Text>
+                    <ul className='ml-4 list-inside list-disc space-y-1 text-gray-50'>
+                      <li>
+                        <CodeSpan>:first-child</CodeSpan> - First child element
+                      </li>
+                      <li>
+                        <CodeSpan>:last-child</CodeSpan> - Last child element
+                      </li>
+                      <li>
+                        <CodeSpan>:nth-child(n)</CodeSpan> - Nth child element
+                      </li>
+                      <li>
+                        <CodeSpan>:nth-of-type(n)</CodeSpan> - Nth element of
+                        same type
+                      </li>
+                      <li>
+                        <CodeSpan>:not(selector)</CodeSpan> - Elements that
+                        don't match selector
+                      </li>
+                    </ul>
+                  </div>
+                  <div className='mb-3'>
+                    <Text variant='muted'>
+                      <strong>Form States:</strong>
+                    </Text>
+                    <ul className='ml-4 list-inside list-disc space-y-1 text-gray-50'>
+                      <li>
+                        <CodeSpan>:valid</CodeSpan> - Form input is valid
+                      </li>
+                      <li>
+                        <CodeSpan>:invalid</CodeSpan> - Form input is invalid
+                      </li>
+                      <li>
+                        <CodeSpan>:required</CodeSpan> - Form input is required
+                      </li>
+                      <li>
+                        <CodeSpan>:checked</CodeSpan> - Checkbox/radio is
+                        checked
+                      </li>
+                      <li>
+                        <CodeSpan>:placeholder-shown</CodeSpan> - Input showing
+                        placeholder
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+
+                <div className='mb-4'>
+                  <Subheader>Common Pseudo-elements</Subheader>
+                  <ul className='ml-4 list-inside list-disc space-y-1 text-gray-50'>
+                    <li>
+                      <CodeSpan>::before</CodeSpan> - Insert content before
+                      element
+                    </li>
+                    <li>
+                      <CodeSpan>::after</CodeSpan> - Insert content after
+                      element
+                    </li>
+                    <li>
+                      <CodeSpan>::first-letter</CodeSpan> - Style first letter
+                    </li>
+                    <li>
+                      <CodeSpan>::first-line</CodeSpan> - Style first line
+                    </li>
+                    <li>
+                      <CodeSpan>::placeholder</CodeSpan> - Style input
+                      placeholder text
+                    </li>
+                    <li>
+                      <CodeSpan>::selection</CodeSpan> - Style selected text
+                    </li>
+                  </ul>
+                  <Callout className='mt-4'>
+                    <strong>Important:</strong> <CodeSpan>::before</CodeSpan>{' '}
+                    and <CodeSpan>::after</CodeSpan> pseudo-elements require the{' '}
+                    <CodeSpan>content</CodeSpan> property to work, even if it's
+                    empty: <CodeSpan>content: "";</CodeSpan>
+                  </Callout>
+                </div>
+
+                {(() => {
+                  const pseudoCode = dedent /* CSS */`/* PSEUDO-CLASSES - Target elements in specific states */
+
+                    /* Interactive states */
+                    button:hover { background: blue; }
+                    button:focus { outline: 2px solid blue; }
+                    button:active { transform: scale(0.95); }
+
+                    /* Structural selectors */
+                    li:first-child { margin-top: 0; }
+                    li:last-child { margin-bottom: 0; }
+                    tr:nth-child(even) { background: #f5f5f5; }
+                    p:not(:first-child) { margin-top: 1rem; }
+
+                    /* Form states */
+                    input:valid { border-color: green; }
+                    input:invalid { border-color: red; }
+                    input:checked + label { font-weight: bold; }
+
+                    /* PSEUDO-ELEMENTS - Create virtual elements */
+
+                    /* Add content before/after elements */
+                    .icon::before {
+                      content: "★";  /* Required property for ::before/::after */
+                      margin-right: 0.5rem;
+                    }
+
+                    .link::after {
+                      content: " →";
+                      color: blue;
+                    }
+
+                    /* Decorative elements */
+                    .quote::before {
+                      content: """;
+                      font-size: 2em;
+                      color: gray;
+                    }
+
+                    /* Typography effects */
+                    .article::first-letter {
+                      font-size: 3em;
+                      float: left;
+                    }
+
+                    /* Style selected text */
+                    ::selection {
+                      background: yellow;
+                      color: black;
+                    }
+
+                    /* Usage examples:
+                       <button>Click me</button>     → :hover, :focus, :active
+                       <ul><li>Item 1</li></ul>      → :first-child, :last-child
+                       <input type="email">          → :valid, :invalid
+                       <span class="icon">Star</span> → ::before adds ★
+                    */`;
+
+                  return (
+                    <CodeBlock
+                      code={pseudoCode}
+                      comment='Essential Pseudo-classes & Pseudo-elements'
+                      language='css'
+                      showLineNumbers={true}
+                    />
+                  );
+                })()}
+              </div>
+            </div>
+          </SectionCard>
+
+          <SectionCard title='Forms & Accessibility'>
+            <div className='space-y-6'>
+              <div>
+                <Header>Semantic Forms</Header>
+                <Text>
+                  Properly structured forms with semantic HTML improve
+                  accessibility and user experience across all devices.
+                </Text>
+                <Text>
+                  Semantic forms use the correct HTML elements, like{' '}
+                  <CodeSpan>&lt;form&gt;</CodeSpan>,{' '}
+                  <CodeSpan>&lt;label&gt;</CodeSpan>,{' '}
+                  <CodeSpan>&lt;input&gt;</CodeSpan>,{' '}
+                  <CodeSpan>&lt;fieldset&gt;</CodeSpan>, and{' '}
+                  <CodeSpan>&lt;legend&gt;</CodeSpan>, to describe the purpose
+                  and structure of each part of the form. This helps screen
+                  readers and assistive technologies understand how to interact
+                  with the form, making it easier for everyone to use.
+                </Text>
+                <Text>
+                  For example, always use a <CodeSpan>&lt;label&gt;</CodeSpan>{' '}
+                  for each input so users know what information to enter. Group
+                  related fields with <CodeSpan>&lt;fieldset&gt;</CodeSpan> and
+                  describe the group with a <CodeSpan>&lt;legend&gt;</CodeSpan>.
+                  This is especially important for users who rely on keyboard
+                  navigation or screen readers.
+                </Text>
+                <Text>
+                  Using semantic HTML also makes your forms easier to style and
+                  maintain, and helps browsers provide helpful features like
+                  autofill and validation. Remember: good form structure is not
+                  just about looks - it's about making your site usable for
+                  everyone.
+                </Text>
+
+                {(() => {
+                  const formsCode = dedent /* HTML */`<!-- Essential Semantic Form Structure -->
+                    <form>
+                      <!-- Group related fields -->
+                      <fieldset>
+                        <legend>Contact Information</legend>
+
+                        <!-- Proper label association -->
+                        <label for="name">Full Name *</label>
+                        <input
+                          type="text"
+                          id="name"
+                          name="name"
+                          required
+                          aria-describedby="name-error"
+                        />
+                        <div id="name-error" role="alert"><!-- Error message --></div>
+
+                        <!-- Input with help text -->
+                        <label for="email">Email *</label>
+                        <input
+                          type="email"
+                          id="email"
+                          name="email"
+                          required
+                          aria-describedby="email-help"
+                        />
+                        <div id="email-help">We'll never share your email</div>
+
+                        <!-- Textarea with placeholder -->
+                        <label for="message">Message</label>
+                        <textarea
+                          id="message"
+                          name="message"
+                          placeholder="Tell us how we can help..."
+                        ></textarea>
+
+                        <!-- Checkbox after input -->
+                        <input type="checkbox" id="newsletter" name="newsletter" />
+                        <label for="newsletter">Subscribe to newsletter</label>
+
+                        <button type="submit">Send Message</button>
+                      </fieldset>
+                    </form>
+
+                    <!-- Key Accessibility Features:
+                         ✅ <fieldset> groups related form controls
+                         ✅ <legend> provides group description
+                         ✅ <label for="id"> associates labels with inputs
+                         ✅ type="email" provides validation
+                         ✅ required attribute for required fields
+                         ✅ aria-describedby links to help/error text
+                         ✅ role="alert" announces errors to screen readers
+                         ✅ Checkbox comes before its label (common pattern)
+                    -->`;
+
+                  return (
+                    <CodeBlock
+                      code={formsCode}
+                      comment='Essential Semantic Forms'
+                      language='html'
+                      showLineNumbers={true}
+                    />
+                  );
+                })()}
+              </div>
+
+              <div>
+                <Header>Focus Management & Contrast</Header>
+                <Text>
+                  Proper focus management and color contrast ensure your site is
+                  accessible to users with disabilities and meets WCAG 2.1
+                  standards.
+                </Text>
+                <Text>
+                  <strong>Focus management</strong> is about making sure users
+                  can navigate your site using only a keyboard. This includes
+                  people who can't use a mouse, use screen readers, or have
+                  motor disabilities. Every interactive element should be
+                  reachable and clearly show when it has focus.
+                </Text>
+                <Text>
+                  <strong>Color contrast</strong> ensures text is readable for
+                  people with visual impairments, including color blindness and
+                  low vision. WCAG requires minimum contrast ratios: 4.5:1 for
+                  normal text and 3:1 for large text (18pt+) and UI components.
+                </Text>
+                <Text>
+                  Good accessibility isn't just for users with disabilities - it
+                  makes your site better for everyone. Clear focus indicators
+                  help all users see where they are, and good contrast improves
+                  readability in bright sunlight or on poor-quality screens.
+                </Text>
+
+                {(() => {
+                  const a11yCode = dedent /* CSS */`/* FOCUS MANAGEMENT - Make keyboard navigation visible */
+
+                    /* Essential: Visible focus indicators */
+                    button:focus,
+                    input:focus,
+                    a:focus {
+                      outline: 2px solid blue;
+                      outline-offset: 2px;
+                    }
+
+                    /* Skip links - Hidden until focused */
+                    .skip-link {
+                      position: absolute;
+                      top: -40px;  /* Hidden off-screen */
+                      left: 10px;
+                    }
+
+                    .skip-link:focus {
+                      top: 10px;   /* Visible when focused */
+                    }
+
+                    /* COLOR CONTRAST - WCAG Requirements */
+
+                    /* ✅ Good contrast (4.5:1 ratio minimum) */
+                    .good-contrast {
+                      background: white;
+                      color: #333;     /* Passes WCAG AA */
+                    }
+
+                    /* ❌ Poor contrast (fails WCAG) */
+                    .poor-contrast {
+                      background: white;
+                      color: #ccc;     /* Only 1.6:1 ratio - too low! */
+                    }
+
+                    /* MOTION PREFERENCES - Respect user settings */
+                    @media (prefers-reduced-motion: reduce) {
+                      * {
+                        animation: none !important;
+                        transition: none !important;
+                      }
+                    }
+
+                    /* Usage in HTML:
+                       <a href="#main" class="skip-link">Skip to content</a>
+                       <button>Focusable button</button>
+                       
+                       Test accessibility:
+                       - Tab through all interactive elements
+                       - Check color contrast with tools
+                       - Respect motion preferences
+                    */`;
+
+                  return (
+                    <CodeBlock
+                      code={a11yCode}
+                      comment='Essential Focus Management & Contrast'
+                      language='css'
+                      showLineNumbers={true}
+                    />
+                  );
+                })()}
+              </div>
+            </div>
+          </SectionCard>
+
+          <SectionCard title='Animations & Micro-interactions'>
+            <div className='space-y-6'>
+              <div>
+                <Header>CSS Transitions & Animations</Header>
+                <Text>
+                  <strong>Transitions</strong> animate changes between two
+                  states when triggered by user interactions (hover, focus,
+                  click). They're perfect for button hovers, form validation
+                  feedback, and menu toggles. Transitions make interfaces feel
+                  responsive and alive.
+                </Text>
+                <Text>
+                  <strong>Animations</strong> are more complex, multi-step
+                  sequences that can run automatically or be triggered. Use them
+                  for loading indicators, page entrances, and drawing attention
+                  to important content. Good animations guide users and provide
+                  helpful feedback.
+                </Text>
+                <Text>
+                  <strong>Micro-interactions</strong> are small, functional
+                  animations that accomplish a single task - like a button
+                  changing color on hover or a form field highlighting when
+                  focused. They make interfaces feel polished and help users
+                  understand what's happening.
+                </Text>
+
+                {(() => {
+                  const animationsCode = dedent /* CSS */`/* TRANSITIONS - Animate between states */
+
+                    /* Basic transition syntax */
+                    button {
+                      background: blue;
+                      transition: background 0.3s ease;  /* property duration timing */
+                    }
+
+                    button:hover {
+                      background: red;  /* Smoothly animates from blue to red */
+                    }
+
+                    /* Micro-interactions - Button feedback */
+                    .button {
+                      transition: transform 0.2s ease;
+                    }
+
+                    .button:hover {
+                      transform: scale(1.05);  /* Slightly larger on hover */
+                    }
+
+                    /* KEYFRAME ANIMATIONS - Multi-step sequences */
+
+                    /* Define animation steps */
+                    @keyframes fadeIn {
+                      from { opacity: 0; }
+                      to   { opacity: 1; }
+                    }
+
+                    /* Apply animation */
+                    .fade-in {
+                      animation: fadeIn 0.5s ease-out;
+                    }
+
+                    /* Loading spinner animation */
+                    @keyframes spin {
+                      to { transform: rotate(360deg); }
+                    }
+
+                    .spinner {
+                      animation: spin 1s linear infinite;
+                    }
+
+                    /* ACCESSIBILITY - Respect user preferences */
+                    @media (prefers-reduced-motion: reduce) {
+                      * {
+                        animation: none !important;
+                        transition: none !important;
+                      }
+                    }
+
+                    /* Performance Tips:
+                       - Only animate: transform, opacity, filter
+                       - Avoid: width, height, top, left (cause layout shifts)
+                       - Keep micro-interactions under 300ms
+                       - Always include prefers-reduced-motion
+                    */`;
+
+                  return (
+                    <CodeBlock
+                      code={animationsCode}
+                      comment='Essential Animations & Transitions'
+                      language='css'
+                      showLineNumbers={true}
+                    />
+                  );
+                })()}
+              </div>
+
+              <div>
+                <Header>Performance Considerations</Header>
+                <Text>
+                  Optimize animations and critical CSS for the best user
+                  experience and performance scores.
+                </Text>
+
+                <Subheader>
+                  <strong>Animation Best Practices:</strong>
+                </Subheader>
+                <ul className='mt-2 list-inside list-disc space-y-1'>
+                  <li>
+                    Only animate properties that don't cause layout
+                    recalculation: <CodeSpan>transform</CodeSpan>,{' '}
+                    <CodeSpan>opacity</CodeSpan>, <CodeSpan>filter</CodeSpan>
+                  </li>
+                  <li>
+                    Use <CodeSpan>transform</CodeSpan> instead of changing{' '}
+                    <CodeSpan>top</CodeSpan>, <CodeSpan>left</CodeSpan>,{' '}
+                    <CodeSpan>width</CodeSpan>, <CodeSpan>height</CodeSpan>
+                  </li>
+                  <li>
+                    Keep animations under 300ms for micro-interactions, 600ms
+                    for larger transitions
+                  </li>
+                  <li>
+                    Always provide <CodeSpan>prefers-reduced-motion</CodeSpan>{' '}
+                    alternatives
+                  </li>
+                  <li>
+                    Use <CodeSpan>will-change</CodeSpan> sparingly and remove it
+                    after animation completes
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </SectionCard>
+
+          <SectionCard title='Advanced Topics'>
+            <div className='space-y-6'>
+              <div>
+                <Header>CSS Subgrid</Header>
+                <Text>
+                  <strong>Subgrid</strong> lets a nested grid container use the
+                  row or column tracks of its parent grid. This allows child
+                  elements to align exactly with the parent’s grid lines, making
+                  complex layouts (like cards, forms, or nested components)
+                  consistent and easy to maintain.
+                </Text>
+                <Text>
+                  <strong>Why use subgrid?</strong> It enables perfect alignment
+                  across nested layouts and keeps your design system consistent,
+                  especially for card layouts, forms, and reusable UI components
+                  that need to line up with the main page grid.
+                </Text>
+                <Text>
+                  <strong>Example:</strong> The card content below aligns with
+                  the parent grid columns using <CodeSpan>subgrid</CodeSpan>.
+                </Text>
+                {(() => {
+                  const subgridExample = dedent /* HTML */`
+                    <!-- Parent grid with 3 columns -->
+                    <div class="parent-grid">
+                      <!-- Card uses subgrid to align with parent columns -->
+                      <div class="card">
+                        <div class="card-header">Card Title</div>
+                        <div class="card-content">Card content aligns with parent grid columns.</div>
+                      </div>
+                    </div>
+                  `;
+                  const subgridCSS = dedent /* CSS */`
+                    /* Parent grid defines 3 columns */
+                    .parent-grid {
+                      display: grid;
+                      grid-template-columns: 1fr 2fr 1fr;
+                    }
+
+                    /* Card uses subgrid to inherit parent columns */
+                    .card {
+                      display: grid;
+                      grid-template-columns: subgrid; /* Inherit columns from parent */
+                      grid-column: 1 / -1; /* Span all parent columns */
+                    }
+
+                    /* Card header spans all columns */
+                    .card-header {
+                      grid-column: 1 / 4;
+                    }
+
+                    /* Card content starts at 2nd column and spans to 3rd */
+                    .card-content {
+                      grid-column: 2 / 4;
+                    }
+
+                    /* Fallback for browsers that don't support subgrid */
+                    @supports not (grid-template-columns: subgrid) {
+                      .card {
+                        grid-template-columns: 1fr 2fr 1fr;
+                      }
+                    }
+                  `;
+                  return (
+                    <>
+                      <CodeBlock
+                        code={subgridExample}
+                        comment='HTML: Card aligned with parent grid using subgrid'
+                        language='html'
+                        showLineNumbers={true}
+                      />
+                      <CodeBlock
+                        code={subgridCSS}
+                        comment='CSS: Subgrid usage (with fallback and comments)'
+                        language='css'
+                        showLineNumbers={true}
+                      />
+                    </>
+                  );
+                })()}
+              </div>
+
+              <div>
+                <Header>View Transitions API</Header>
+                <Text>
+                  View Transitions API enables smooth, performant animations
+                  between different page states without complex JavaScript
+                  libraries. Perfect for SPA (Single Page Application)
+                  navigation, modal opens/closes, and dynamic content updates.
+                  The browser handles the heavy lifting of creating seamless
+                  transitions between DOM states.
+                </Text>
+                <Text>
+                  <strong>How it works:</strong> You define which elements
+                  should transition using view-transition-name, then customize
+                  the animation. The API captures before/after states and
+                  animates between them automatically.
+                </Text>
+                <Callout>
+                  In simple terms, it's makes smooth transitions between pages
+                  and animations. But not all browsers support it yet.
+                </Callout>
+
+                {(() => {
+                  const viewTransitionsCode = dedent /* CSS */`/* Name elements that should transition smoothly */
+                    .page-title {
+                      view-transition-name: page-title;
+                    }
+
+                    /* Customize the transition animation */
+                    ::view-transition-old(page-title) {
+                      animation: slide-out 0.3s ease-in;
+                    }
+
+                    ::view-transition-new(page-title) {
+                      animation: slide-in 0.3s ease-out;
+                    }
+
+                    /* JavaScript to trigger transition */
+                    document.startViewTransition(() => {
+                      updateContent(); // Your DOM changes here
+                    });`;
+
+                  return (
+                    <CodeBlock
+                      code={viewTransitionsCode}
+                      comment='View Transitions - Core Implementation'
+                      language='css'
+                      showLineNumbers={true}
+                    />
+                  );
+                })()}
+              </div>
+
+              <div>
+                <Header>SEO Fundamentals</Header>
+                <Text>
+                  Search Engine Optimization through proper HTML structure
+                  directly impacts discoverability and user experience. Meta
+                  tags, semantic HTML, and structured data help search engines
+                  understand your content, while Open Graph tags control how
+                  your site appears when shared on social media.
+                </Text>
+                <Text>
+                  <strong>Critical for modern web:</strong> Mobile-first
+                  indexing, Core Web Vitals, and social sharing make proper SEO
+                  essential for any production website. These fundamentals
+                  should be implemented from day one.
+                </Text>
+
+                {(() => {
+                  const seoCode = dedent /* HTML */`<!-- Essential SEO meta tags -->
+                    <title>Descriptive Page Title - Brand Name</title>
+                    <meta name="description" content="Compelling 150-160 character description" />
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+                    <!-- Open Graph for social sharing -->
+                    <meta property="og:title" content="Page Title" />
+                    <meta property="og:description" content="Page description" />
+                    <meta property="og:image" content="https://example.com/share-image.jpg" />
+
+                    <!-- Canonical URL prevents duplicate content issues -->
+                    <link rel="canonical" href="https://example.com/this-page" />
+
+                    <!-- Semantic HTML structure -->
+                    <main>
+                      <h1>Single H1 per page</h1>
+                      <section>
+                        <h2>Proper heading hierarchy</h2>
+                        <p>Meaningful content structure...</p>
+                      </section>
+                    </main>`;
+
+                  return (
+                    <CodeBlock
+                      code={seoCode}
+                      comment='SEO Essentials - Core Implementation'
+                      language='html'
+                      showLineNumbers={true}
+                    />
+                  );
+                })()}
               </div>
             </div>
           </SectionCard>
