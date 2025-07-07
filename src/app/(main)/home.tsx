@@ -11,7 +11,7 @@ type Section = {
 
 const sections: Section[] = [
   {
-    href: '/frontend-junior',
+    href: '/frontend/junior',
     title: 'Frontend Development',
     level: 'Junior Level',
     description:
