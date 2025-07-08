@@ -13,7 +13,7 @@ const sections: Section[] = [
     href: '/frontend/junior/html&css',
     title: 'HTML & CSS',
     description:
-      'Semantic HTML, accessibility basics, Flexbox, Grid, responsive designSemantic HTML, accessibility basics, Flexbox, Grid, responsive design',
+      'Semantic HTML, accessibility basics, Flexbox, Grid, responsive design',
     inProgress: false,
   },
   {
