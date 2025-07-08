@@ -101,6 +101,8 @@ export const CodeBlock = ({
         borderLeft,
         paddingLeft: isHighlighted || isHighlightedEnd ? '0.75rem' : '0',
         marginLeft: isHighlighted || isHighlightedEnd ? '-0.75rem' : '0',
+        width: 'fit-content',
+        minWidth: '100%',
       },
     };
   };
@@ -116,6 +118,8 @@ export const CodeBlock = ({
         codeTagProps={{
           style: {
             fontFamily: `ui-monospace, SFMono-Regular, 'SF Mono', Consolas, 'Liberation Mono', Menlo, monospace`,
+            display: 'grid',
+            gridTemplateColumns: '1fr',
           },
         }}
         customStyle={{
@@ -124,6 +128,7 @@ export const CodeBlock = ({
           background: 'transparent',
           fontSize: '0.875rem',
           lineHeight: '1.5',
+          overflowX: 'auto',
         }}
         language={language}
         lineProps={getLineProps}
