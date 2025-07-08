@@ -1,5 +1,6 @@
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { coldarkDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import { parseHighlightLines } from '@/helpers/parse-highlight-lines';
 
 // Move regex patterns to top level for better performance
 const COMMENT_REGEX = /^\/\*\s*\w+\s*\*\/\s*\n?/;
@@ -49,31 +50,6 @@ export const CodeBlock = ({
       .join('\n')
       .trim();
   }
-
-  const parseHighlightLines = (highlightStr?: string): number[] => {
-    if (!highlightStr) {
-      return [];
-    }
-
-    const highlightedLineNumbers: number[] = [];
-    const parts = highlightStr.split(',');
-
-    // Use for...of instead of forEach for better performance
-    for (const part of parts) {
-      if (part.includes('-')) {
-        const [start, end] = part
-          .split('-')
-          .map((n) => Number.parseInt(n.trim(), 10)); // Add radix parameter
-        for (let i = start; i <= end; i++) {
-          highlightedLineNumbers.push(i);
-        }
-      } else {
-        highlightedLineNumbers.push(Number.parseInt(part.trim(), 10)); // Add radix parameter
-      }
-    }
-
-    return highlightedLineNumbers;
-  };
 
   const highlightedLines = parseHighlightLines(highlightLines);
   const highlightedLinesEnd = parseHighlightLines(highlightLinesEnd);
