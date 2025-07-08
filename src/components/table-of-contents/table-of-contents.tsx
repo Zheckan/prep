@@ -168,12 +168,15 @@ export const TableOfContents = () => {
   };
 
   return (
-    <nav className='fixed left-0 z-40' style={{ top: headerHeight }}>
+    <nav
+      className='pointer-events-none fixed left-0 z-40'
+      style={{ top: headerHeight }}
+    >
       <div className='relative'>
         {/* Small trigger zone - always visible */}
         <button
           aria-label='Toggle table of contents'
-          className='absolute top-0 left-0 w-4 cursor-pointer border-none bg-transparent p-0 md:w-3'
+          className='pointer-events-auto absolute top-0 left-0 w-4 cursor-pointer border-none bg-transparent p-0 md:w-3'
           onClick={handleTriggerClick}
           onMouseEnter={() => setOpen(true)}
           onTouchStart={handleTriggerClick}
@@ -206,7 +209,7 @@ export const TableOfContents = () => {
             x: open ? 0 : '-100%',
             opacity: open ? 1 : 0,
           }}
-          className='scrollbar-hide relative min-w-0 max-w-sm overflow-y-auto border-white/10 border-t border-r border-b bg-black/30 p-4 text-sm text-white backdrop-blur-xl backdrop-saturate-150 md:border'
+          className='scrollbar-hide pointer-events-auto relative min-w-0 max-w-sm overflow-y-auto border-white/10 border-t border-r border-b bg-black/30 p-4 text-sm text-white backdrop-blur-xl backdrop-saturate-150 md:border'
           onMouseEnter={() => setOpen(true)}
           onMouseLeave={handleMouseLeave}
           style={{
