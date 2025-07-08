@@ -22,6 +22,7 @@ export const TableOfContents = () => {
   const [pinned, setPinned] = useState(false);
   const [headerHeight, setHeaderHeight] = useState(0);
   const [touchStart, setTouchStart] = useState<number | null>(null);
+  const [availableHeight, setAvailableHeight] = useState(0);
 
   useEffect(() => {
     const getHeadingLevel = (tagName: string): number => {
@@ -91,6 +92,22 @@ export const TableOfContents = () => {
     };
   }, []);
 
+  // Track available height for trigger zone
+  useEffect(() => {
+    const updateAvailableHeight = () => {
+      const viewportHeight = window.innerHeight;
+      const calculatedHeight = viewportHeight - headerHeight;
+      setAvailableHeight(Math.max(calculatedHeight, 200)); // Minimum 200px
+    };
+
+    updateAvailableHeight();
+
+    window.addEventListener('resize', updateAvailableHeight);
+    return () => {
+      window.removeEventListener('resize', updateAvailableHeight);
+    };
+  }, [headerHeight]);
+
   useEffect(() => {
     const handleTouchStart = (e: TouchEvent) => {
       if (window.innerWidth < 768) {
@@ -156,10 +173,11 @@ export const TableOfContents = () => {
         {/* Small trigger zone - always visible */}
         <button
           aria-label='Toggle table of contents'
-          className='absolute top-0 left-0 h-full w-4 cursor-pointer border-none bg-transparent p-0 md:w-3'
+          className='absolute top-0 left-0 w-4 cursor-pointer border-none bg-transparent p-0 md:w-3'
           onClick={handleTriggerClick}
           onMouseEnter={() => setOpen(true)}
           onTouchStart={handleTriggerClick}
+          style={{ height: `${availableHeight}px` }}
           type='button'
         />
 
@@ -167,17 +185,18 @@ export const TableOfContents = () => {
         {!open && (
           <motion.div
             animate={{ opacity: 1 }}
-            className='pointer-events-none absolute top-0 left-0 h-full w-4 border-white/10 border-t border-r border-b bg-black/30 backdrop-blur-md md:w-3'
+            className='pointer-events-none absolute top-0 left-0 w-4 border-white/10 border-t border-r border-b bg-black/30 backdrop-blur-md md:w-3'
             exit={{ opacity: 0 }}
             initial={{ opacity: 0 }}
             style={{
               borderTopRightRadius: '3px',
               borderBottomRightRadius: '3px',
+              height: `${availableHeight}px`,
             }}
           >
             <div className='h-full w-full bg-gradient-to-r from-black/40 to-transparent' />
             {/* Mobile indicator line */}
-            <div className='absolute inset-y-0 right-0 w-0.5 bg-white/50 md:hidden' />
+            <div className='absolute inset-y-0 right-0 w-0.1 border-t-0 bg-white/10 md:hidden' />
           </motion.div>
         )}
 
@@ -187,7 +206,7 @@ export const TableOfContents = () => {
             x: open ? 0 : '-100%',
             opacity: open ? 1 : 0,
           }}
-          className='scrollbar-hide relative max-h-[80vh] min-w-0 max-w-sm overflow-y-auto border border-white/10 bg-black/30 p-4 text-sm text-white backdrop-blur-xl backdrop-saturate-150'
+          className='scrollbar-hide relative min-w-0 max-w-sm overflow-y-auto border-white/10 border-t border-r border-b bg-black/30 p-4 text-sm text-white backdrop-blur-xl backdrop-saturate-150 md:border'
           onMouseEnter={() => setOpen(true)}
           onMouseLeave={handleMouseLeave}
           style={{
@@ -195,7 +214,8 @@ export const TableOfContents = () => {
             msOverflowStyle: 'none',
             width: 'fit-content',
             minWidth: '240px',
-            borderRadius: '0 8px 8px 0',
+            borderRadius: '0 6px 6px 0',
+            maxHeight: `${availableHeight}px`,
           }}
           transition={{
             type: 'tween',
