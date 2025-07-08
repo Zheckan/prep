@@ -4,11 +4,11 @@
 
 Currently information prepared is for Frontend Junior position, in future will be updated for other positions (Frontend Developer, Backend Developer, etc.). Other types of interviews (technical, behavioral, etc.). Other levels of experience (Mid, Senior, etc.).
 
-Feel free to use this information for your own preparation, but be aware that I am stupid student trying to lend my first full time job. So I will do mistakes and I will explain some things in a weird way understandable for me.
+Feel free to use this information for your own preparation, but be aware that I am a stupid student trying to land my first full-time job. So I will make mistakes and I will explain some things in a weird way understandable to me.
 
 If you need just to read, this site is hosted on [Vercel](https://vercel.com/) and you can find it [here](https://prep-info.vercel.app/).
 
-Feel free to contribute to this repository. Really well know DevOps? Contribute to this repository. Find some mistakes? Contribute to this repository. Do anything? Contribute to this repository. Do not want contribute to this repo? Contribute to other projects. See [Getting Started](#getting-started) section for more information.
+Feel free to contribute to this repository. Really know DevOps well? Contribute to this repository. Find some mistakes? Contribute to this repository. Do anything? Contribute to this repository. Do not want to contribute to this repo? Contribute to other projects. See [Getting Started](#getting-started) section for more information.
 
 ## Table of contents
 
@@ -26,7 +26,7 @@ As I mentioned before, this is a note and at the same time playground for me to 
 
 ## Getting Started
 
-This is nextjs project. So you need to have node.js installed.
+This is a Next.js project, so you need to have Node.js installed.
 Check if you have node.js installed:
 
 ```bash
@@ -67,7 +67,7 @@ bun dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-If you are doing this before I've changed home page to have sections for each topic, and it have only frontend topics. Change it to have multiple sections, and add Frontend Junior section, so it redirects to current / page.
+If you are doing this before I've changed the home page to have sections for each topic, and it has only frontend topics. Change it to have multiple sections, and add a Frontend Junior section so it redirects to the current / page.
 
 ## Learn More (standard nextjs stuff, leave it here so maybe some will find this useful)
 
