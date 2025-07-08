@@ -28,7 +28,7 @@ export const TableOfContents = () => {
       document.querySelectorAll<HTMLElement>('h2[id], h3[id]')
     );
     const mapped: TocItem[] = [];
-    headings.forEach((el) => {
+    for (const el of headings) {
       const item = {
         id: el.id,
         text: el.textContent || '',
@@ -36,10 +36,10 @@ export const TableOfContents = () => {
       } as TocHeading;
       if (item.level === 2) {
         mapped.push({ id: item.id, text: item.text, children: [] });
-      } else if (mapped.length > 0) {
-        mapped[mapped.length - 1].children.push(item);
+      } else if (mapped.at(-1)) {
+        mapped.at(-1)?.children.push(item);
       }
-    });
+    }
     setItems(mapped);
 
     const header = document.getElementById('page-header');
