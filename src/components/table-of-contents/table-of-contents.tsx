@@ -120,108 +120,157 @@ export const TableOfContents = () => {
     }
   };
 
-  const handleLinkClick = () => {
+  const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     if (!pinned) {
       setOpen(false);
     }
+
+    // Prevent default navigation and handle scroll offset without URL change
+    e.preventDefault();
+    const href = e.currentTarget.getAttribute('href');
+    if (href?.startsWith('#')) {
+      const targetId = href.substring(1);
+      const targetElement = document.getElementById(targetId);
+      if (targetElement) {
+        // Use max header height (140px) + padding for consistent offset
+        const maxHeaderOffset = 140 + 20;
+        const elementPosition = targetElement.getBoundingClientRect().top;
+        const offsetPosition =
+          elementPosition + window.pageYOffset - maxHeaderOffset;
+
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: 'smooth',
+        });
+      }
+    }
+  };
+
+  const handleTriggerClick = () => {
+    setOpen(!open);
   };
 
   return (
     <nav className='fixed left-0 z-40' style={{ top: headerHeight }}>
       <div className='relative'>
-        {/* Hint border when closed */}
-        {!open && (
-          <div
-            className='absolute top-0 left-0 h-full w-1 border-white/10 border-r bg-white/20'
-            style={{ right: '-4px' }}
-          />
-        )}
-
+        {/* Small trigger zone - always visible */}
         <button
-          className='group'
+          aria-label='Toggle table of contents'
+          className='absolute top-0 left-0 h-full w-4 cursor-pointer border-none bg-transparent p-0 md:w-3'
+          onClick={handleTriggerClick}
           onMouseEnter={() => setOpen(true)}
-          onMouseLeave={handleMouseLeave}
+          onTouchStart={handleTriggerClick}
           type='button'
-        >
+        />
+
+        {/* Preview hint when closed - more visible on mobile */}
+        {!open && (
           <motion.div
-            animate={{ x: open ? 0 : '-100%' }}
-            className='scrollbar-hide relative max-h-[80vh] min-w-0 max-w-sm overflow-y-auto border-white/10 border-r bg-black/30 p-4 text-sm text-white backdrop-blur-xl backdrop-saturate-150'
+            animate={{ opacity: 1 }}
+            className='pointer-events-none absolute top-0 left-0 h-full w-4 border-white/10 border-t border-r border-b bg-black/30 backdrop-blur-md md:w-3'
+            exit={{ opacity: 0 }}
+            initial={{ opacity: 0 }}
             style={{
-              scrollbarWidth: 'none',
-              msOverflowStyle: 'none',
-              width: 'fit-content',
-              minWidth: '240px',
+              borderTopRightRadius: '3px',
+              borderBottomRightRadius: '3px',
             }}
           >
-            <div className='relative'>
-              {/* Pin icon aligned with first section */}
-              <button
-                className='-right-2 absolute top-0 hidden md:block'
-                onClick={() => setPinned(!pinned)}
-                type='button'
-              >
-                {pinned ? (
-                  <PinOff className='fill-white' size={18} />
-                ) : (
-                  <Pin size={18} />
-                )}
-              </button>
+            <div className='h-full w-full bg-gradient-to-r from-black/40 to-transparent' />
+            {/* Mobile indicator line */}
+            <div className='absolute inset-y-0 right-0 w-0.5 bg-white/50 md:hidden' />
+          </motion.div>
+        )}
 
-              <ul className='space-y-3 pr-8'>
-                {items.map((section) => (
-                  <li key={section.id}>
-                    {/* Level 1: SectionCard (h2) */}
-                    <a
-                      className='block break-words text-left font-bold text-white transition-colors duration-200 hover:text-yellow-500'
-                      href={`#${section.id}`}
-                      onClick={handleLinkClick}
-                    >
-                      {section.text}
-                    </a>
+        {/* Main menu */}
+        <motion.div
+          animate={{
+            x: open ? 0 : '-100%',
+            opacity: open ? 1 : 0,
+          }}
+          className='scrollbar-hide relative max-h-[80vh] min-w-0 max-w-sm overflow-y-auto border border-white/10 bg-black/30 p-4 text-sm text-white backdrop-blur-xl backdrop-saturate-150'
+          onMouseEnter={() => setOpen(true)}
+          onMouseLeave={handleMouseLeave}
+          style={{
+            scrollbarWidth: 'none',
+            msOverflowStyle: 'none',
+            width: 'fit-content',
+            minWidth: '240px',
+            borderRadius: '0 8px 8px 0',
+          }}
+          transition={{
+            type: 'tween',
+            ease: 'easeInOut',
+            duration: 0.3,
+          }}
+        >
+          <div className='relative'>
+            {/* Pin icon aligned with first section */}
+            <button
+              className='-right-2 absolute top-0 hidden md:block'
+              onClick={() => setPinned(!pinned)}
+              type='button'
+            >
+              {pinned ? (
+                <PinOff className='fill-white' size={18} />
+              ) : (
+                <Pin size={18} />
+              )}
+            </button>
 
-                    {section.children.length > 0 && (
-                      <ul className='mt-2 space-y-1 border-zinc-600 border-l pl-4'>
-                        {section.children.map((child) => {
-                          // Check if this is a Header (h3) or Subheader (h4)
-                          const isSubheader = child.level === 4;
+            <ul className='space-y-3 pr-8'>
+              {items.map((section) => (
+                <li key={section.id}>
+                  {/* Level 1: SectionCard (h2) */}
+                  <a
+                    className='block break-words text-left font-bold text-white transition-colors duration-200 hover:text-yellow-500'
+                    href={`#${section.id}`}
+                    onClick={handleLinkClick}
+                  >
+                    {section.text}
+                  </a>
 
-                          return (
-                            <li key={child.id}>
-                              {isSubheader ? (
-                                /* Level 3: Subheader (h4) with || indicator */
-                                <div className='flex items-start gap-2 pl-4'>
-                                  <span className='mt-1 text-xs text-zinc-500'>
-                                    ||
-                                  </span>
-                                  <a
-                                    className='block break-words text-left text-gray-400 text-xs leading-relaxed transition-colors duration-200 hover:text-yellow-500'
-                                    href={`#${child.id}`}
-                                    onClick={handleLinkClick}
-                                  >
-                                    {child.text}
-                                  </a>
-                                </div>
-                              ) : (
-                                /* Level 2: Header (h3) */
+                  {section.children.length > 0 && (
+                    <ul className='mt-2 space-y-1 border-zinc-600 border-l pl-4'>
+                      {section.children.map((child) => {
+                        // Check if this is a Header (h3) or Subheader (h4)
+                        const isSubheader = child.level === 4;
+
+                        return (
+                          <li key={child.id}>
+                            {isSubheader ? (
+                              /* Level 3: Subheader (h4) with || indicator */
+                              <div className='flex items-start gap-2 pl-4'>
+                                <span className='mt-1 text-xs text-zinc-500'>
+                                  ||
+                                </span>
                                 <a
-                                  className='block break-words text-left text-gray-200 text-sm transition-colors duration-200 hover:text-yellow-500'
+                                  className='block break-words text-left text-gray-400 text-xs leading-relaxed transition-colors duration-200 hover:text-yellow-500'
                                   href={`#${child.id}`}
                                   onClick={handleLinkClick}
                                 >
                                   {child.text}
                                 </a>
-                              )}
-                            </li>
-                          );
-                        })}
-                      </ul>
-                    )}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </motion.div>
-        </button>
+                              </div>
+                            ) : (
+                              /* Level 2: Header (h3) */
+                              <a
+                                className='block break-words text-left text-gray-200 text-sm transition-colors duration-200 hover:text-yellow-500'
+                                href={`#${child.id}`}
+                                onClick={handleLinkClick}
+                              >
+                                {child.text}
+                              </a>
+                            )}
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </motion.div>
       </div>
     </nav>
   );

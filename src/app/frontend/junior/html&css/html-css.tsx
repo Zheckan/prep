@@ -11,7 +11,7 @@ import {
 
 export default function HTMLCSSComponent() {
   return (
-    <div className='min-h-screen bg-black text-white'>
+    <div className='min-h-screen text-white'>
       <PageHeader
         description='Semantic HTML, accessibility basics, Flexbox, Grid, responsive design'
         title='HTML & CSS Notes'
