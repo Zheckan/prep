@@ -10,7 +10,8 @@
     "lint": "npx ultracite@latest lint",
     "format": "npx ultracite@latest format",
     "format:check": "npx ultracite@latest format --check .",
-    "prepare": "husky"
+    "prepare": "husky",
+    "test": "jest"
   },
   "dependencies": {
     "@vercel/analytics": "^1.5.0",
@@ -25,13 +26,20 @@
   "devDependencies": {
     "@biomejs/biome": "2.0.6",
     "@tailwindcss/postcss": "^4",
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.3.0",
+    "@types/jest": "^30.0.0",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "@types/react-syntax-highlighter": "^15.5.13",
     "husky": "^9.1.7",
+    "identity-obj-proxy": "^3.0.0",
+    "jest": "^30.0.4",
+    "jest-environment-jsdom": "^30.0.4",
     "prettier": "^3.6.0",
     "tailwindcss": "^4",
+    "ts-jest": "^29.4.0",
     "typescript": "^5",
     "ultracite": "5.0.31"
   }
