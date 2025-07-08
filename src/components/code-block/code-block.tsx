@@ -1,5 +1,6 @@
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { coldarkDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import { parseHighlightLines } from '@/helpers/parse-highlight-lines';
 
 // Move regex patterns to top level for better performance
 const COMMENT_REGEX = /^\/\*\s*\w+\s*\*\/\s*\n?/;
@@ -50,31 +51,6 @@ export const CodeBlock = ({
       .trim();
   }
 
-  const parseHighlightLines = (highlightStr?: string): number[] => {
-    if (!highlightStr) {
-      return [];
-    }
-
-    const highlightedLineNumbers: number[] = [];
-    const parts = highlightStr.split(',');
-
-    // Use for...of instead of forEach for better performance
-    for (const part of parts) {
-      if (part.includes('-')) {
-        const [start, end] = part
-          .split('-')
-          .map((n) => Number.parseInt(n.trim(), 10)); // Add radix parameter
-        for (let i = start; i <= end; i++) {
-          highlightedLineNumbers.push(i);
-        }
-      } else {
-        highlightedLineNumbers.push(Number.parseInt(part.trim(), 10)); // Add radix parameter
-      }
-    }
-
-    return highlightedLineNumbers;
-  };
-
   const highlightedLines = parseHighlightLines(highlightLines);
   const highlightedLinesEnd = parseHighlightLines(highlightLinesEnd);
 
@@ -101,6 +77,8 @@ export const CodeBlock = ({
         borderLeft,
         paddingLeft: isHighlighted || isHighlightedEnd ? '0.75rem' : '0',
         marginLeft: isHighlighted || isHighlightedEnd ? '-0.75rem' : '0',
+        width: 'fit-content',
+        minWidth: '100%',
       },
     };
   };
@@ -116,6 +94,8 @@ export const CodeBlock = ({
         codeTagProps={{
           style: {
             fontFamily: `ui-monospace, SFMono-Regular, 'SF Mono', Consolas, 'Liberation Mono', Menlo, monospace`,
+            display: 'grid',
+            gridTemplateColumns: '1fr',
           },
         }}
         customStyle={{
@@ -124,6 +104,7 @@ export const CodeBlock = ({
           background: 'transparent',
           fontSize: '0.875rem',
           lineHeight: '1.5',
+          overflowX: 'auto',
         }}
         language={language}
         lineProps={getLineProps}
