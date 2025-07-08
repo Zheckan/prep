@@ -9,7 +9,7 @@
     "start": "next start",
     "lint": "npx ultracite@latest lint",
     "format": "npx ultracite@latest format",
-    "format:check": "npx ultracite@latest format --check .",
+    "format:check": "npx ultracite@latest format .",
     "prepare": "husky",
     "test": "jest"
   },
