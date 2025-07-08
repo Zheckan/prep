@@ -1,6 +1,6 @@
 'use client';
 
-import { PageHeader } from '@/components';
+import { PageHeader, TableOfContents } from '@/components';
 import {
   CssFlexbox,
   CssFunctionsAndModernFeatures,
@@ -20,6 +20,8 @@ export default function HTMLCSSComponent() {
 
       {/* Spacer to account for fixed header */}
       <div className='h-[140px]' />
+
+      <TableOfContents />
 
       <div className='mx-auto max-w-4xl px-6 py-8'>
         <div className='prose prose-invert prose-zinc max-w-none'>
