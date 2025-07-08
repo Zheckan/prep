@@ -1,5 +1,9 @@
+'use client';
+
+import { AnimatePresence, motion } from 'framer-motion';
 import { BookOpenCheck, House } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { useEffect, useRef, useState } from 'react';
 
 interface PageHeaderProps {
   title: string;
@@ -13,16 +17,62 @@ export const PageHeader = ({
   topicHome,
 }: PageHeaderProps) => {
   const router = useRouter();
+  const [isScrolled, setIsScrolled] = useState(false);
+  const lastScrollY = useRef(0);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      if (currentScrollY > 20) {
+        if (currentScrollY > lastScrollY.current) {
+          // Scrolling down
+          setIsScrolled(true);
+        } else {
+          // Scrolling up
+          setIsScrolled(false);
+        }
+      } else {
+        setIsScrolled(false);
+      }
+      lastScrollY.current = currentScrollY;
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
 
   return (
-    <div className='fixed top-0 right-0 left-0 z-50 border-white/10 border-b bg-black/30 backdrop-blur-xl backdrop-saturate-150'>
-      <div className='mx-auto max-w-4xl px-6 py-8'>
-        <div className='flex items-center justify-between'>
-          <div>
-            <h1 className='mb-2 font-bold text-3xl text-white md:text-4xl'>
+    <motion.div
+      animate={{
+        height: isScrolled ? '80px' : '140px',
+      }}
+      className='fixed top-0 right-0 left-0 z-50 border-white/10 border-b bg-black/30 backdrop-blur-xl backdrop-saturate-150'
+      transition={{ duration: 0.3, ease: 'easeInOut' }}
+    >
+      <div className='mx-auto h-full max-w-4xl px-6'>
+        <div className='flex h-full items-center justify-between'>
+          <div className='flex-1'>
+            <motion.h1
+              className='font-bold text-3xl text-white md:text-4xl'
+              layout
+              transition={{ duration: 0.3, ease: 'easeInOut' }}
+            >
               {title}
-            </h1>
-            <p className='text-gray-50'>{description}</p>
+            </motion.h1>
+            <AnimatePresence>
+              {!isScrolled && (
+                <motion.p
+                  className='text-gray-50'
+                  exit={{ opacity: 0, height: 0 }}
+                  initial={{ opacity: 1, height: 'auto' }}
+                  transition={{ duration: 0.2, ease: 'easeInOut' }}
+                >
+                  {description}
+                </motion.p>
+              )}
+            </AnimatePresence>
           </div>
           <div className='flex items-center gap-4'>
             {topicHome && (
@@ -46,6 +96,6 @@ export const PageHeader = ({
           </div>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
