@@ -110,7 +110,7 @@ export const CodeBlock = ({
         lineProps={getLineProps}
         showLineNumbers={showLineNumbers}
         style={coldarkDark}
-        wrapLines={highlightedLines.length > 0}
+        wrapLines={true}
       >
         {codeToHighlight}
       </SyntaxHighlighter>
