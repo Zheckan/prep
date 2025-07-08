@@ -30,6 +30,16 @@ body::before {
   position: fixed;
   inset: 0;
   z-index: -1;
-  background: radial-gradient(circle at 20% 20%, #facc15, transparent 70%);
+  background: radial-gradient(circle at 20% 20%, #ae930a99, transparent 70%);
   filter: blur(80px);
+}
+
+/* Hide scrollbars */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
 }
