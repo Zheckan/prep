@@ -1,6 +1,6 @@
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { coldarkDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
-import { parseHighlightLines } from '@/helpers/parseHighlightLines';
+import { parseHighlightLines } from '@/helpers/parse-highlight-lines';
 
 // Move regex patterns to top level for better performance
 const COMMENT_REGEX = /^\/\*\s*\w+\s*\*\/\s*\n?/;

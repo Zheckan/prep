@@ -1,1 +1,1 @@
-export * from './parseHighlightLines';
+export * from './parse-highlight-lines';

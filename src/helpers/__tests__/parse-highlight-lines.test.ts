@@ -1,4 +1,4 @@
-import { parseHighlightLines } from '../parseHighlightLines';
+import { parseHighlightLines } from '../parse-highlight-lines';
 
 describe('parseHighlightLines', () => {
   it('returns empty array for undefined', () => {
@@ -10,14 +10,14 @@ describe('parseHighlightLines', () => {
   });
 
   it('parses comma separated numbers', () => {
-    expect(parseHighlightLines('1,2,5')).toEqual([1,2,5]);
+    expect(parseHighlightLines('1,2,5')).toEqual([1, 2, 5]);
   });
 
   it('parses range of numbers', () => {
-    expect(parseHighlightLines('1-3')).toEqual([1,2,3]);
+    expect(parseHighlightLines('1-3')).toEqual([1, 2, 3]);
   });
 
   it('parses mixed numbers and ranges', () => {
-    expect(parseHighlightLines('1-2,4,6-7')).toEqual([1,2,4,6,7]);
+    expect(parseHighlightLines('1-2,4,6-7')).toEqual([1, 2, 4, 6, 7]);
   });
 });
