@@ -1,7 +1,15 @@
 #!/bin/sh
 
-# Format files and fix linting issues
-npx ultracite format
+# Get list of staged files that can be formatted
+STAGED_FILES=$(git diff --cached --name-only --diff-filter=ACM | grep -E '\.(js|jsx|ts|tsx|json|css|scss|md)$' || true)
 
-# Add any formatting changes back to the staging area
-git add .
+# Exit if no relevant staged files
+if [ -z "$STAGED_FILES" ]; then
+  exit 0
+fi
+
+# Format only the staged files
+npx ultracite format $STAGED_FILES
+
+# Add back only the formatted staged files
+git add $STAGED_FILES
