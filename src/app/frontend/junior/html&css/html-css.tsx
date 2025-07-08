@@ -15,6 +15,7 @@ export default function HTMLCSSComponent() {
       <PageHeader
         description='Semantic HTML, accessibility basics, Flexbox, Grid, responsive design'
         title='HTML & CSS Notes'
+        topicHome='/frontend/junior'
       />
 
       {/* Spacer to account for fixed header */}

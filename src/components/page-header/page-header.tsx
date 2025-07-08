@@ -1,12 +1,17 @@
-import { House } from 'lucide-react';
+import { BookOpenCheck, House } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 interface PageHeaderProps {
   title: string;
   description: string;
+  topicHome?: string;
 }
 
-export const PageHeader = ({ title, description }: PageHeaderProps) => {
+export const PageHeader = ({
+  description,
+  title,
+  topicHome,
+}: PageHeaderProps) => {
   const router = useRouter();
 
   return (
@@ -19,14 +24,26 @@ export const PageHeader = ({ title, description }: PageHeaderProps) => {
             </h1>
             <p className='text-gray-50'>{description}</p>
           </div>
-          <button
-            aria-label='Go to home page'
-            className='text-white transition-colors hover:text-yellow-500'
-            onClick={() => router.push('/')}
-            type='button'
-          >
-            <House size={24} />
-          </button>
+          <div className='flex items-center gap-4'>
+            {topicHome && (
+              <button
+                aria-label='Go to topic home'
+                className='text-white transition-colors hover:text-yellow-500'
+                onClick={() => router.push(topicHome)}
+                type='button'
+              >
+                <BookOpenCheck size={24} />
+              </button>
+            )}
+            <button
+              aria-label='Go to home page'
+              className='text-white transition-colors hover:text-yellow-500'
+              onClick={() => router.push('/')}
+              type='button'
+            >
+              <House size={24} />
+            </button>
+          </div>
         </div>
       </div>
     </div>
