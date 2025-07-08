@@ -1,6 +1,7 @@
 'use client';
 
-import { PageHeader } from '@/components';
+import { useEffect, useState } from 'react';
+import { PageHeader, TableOfContents } from '@/components';
 import {
   CssFlexbox,
   CssFunctionsAndModernFeatures,
@@ -10,6 +11,25 @@ import {
 } from './components';
 
 export default function HTMLCSSComponent() {
+  const [headerHeight, setHeaderHeight] = useState(0);
+
+  useEffect(() => {
+    const header = document.getElementById('page-header');
+    if (!header) {
+      return;
+    }
+    const updateHeight = () =>
+      setHeaderHeight(header.getBoundingClientRect().height);
+    updateHeight();
+    const resizeObserver = new ResizeObserver(updateHeight);
+    resizeObserver.observe(header);
+    window.addEventListener('scroll', updateHeight);
+    return () => {
+      resizeObserver.disconnect();
+      window.removeEventListener('scroll', updateHeight);
+    };
+  }, []);
+
   return (
     <div className='min-h-screen bg-black text-white'>
       <PageHeader
@@ -18,10 +38,12 @@ export default function HTMLCSSComponent() {
         topicHome='/frontend/junior'
       />
 
-      {/* Spacer to account for fixed header */}
-      <div className='h-[140px]' />
+      <TableOfContents />
 
-      <div className='mx-auto max-w-4xl px-6 py-8'>
+      <div
+        className='mx-auto max-w-4xl px-6 py-8'
+        style={{ paddingTop: headerHeight }}
+      >
         <div className='prose prose-invert prose-zinc max-w-none'>
           <SemanticHtmlAndAccessibility />
           <CssFlexbox />
