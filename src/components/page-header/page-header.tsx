@@ -45,6 +45,7 @@ export const PageHeader = ({
 
   return (
     <motion.div
+      id='page-header'
       animate={{
         height: isScrolled ? '80px' : '140px',
       }}
