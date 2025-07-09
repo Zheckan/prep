@@ -167,6 +167,30 @@ export const TableOfContents = () => {
     setOpen(!open);
   };
 
+  // Handle click outside on mobile
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (window.innerWidth < 768 && open && !pinned) {
+        const target = event.target as Element;
+        const tocNav = document.querySelector('nav[style*="top:"]');
+        const tocContent = tocNav?.querySelector('div[style*="borderRadius"]');
+
+        // Close if clicking outside the TOC content area
+        if (tocContent && !tocContent.contains(target)) {
+          setOpen(false);
+        }
+      }
+    };
+
+    if (open) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [open, pinned]);
+
   return (
     <nav
       className='pointer-events-none fixed left-0 z-40'
@@ -184,7 +208,7 @@ export const TableOfContents = () => {
           type='button'
         />
 
-        {/* Preview hint when closed - more visible on mobile */}
+        {/* Preview hint when closed - same height as open state */}
         {!open && (
           <motion.div
             animate={{ opacity: 1 }}
@@ -261,19 +285,14 @@ export const TableOfContents = () => {
                         return (
                           <li key={child.id}>
                             {isSubheader ? (
-                              /* Level 3: Subheader (h4) with || indicator */
-                              <div className='flex items-start gap-2 pl-4'>
-                                <span className='mt-1 text-xs text-zinc-500'>
-                                  ||
-                                </span>
-                                <a
-                                  className='block break-words text-left text-gray-400 text-xs leading-relaxed transition-colors duration-200 hover:text-yellow-500'
-                                  href={`#${child.id}`}
-                                  onClick={handleLinkClick}
-                                >
-                                  {child.text}
-                                </a>
-                              </div>
+                              /* Level 3: Subheader (h4) with double border */
+                              <a
+                                className='block break-words border-zinc-600 border-l pl-4 text-left text-gray-400 text-xs leading-relaxed transition-colors duration-200 hover:text-yellow-500'
+                                href={`#${child.id}`}
+                                onClick={handleLinkClick}
+                              >
+                                {child.text}
+                              </a>
                             ) : (
                               /* Level 2: Header (h3) */
                               <a
