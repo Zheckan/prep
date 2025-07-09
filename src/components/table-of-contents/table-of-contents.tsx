@@ -22,7 +22,13 @@ export const TableOfContents = () => {
   const [pinned, setPinned] = useState(false);
   const [headerHeight, setHeaderHeight] = useState(0);
   const [touchStart, setTouchStart] = useState<number | null>(null);
-  const [availableHeight, setAvailableHeight] = useState(0);
+  const [availableHeight, setAvailableHeight] = useState(() => {
+    // Initialize with a reasonable estimate to prevent flicker
+    if (typeof window !== 'undefined') {
+      return Math.max(window.innerHeight - 140, 200); // Assume max header height of 140px
+    }
+    return 200;
+  });
 
   useEffect(() => {
     const getHeadingLevel = (tagName: string): number => {
@@ -97,7 +103,12 @@ export const TableOfContents = () => {
     const updateAvailableHeight = () => {
       const viewportHeight = window.innerHeight;
       const calculatedHeight = viewportHeight - headerHeight;
-      setAvailableHeight(Math.max(calculatedHeight, 200)); // Minimum 200px
+      const newHeight = Math.max(calculatedHeight, 200); // Minimum 200px
+
+      // Only update if there's a meaningful change to prevent flicker
+      if (Math.abs(newHeight - availableHeight) > 5) {
+        setAvailableHeight(newHeight);
+      }
     };
 
     updateAvailableHeight();
@@ -106,7 +117,7 @@ export const TableOfContents = () => {
     return () => {
       window.removeEventListener('resize', updateAvailableHeight);
     };
-  }, [headerHeight]);
+  }, [headerHeight, availableHeight]);
 
   useEffect(() => {
     const handleTouchStart = (e: TouchEvent) => {
@@ -239,7 +250,7 @@ export const TableOfContents = () => {
             msOverflowStyle: 'none',
             width: 'fit-content',
             minWidth: '240px',
-            maxHeight: `${availableHeight}px`,
+            height: `${availableHeight}px`,
           }}
           transition={{
             type: 'tween',
