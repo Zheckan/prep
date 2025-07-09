@@ -49,6 +49,7 @@ export const PageHeader = ({
         height: isScrolled ? '80px' : '140px',
       }}
       className='fixed top-0 right-0 left-0 z-50 border-white/10 border-b bg-black/30 backdrop-blur-xl backdrop-saturate-150'
+      id='page-header'
       transition={{ duration: 0.3, ease: 'easeInOut' }}
     >
       <div className='mx-auto h-full max-w-4xl px-6'>
