@@ -173,7 +173,7 @@ export const TableOfContents = () => {
       if (window.innerWidth < 768 && open && !pinned) {
         const target = event.target as Element;
         const tocNav = document.querySelector('nav[style*="top:"]');
-        const tocContent = tocNav?.querySelector('div[style*="borderRadius"]');
+        const tocContent = tocNav?.querySelector('.scrollbar-hide');
 
         // Close if clicking outside the TOC content area
         if (tocContent && !tocContent.contains(target)) {
@@ -200,7 +200,7 @@ export const TableOfContents = () => {
         {/* Small trigger zone - always visible */}
         <button
           aria-label='Toggle table of contents'
-          className='pointer-events-auto absolute top-0 left-0 w-4 cursor-pointer border-none bg-transparent p-0 md:w-3'
+          className='pointer-events-auto absolute top-0 left-0 w-2 cursor-pointer border-none bg-transparent p-0 md:w-3'
           onClick={handleTriggerClick}
           onMouseEnter={() => setOpen(true)}
           onTouchStart={handleTriggerClick}
@@ -212,12 +212,10 @@ export const TableOfContents = () => {
         {!open && (
           <motion.div
             animate={{ opacity: 1 }}
-            className='pointer-events-none absolute top-0 left-0 w-4 border-white/10 border-t border-r border-b bg-black/30 backdrop-blur-md md:w-3'
+            className='pointer-events-none absolute top-0 left-0 w-2 border-white/10 border-r border-b bg-black/30 backdrop-blur-xl backdrop-saturate-150 md:w-3'
             exit={{ opacity: 0 }}
             initial={{ opacity: 0 }}
             style={{
-              borderTopRightRadius: '3px',
-              borderBottomRightRadius: '3px',
               height: `${availableHeight}px`,
             }}
           >
@@ -233,7 +231,7 @@ export const TableOfContents = () => {
             x: open ? 0 : '-100%',
             opacity: open ? 1 : 0,
           }}
-          className='scrollbar-hide pointer-events-auto relative min-w-0 max-w-sm overflow-y-auto border-white/10 border-t border-r border-b bg-black/30 p-4 text-sm text-white backdrop-blur-xl backdrop-saturate-150 md:border'
+          className='scrollbar-hide pointer-events-auto relative min-w-0 max-w-sm overflow-y-auto border-white/10 border-r border-b bg-black/30 p-4 text-sm text-white backdrop-blur-xl backdrop-saturate-150 md:border'
           onMouseEnter={() => setOpen(true)}
           onMouseLeave={handleMouseLeave}
           style={{
@@ -241,7 +239,6 @@ export const TableOfContents = () => {
             msOverflowStyle: 'none',
             width: 'fit-content',
             minWidth: '240px',
-            borderRadius: '0 6px 6px 0',
             maxHeight: `${availableHeight}px`,
           }}
           transition={{
