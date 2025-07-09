@@ -22,13 +22,8 @@ export const TableOfContents = () => {
   const [pinned, setPinned] = useState(false);
   const [headerHeight, setHeaderHeight] = useState(0);
   const [touchStart, setTouchStart] = useState<number | null>(null);
-  const [availableHeight, setAvailableHeight] = useState(() => {
-    // Initialize with a reasonable estimate to prevent flicker
-    if (typeof window !== 'undefined') {
-      return Math.max(window.innerHeight - 140, 200); // Assume max header height of 140px
-    }
-    return 200;
-  });
+  const [availableHeight, setAvailableHeight] = useState(0);
+  const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
     const getHeadingLevel = (tagName: string): number => {
@@ -69,10 +64,11 @@ export const TableOfContents = () => {
         }
       }
       setItems(mapped);
+      setIsLoaded(true);
     };
 
     // Initial update with delay to ensure content is rendered
-    const timeoutId = setTimeout(updateTOC, 1000);
+    const timeoutId = setTimeout(updateTOC, 0);
 
     const header = document.getElementById('page-header');
     let resizeObserver: ResizeObserver | null = null;
@@ -103,12 +99,7 @@ export const TableOfContents = () => {
     const updateAvailableHeight = () => {
       const viewportHeight = window.innerHeight;
       const calculatedHeight = viewportHeight - headerHeight;
-      const newHeight = Math.max(calculatedHeight, 200); // Minimum 200px
-
-      // Only update if there's a meaningful change to prevent flicker
-      if (Math.abs(newHeight - availableHeight) > 5) {
-        setAvailableHeight(newHeight);
-      }
+      setAvailableHeight(Math.max(calculatedHeight, 200)); // Minimum 200px
     };
 
     updateAvailableHeight();
@@ -117,7 +108,7 @@ export const TableOfContents = () => {
     return () => {
       window.removeEventListener('resize', updateAvailableHeight);
     };
-  }, [headerHeight, availableHeight]);
+  }, [headerHeight]);
 
   useEffect(() => {
     const handleTouchStart = (e: TouchEvent) => {
@@ -202,6 +193,11 @@ export const TableOfContents = () => {
     };
   }, [open, pinned]);
 
+  // Don't render until content is loaded to prevent flickering
+  if (!isLoaded) {
+    return null;
+  }
+
   return (
     <nav
       className='pointer-events-none fixed left-0 z-40'
@@ -222,12 +218,18 @@ export const TableOfContents = () => {
         {/* Preview hint when closed - same height as open state */}
         {!open && (
           <motion.div
-            animate={{ opacity: 1 }}
+            animate={{ opacity: 1, x: 0 }}
             className='pointer-events-none absolute top-0 left-0 w-2 border-white/10 border-r border-b bg-black/30 backdrop-blur-xl backdrop-saturate-150 md:w-3'
             exit={{ opacity: 0 }}
-            initial={{ opacity: 0 }}
+            initial={{ opacity: 0, x: -20 }}
             style={{
               height: `${availableHeight}px`,
+            }}
+            transition={{
+              type: 'tween',
+              ease: 'easeInOut',
+              duration: 0.4,
+              delay: 0.2,
             }}
           >
             <div className='h-full w-full bg-gradient-to-r from-black/40 to-transparent' />
@@ -243,6 +245,10 @@ export const TableOfContents = () => {
             opacity: open ? 1 : 0,
           }}
           className='scrollbar-hide pointer-events-auto relative min-w-0 max-w-sm overflow-y-auto border-white/10 border-r border-b bg-black/30 p-4 text-sm text-white backdrop-blur-xl backdrop-saturate-150 md:border'
+          initial={{
+            x: '-100%',
+            opacity: 0,
+          }}
           onMouseEnter={() => setOpen(true)}
           onMouseLeave={handleMouseLeave}
           style={{

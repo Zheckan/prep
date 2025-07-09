@@ -18,11 +18,18 @@ export const PageHeader = ({
 }: PageHeaderProps) => {
   const router = useRouter();
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isInitialLoad, setIsInitialLoad] = useState(true);
   const lastScrollY = useRef(0);
 
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
+
+      // Mark as no longer initial load after first scroll
+      if (isInitialLoad) {
+        setIsInitialLoad(false);
+      }
+
       if (currentScrollY > 20) {
         if (currentScrollY > lastScrollY.current) {
           // Scrolling down
@@ -41,15 +48,16 @@ export const PageHeader = ({
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
-  }, []);
+  }, [isInitialLoad]);
 
   return (
     <motion.div
       animate={{
-        height: isScrolled ? '80px' : '140px',
+        height: isInitialLoad || !isScrolled ? '140px' : '80px',
       }}
       className='fixed top-0 right-0 left-0 z-50 border-white/10 border-b bg-black/30 backdrop-blur-xl backdrop-saturate-150'
       id='page-header'
+      initial={{ height: '140px' }}
       transition={{ duration: 0.3, ease: 'easeInOut' }}
     >
       <div className='mx-auto h-full max-w-4xl px-6'>
@@ -63,7 +71,7 @@ export const PageHeader = ({
               {title}
             </motion.h1>
             <AnimatePresence>
-              {!isScrolled && (
+              {(isInitialLoad || !isScrolled) && (
                 <motion.p
                   className='text-gray-50'
                   exit={{ opacity: 0, height: 0 }}
