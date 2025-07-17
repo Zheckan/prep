@@ -17,10 +17,10 @@ const sections: Section[] = [
     inProgress: false,
   },
   {
-    href: '#',
+    href: '/frontend/junior/javascript-fundamentals',
     title: 'JavaScript Fundamentals',
     description: 'ES6+ syntax, scope, closures, async patterns, DOM APIs',
-    inProgress: true,
+    inProgress: false,
   },
   {
     href: '#',
