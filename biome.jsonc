@@ -14,7 +14,7 @@
   },
   "javascript": {
     "formatter": {
-      "quoteStyle": "single", 
+      "quoteStyle": "single",
       "jsxQuoteStyle": "single"
     }
   }
