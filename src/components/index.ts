@@ -1,3 +1,4 @@
+export * from './ambient-background/ambient-background';
 export * from './code-block';
 export * from './layout';
 export * from './notes-area';

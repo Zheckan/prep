@@ -8,9 +8,17 @@
   --muted: #a1a1aa; /* zinc-400 */
   --muted-foreground: #d4d4d8; /* zinc-300 */
   --border: rgba(255, 255, 255, 0.08);
-  --glass-bg: rgba(0, 0, 0, 0.4);
-  --glass-strong-bg: rgba(0, 0, 0, 0.5);
+  --glass-bg: rgba(0, 0, 0, 0.1);
+  --glass-strong-bg: rgba(0, 0, 0, 0.22);
   --ring: var(--accent);
+  /* Current page header height (controlled by PageHeader) */
+  --page-header-height: 128px;
+
+  /* Ambient background hues */
+  --ambient-1: 255 90 31; /* warm orange */
+  --ambient-2: 234 179 8; /* yellow-500 */
+  --ambient-3: 168 85 247; /* purple */
+  --ambient-4: 14 165 233; /* cyan */
 }
 
 @theme inline {
@@ -28,8 +36,8 @@
     --muted: #52525b; /* zinc-600 */
     --muted-foreground: #3f3f46; /* zinc-700 */
     --border: rgba(0, 0, 0, 0.08);
-    --glass-bg: rgba(255, 255, 255, 0.6);
-    --glass-strong-bg: rgba(255, 255, 255, 0.7);
+    --glass-bg: rgba(255, 255, 255, 0.5);
+    --glass-strong-bg: rgba(255, 255, 255, 0.6);
   }
 }
 
@@ -49,29 +57,7 @@ body {
     "Segoe UI Emoji";
 }
 
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  z-index: -1;
-  background:
-    radial-gradient(
-      1200px 800px at 15% 10%,
-      color(from var(--accent) srgb r g b / 0.1),
-      transparent 55%
-    ),
-    radial-gradient(
-      900px 600px at 85% 20%,
-      color(from var(--accent) srgb r g b / 0.06),
-      transparent 60%
-    ),
-    linear-gradient(
-      180deg,
-      rgba(255, 255, 255, 0.02),
-      rgba(255, 255, 255, 0) 60%
-    );
-  filter: blur(0px);
-}
+/* Image + gradient background is rendered via AmbientBackground component */
 
 /* subtle vignette to highlight glass layers */
 body::after {
@@ -87,6 +73,7 @@ body::after {
     ),
     radial-gradient(80% 50% at 50% 100%, rgba(0, 0, 0, 0.25), transparent 70%);
   pointer-events: none;
+  transition: filter 0.28s ease-in-out;
 }
 
 /* Accessible focus styles */
