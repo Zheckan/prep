@@ -208,7 +208,7 @@ export const TableOfContents = () => {
               className='h-full w-full opacity-80'
               style={{
                 background:
-                  'linear-gradient(to right, rgba(255,255,255,0.08), rgba(255,255,255,0))',
+                  'linear-gradient(to right, color-mix(in srgb, rgba(255, 255, 255, 0.3) 100%, var(--glass-strong-bg) 20%), transparent)',
               }}
             />
             <div className='absolute inset-y-0 right-0 w-px md:hidden' />
@@ -262,7 +262,7 @@ export const TableOfContents = () => {
                 <li key={section.id}>
                   {/* Level 1: SectionCard (h2) */}
                   <a
-                    className='block break-words text-left font-bold text-white transition-colors duration-200 hover:text-yellow-500 focus-visible:outline-none'
+                    className='block break-words text-left font-bold text-white transition-colors duration-200 hover:text-[var(--accent)] focus-visible:outline-none'
                     href={`#${section.id}`}
                     onClick={handleLinkClick}
                   >
@@ -280,7 +280,7 @@ export const TableOfContents = () => {
                             {isSubheader ? (
                               /* Level 3: Subheader (h4) with double border */
                               <a
-                                className='block break-words border-zinc-600 border-l pl-4 text-left text-xs text-zinc-400 leading-relaxed transition-colors duration-200 hover:text-yellow-500 focus-visible:outline-none'
+                                className='block break-words border-zinc-600 border-l pl-4 text-left text-xs text-zinc-400 leading-relaxed transition-colors duration-200 hover:text-[var(--accent)] focus-visible:outline-none'
                                 href={`#${child.id}`}
                                 onClick={handleLinkClick}
                               >
@@ -289,7 +289,7 @@ export const TableOfContents = () => {
                             ) : (
                               /* Level 2: Header (h3) */
                               <a
-                                className='block break-words text-left text-gray-200 text-sm transition-colors duration-200 hover:text-yellow-500 focus-visible:outline-none'
+                                className='block break-words text-left text-gray-200 text-sm transition-colors duration-200 hover:text-[var(--accent)] focus-visible:outline-none'
                                 href={`#${child.id}`}
                                 onClick={handleLinkClick}
                               >
