@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion';
 import { Pin, PinOff } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 interface TocHeading {
   id: string;
@@ -21,8 +21,10 @@ export const TableOfContents = () => {
   const [open, setOpen] = useState(false);
   const [pinned, setPinned] = useState(false);
   const [headerHeight, setHeaderHeight] = useState(0);
-  const [touchStart, setTouchStart] = useState<number | null>(null);
   const [isLoaded, setIsLoaded] = useState(false);
+  const touchStartRef = useRef<number | null>(null);
+  const openRef = useRef(open);
+  const pinnedRef = useRef(pinned);
 
   useEffect(() => {
     const getHeadingLevel = (tagName: string): number => {
@@ -90,27 +92,27 @@ export const TableOfContents = () => {
   }, []);
 
   useEffect(() => {
-    const handleTouchStart = (e: TouchEvent) => {
+    const onTouchStart = (e: TouchEvent) => {
       if (window.innerWidth < 768) {
-        setTouchStart(e.touches[0].clientX);
+        touchStartRef.current = e.touches[0].clientX;
       }
     };
-    const handleTouchEnd = (e: TouchEvent) => {
-      if (window.innerWidth < 768 && touchStart !== null) {
-        const diff = e.changedTouches[0].clientX - touchStart;
-        if (touchStart < 30 && diff > 40) {
+    const onTouchEnd = (e: TouchEvent) => {
+      if (window.innerWidth < 768 && touchStartRef.current !== null) {
+        const diff = e.changedTouches[0].clientX - touchStartRef.current;
+        if (touchStartRef.current < 30 && diff > 40) {
           setOpen(true);
         }
       }
-      setTouchStart(null);
+      touchStartRef.current = null;
     };
-    window.addEventListener('touchstart', handleTouchStart);
-    window.addEventListener('touchend', handleTouchEnd);
+    window.addEventListener('touchstart', onTouchStart, { passive: true });
+    window.addEventListener('touchend', onTouchEnd);
     return () => {
-      window.removeEventListener('touchstart', handleTouchStart);
-      window.removeEventListener('touchend', handleTouchEnd);
+      window.removeEventListener('touchstart', onTouchStart);
+      window.removeEventListener('touchend', onTouchEnd);
     };
-  }, [touchStart]);
+  }, []);
 
   const handleMouseLeave = () => {
     if (!pinned) {
@@ -150,27 +152,30 @@ export const TableOfContents = () => {
 
   // Handle click outside on mobile
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (window.innerWidth < 768 && open && !pinned) {
-        const target = event.target as Element;
-        const tocNav = document.querySelector('nav[style*="top:"]');
-        const tocContent = tocNav?.querySelector('.scrollbar-hide');
+    openRef.current = open;
+    pinnedRef.current = pinned;
+  }, [open, pinned]);
 
-        // Close if clicking outside the TOC content area
-        if (tocContent && !tocContent.contains(target)) {
-          setOpen(false);
-        }
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (window.innerWidth >= 768) return;
+      if (!openRef.current || pinnedRef.current) {
+        return;
+      }
+      const target = event.target as Element;
+      const tocNav = document.querySelector('nav[style*="top:"]');
+      const tocContent = tocNav?.querySelector('.scrollbar-hide');
+
+      if (tocContent && !tocContent.contains(target)) {
+        setOpen(false);
       }
     };
 
-    if (open) {
-      document.addEventListener('mousedown', handleClickOutside);
-    }
-
+    document.addEventListener('mousedown', handleClickOutside);
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [open, pinned]);
+  }, []);
 
   // Don't render until content is loaded to prevent flickering
   if (!isLoaded) {

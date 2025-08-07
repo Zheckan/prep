@@ -24,30 +24,19 @@ export const PageHeader = ({
   useEffect(() => {
     let rafId: number | null = null;
     const onScroll = () => {
-      if (rafId !== null) {
-        return;
-      }
+      if (rafId !== null) return;
       rafId = window.requestAnimationFrame(() => {
         rafId = null;
         const currentScrollY = window.scrollY;
-
-        if (isInitialLoad) {
-          setIsInitialLoad(false);
-        }
-
-        if (currentScrollY > 20) {
-          if (currentScrollY > lastScrollY.current) {
-            setIsScrolled(true);
-          } else {
-            setIsScrolled(false);
-          }
-        } else {
-          setIsScrolled(false);
-        }
+        setIsScrolled(
+          currentScrollY > 20 && currentScrollY > lastScrollY.current
+        );
         lastScrollY.current = currentScrollY;
       });
     };
 
+    setIsInitialLoad(false);
+    onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => {
       window.removeEventListener('scroll', onScroll);
@@ -55,7 +44,7 @@ export const PageHeader = ({
         cancelAnimationFrame(rafId);
       }
     };
-  }, [isInitialLoad]);
+  }, []);
 
   return (
     <motion.div

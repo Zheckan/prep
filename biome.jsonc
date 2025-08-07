@@ -7,13 +7,14 @@
         "noUnknownAtRule": "off"
       },
       "style": {
-        "noExportedImports": "off"
+        "noExportedImports": "off",
+        "useBlockStatements": "off"
       }
     }
   },
   "javascript": {
     "formatter": {
-      "quoteStyle": "single",
+      "quoteStyle": "single", 
       "jsxQuoteStyle": "single"
     }
   }
