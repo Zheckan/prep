@@ -211,7 +211,7 @@ export const TableOfContents = () => {
                   'linear-gradient(to right, rgba(255,255,255,0.08), rgba(255,255,255,0))',
               }}
             />
-            <div className='absolute inset-y-0 right-0 w-px bg-yellow-500/40 md:hidden' />
+            <div className='absolute inset-y-0 right-0 w-px md:hidden' />
           </motion.div>
         )}
 
