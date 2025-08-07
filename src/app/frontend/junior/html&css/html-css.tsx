@@ -24,7 +24,7 @@ export default function HTMLCSSComponent() {
       <TableOfContents />
 
       <div className='mx-auto max-w-4xl px-6 py-8'>
-        <div className='prose prose-invert prose-zinc max-w-none'>
+        <div className='prose prose-invert prose-zinc max-w-none prose-a:text-yellow-500 prose-code:text-zinc-100 prose-strong:text-zinc-100'>
           <SemanticHtmlAndAccessibility />
           <CssFlexbox />
           <CssGrid />

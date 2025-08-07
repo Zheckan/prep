@@ -76,7 +76,7 @@ export default function FrontendJunior() {
 
           const colSpan = Math.round(6 / itemsOnThisRow);
 
-          const className = `bg-zinc-900 shadow-lg hover:shadow-xl transition-shadow duration-300 p-6 border border-zinc-800 cursor-pointer hover:border-zinc-600 ${
+          const className = `bg-[var(--card-bg)] transition-colors duration-200 p-6 border border-[var(--border)] cursor-pointer hover:border-zinc-500 ${
             colSpanClasses[colSpan]
           }`;
 

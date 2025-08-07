@@ -219,7 +219,7 @@ export const TableOfContents = () => {
         {!open && (
           <motion.div
             animate={{ opacity: 1, x: 0 }}
-            className='pointer-events-none absolute top-0 left-0 w-2 border-white/10 border-r border-b bg-black/30 backdrop-blur-xl backdrop-saturate-150 md:w-3'
+            className='pointer-events-none absolute top-0 left-0 w-2 border-[var(--border)] border-r border-b bg-black/50 backdrop-blur-md md:w-3'
             exit={{ opacity: 0 }}
             initial={{ opacity: 0, x: -20 }}
             style={{
@@ -244,7 +244,7 @@ export const TableOfContents = () => {
             x: open ? 0 : '-100%',
             opacity: open ? 1 : 0,
           }}
-          className='scrollbar-hide pointer-events-auto relative min-w-0 max-w-sm overflow-y-auto border-white/10 border-r border-b bg-black/30 p-4 text-sm text-white backdrop-blur-xl backdrop-saturate-150 md:border'
+          className='scrollbar-hide pointer-events-auto relative min-w-0 max-w-sm overflow-y-auto border-[var(--border)] border-r border-b bg-black/50 p-4 text-sm text-white backdrop-blur-md md:border'
           initial={{
             x: '-100%',
             opacity: 0,

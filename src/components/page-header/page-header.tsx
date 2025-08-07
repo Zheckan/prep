@@ -55,7 +55,7 @@ export const PageHeader = ({
       animate={{
         height: isInitialLoad || !isScrolled ? '140px' : '80px',
       }}
-      className='fixed top-0 right-0 left-0 z-50 border-white/10 border-b bg-black/30 backdrop-blur-xl backdrop-saturate-150'
+      className='fixed top-0 right-0 left-0 z-50 border-[var(--border)] border-b bg-black/50 backdrop-blur-md'
       id='page-header'
       initial={{ height: '140px' }}
       transition={{ duration: 0.3, ease: 'easeInOut' }}
@@ -87,7 +87,7 @@ export const PageHeader = ({
             {topicHome && (
               <button
                 aria-label='Go to topic home'
-                className='text-white transition-colors hover:text-yellow-500'
+                className='text-white transition-colors hover:text-[var(--accent)]'
                 onClick={() => router.push(topicHome)}
                 type='button'
               >
@@ -96,7 +96,7 @@ export const PageHeader = ({
             )}
             <button
               aria-label='Go to home page'
-              className='text-white transition-colors hover:text-yellow-500'
+              className='text-white transition-colors hover:text-[var(--accent)]'
               onClick={() => router.push('/')}
               type='button'
             >
