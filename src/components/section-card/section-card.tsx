@@ -1,14 +1,13 @@
 import { slugify } from '@/helpers/slugify';
-
-interface SectionCardProps {
-  title: string;
-  children: React.ReactNode;
-}
+import type { SectionCardProps } from '@/types';
 
 export const SectionCard = ({ title, children }: SectionCardProps) => {
   const id = slugify(title);
   return (
-    <section className='mb-12 border border-zinc-800 bg-zinc-900 p-6' id={id}>
+    <section
+      className='mb-12 rounded-lg border border-zinc-800 bg-zinc-900/90 p-6 backdrop-blur supports-[backdrop-filter]:bg-zinc-900/70'
+      id={id}
+    >
       <h2
         className='mb-4 border-zinc-700 border-b pb-2 font-bold text-2xl text-white'
         id={id}

@@ -7,7 +7,8 @@
         "noUnknownAtRule": "off"
       },
       "style": {
-        "noExportedImports": "off"
+        "noExportedImports": "off",
+        "useBlockStatements": "off"
       }
     }
   },
