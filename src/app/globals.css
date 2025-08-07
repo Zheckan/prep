@@ -97,10 +97,10 @@ a:focus-visible,
   backdrop-filter: blur(14px) saturate(160%);
 }
 
-/* Mobile: always full width minus page padding */
+/* Mobile: allow full viewport width */
 @media (max-width: 640px) {
   .content-container {
-    max-width: calc(100vw - 3rem);
+    max-width: 100vw;
   }
 }
 

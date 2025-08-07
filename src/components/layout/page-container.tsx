@@ -29,7 +29,7 @@ export function PageContainer({
     return initialWidth;
   });
 
-  const [headerHeight, setHeaderHeight] = useState<number>(140);
+  const [headerHeight, setHeaderHeight] = useState<number>(120);
 
   useEffect(() => {
     if (typeof window === 'undefined') {
@@ -88,7 +88,7 @@ export function PageContainer({
 
   const containerClasses = useMemo(() => {
     return [
-      'content-container mx-auto px-6 py-8',
+      'content-container mx-0 sm:mx-auto px-4 py-8',
       'transition-[max-width] duration-200 ease-in-out',
       className,
     ].join(' ');

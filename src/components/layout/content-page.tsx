@@ -21,7 +21,7 @@ export function ContentPage({
         topicHome={topicHome}
       />
       {/* Spacer equal to header's maximum height for consistent offset */}
-      <div aria-hidden='true' className='h-[180px]' />
+      <div aria-hidden='true' className='h-[120px] sm:h-[180px]' />
       <TableOfContents />
       <PageContainer
         allowWidthToggle={allowWidthToggle}
