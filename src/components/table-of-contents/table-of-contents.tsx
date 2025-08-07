@@ -22,7 +22,6 @@ export const TableOfContents = () => {
   const [pinned, setPinned] = useState(false);
   const [headerHeight, setHeaderHeight] = useState(0);
   const [touchStart, setTouchStart] = useState<number | null>(null);
-  const [availableHeight, setAvailableHeight] = useState(0);
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
@@ -80,7 +79,6 @@ export const TableOfContents = () => {
       updateHeight();
       resizeObserver = new ResizeObserver(updateHeight);
       resizeObserver.observe(header);
-      window.addEventListener('scroll', updateHeight);
     }
 
     return () => {
@@ -88,27 +86,8 @@ export const TableOfContents = () => {
       if (resizeObserver) {
         resizeObserver.disconnect();
       }
-      if (updateHeight) {
-        window.removeEventListener('scroll', updateHeight);
-      }
     };
   }, []);
-
-  // Track available height for trigger zone
-  useEffect(() => {
-    const updateAvailableHeight = () => {
-      const viewportHeight = window.innerHeight;
-      const calculatedHeight = viewportHeight - headerHeight;
-      setAvailableHeight(Math.max(calculatedHeight, 200)); // Minimum 200px
-    };
-
-    updateAvailableHeight();
-
-    window.addEventListener('resize', updateAvailableHeight);
-    return () => {
-      window.removeEventListener('resize', updateAvailableHeight);
-    };
-  }, [headerHeight]);
 
   useEffect(() => {
     const handleTouchStart = (e: TouchEvent) => {
@@ -211,7 +190,7 @@ export const TableOfContents = () => {
           onClick={handleTriggerClick}
           onMouseEnter={() => setOpen(true)}
           onTouchStart={handleTriggerClick}
-          style={{ height: `${availableHeight}px` }}
+          style={{ height: `calc(100dvh - ${headerHeight}px)` }}
           type='button'
         />
 
@@ -223,7 +202,7 @@ export const TableOfContents = () => {
             exit={{ opacity: 0 }}
             initial={{ opacity: 0, x: -20 }}
             style={{
-              height: `${availableHeight}px`,
+              height: `calc(100dvh - ${headerHeight}px)`,
             }}
             transition={{
               type: 'tween',
@@ -258,7 +237,7 @@ export const TableOfContents = () => {
             msOverflowStyle: 'none',
             width: 'fit-content',
             minWidth: '240px',
-            height: `${availableHeight}px`,
+            height: `calc(100dvh - ${headerHeight}px)`,
           }}
           transition={{
             type: 'tween',

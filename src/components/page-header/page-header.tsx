@@ -22,31 +22,38 @@ export const PageHeader = ({
   const lastScrollY = useRef(0);
 
   useEffect(() => {
-    const handleScroll = () => {
-      const currentScrollY = window.scrollY;
-
-      // Mark as no longer initial load after first scroll
-      if (isInitialLoad) {
-        setIsInitialLoad(false);
+    let rafId: number | null = null;
+    const onScroll = () => {
+      if (rafId !== null) {
+        return;
       }
+      rafId = window.requestAnimationFrame(() => {
+        rafId = null;
+        const currentScrollY = window.scrollY;
 
-      if (currentScrollY > 20) {
-        if (currentScrollY > lastScrollY.current) {
-          // Scrolling down
-          setIsScrolled(true);
+        if (isInitialLoad) {
+          setIsInitialLoad(false);
+        }
+
+        if (currentScrollY > 20) {
+          if (currentScrollY > lastScrollY.current) {
+            setIsScrolled(true);
+          } else {
+            setIsScrolled(false);
+          }
         } else {
-          // Scrolling up
           setIsScrolled(false);
         }
-      } else {
-        setIsScrolled(false);
-      }
-      lastScrollY.current = currentScrollY;
+        lastScrollY.current = currentScrollY;
+      });
     };
 
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', onScroll, { passive: true });
     return () => {
-      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('scroll', onScroll);
+      if (rafId !== null) {
+        cancelAnimationFrame(rafId);
+      }
     };
   }, [isInitialLoad]);
 

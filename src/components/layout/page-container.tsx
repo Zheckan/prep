@@ -25,7 +25,17 @@ export function PageContainer({
   allowWidthToggle = true,
 }: PageContainerProps) {
   const storageKey = 'prep:content-width';
-  const [width, setWidth] = useState<WidthPreset>(() => initialWidth);
+  const [width, setWidth] = useState<WidthPreset>(() => {
+    if (typeof document !== 'undefined') {
+      const attr = document.documentElement.dataset.contentWidth as
+        | WidthPreset
+        | undefined;
+      if (attr && attr in presetToMaxWidth) {
+        return attr;
+      }
+    }
+    return initialWidth;
+  });
 
   const [headerHeight, setHeaderHeight] = useState<number>(140);
 
@@ -47,28 +57,13 @@ export function PageContainer({
     };
   }, []);
 
-  useEffect(() => {
+  const applyWidthPreference = (next: WidthPreset) => {
+    setWidth(next);
     try {
-      const saved = window.localStorage.getItem(
-        storageKey
-      ) as WidthPreset | null;
-      const attr = document.documentElement.dataset.contentWidth as
-        | WidthPreset
-        | undefined;
-      const initial = saved || attr;
-      if (initial && initial in presetToMaxWidth) {
-        setWidth(initial);
+      if (typeof window !== 'undefined') {
+        window.localStorage.setItem(storageKey, next);
       }
-    } catch {
-      /* ignore SSR/storage read errors */
-    }
-  }, []);
-
-  useEffect(() => {
-    try {
-      window.localStorage.setItem(storageKey, width);
-      document.documentElement.dataset.contentWidth = width;
-      // Write cookie for SSR to match on next request using Cookie Store API when available
+      document.documentElement.dataset.contentWidth = next;
       if ('cookieStore' in globalThis) {
         type CookieStore = {
           set: (cookie: {
@@ -85,7 +80,7 @@ export function PageContainer({
           cookieStore
             .set({
               name: 'prep-content-width',
-              value: width,
+              value: next,
               path: '/',
               expires,
             })
@@ -97,7 +92,7 @@ export function PageContainer({
     } catch {
       /* ignore SSR/storage write errors */
     }
-  }, [width]);
+  };
 
   const containerClasses = useMemo(() => {
     return [
@@ -128,7 +123,7 @@ export function PageContainer({
                       : 'text-zinc-200 hover:text-yellow-500'
                   }`}
                   key={preset}
-                  onClick={() => setWidth(preset)}
+                  onClick={() => applyWidthPreference(preset)}
                   type='button'
                 >
                   {preset}
