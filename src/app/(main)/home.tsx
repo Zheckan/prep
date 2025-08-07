@@ -51,7 +51,7 @@ export default function HomeComponent() {
 
           const colSpan = Math.round(6 / itemsOnThisRow);
 
-          const className = `bg-zinc-900 shadow-lg hover:shadow-xl transition-shadow duration-300 p-6 border border-zinc-800 cursor-pointer hover:border-zinc-600 ${
+          const className = `rounded-lg border border-zinc-800 bg-zinc-900/90 p-6 shadow-sm transition-colors duration-200 hover:border-zinc-600 ${
             colSpanClasses[colSpan]
           }`;
 
@@ -69,7 +69,7 @@ export default function HomeComponent() {
                     {section.title}
                   </h2>
                   {section.level && (
-                    <span className='font-medium text-blue-400 text-sm'>
+                    <span className='font-medium text-sm text-yellow-500'>
                       {section.level}
                     </span>
                   )}

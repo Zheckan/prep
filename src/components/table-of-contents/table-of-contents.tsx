@@ -234,7 +234,7 @@ export const TableOfContents = () => {
           >
             <div className='h-full w-full bg-gradient-to-r from-black/40 to-transparent' />
             {/* Mobile indicator line */}
-            <div className='absolute inset-y-0 right-0 w-0.1 border-t-0 bg-white/10 md:hidden' />
+            <div className='absolute inset-y-0 right-0 w-0.1 border-t-0 bg-yellow-500/30 md:hidden' />
           </motion.div>
         )}
 
@@ -244,11 +244,13 @@ export const TableOfContents = () => {
             x: open ? 0 : '-100%',
             opacity: open ? 1 : 0,
           }}
-          className='scrollbar-hide pointer-events-auto relative min-w-0 max-w-sm overflow-y-auto border-white/10 border-r border-b bg-black/30 p-4 text-sm text-white backdrop-blur-xl backdrop-saturate-150 md:border'
+          className='scrollbar-hide pointer-events-auto relative min-w-0 max-w-sm overflow-y-auto border-white/10 border-r border-b bg-black/40 p-4 text-sm text-white backdrop-blur-xl backdrop-saturate-150 md:border'
           initial={{
             x: '-100%',
             opacity: 0,
           }}
+          onBlur={handleMouseLeave}
+          onFocus={() => setOpen(true)}
           onMouseEnter={() => setOpen(true)}
           onMouseLeave={handleMouseLeave}
           style={{
@@ -283,7 +285,7 @@ export const TableOfContents = () => {
                 <li key={section.id}>
                   {/* Level 1: SectionCard (h2) */}
                   <a
-                    className='block break-words text-left font-bold text-white transition-colors duration-200 hover:text-yellow-500'
+                    className='block break-words text-left font-bold text-white transition-colors duration-200 hover:text-yellow-500 focus-visible:outline-none'
                     href={`#${section.id}`}
                     onClick={handleLinkClick}
                   >
@@ -301,7 +303,7 @@ export const TableOfContents = () => {
                             {isSubheader ? (
                               /* Level 3: Subheader (h4) with double border */
                               <a
-                                className='block break-words border-zinc-600 border-l pl-4 text-left text-gray-400 text-xs leading-relaxed transition-colors duration-200 hover:text-yellow-500'
+                                className='block break-words border-zinc-600 border-l pl-4 text-left text-xs text-zinc-400 leading-relaxed transition-colors duration-200 hover:text-yellow-500 focus-visible:outline-none'
                                 href={`#${child.id}`}
                                 onClick={handleLinkClick}
                               >
@@ -310,7 +312,7 @@ export const TableOfContents = () => {
                             ) : (
                               /* Level 2: Header (h3) */
                               <a
-                                className='block break-words text-left text-gray-200 text-sm transition-colors duration-200 hover:text-yellow-500'
+                                className='block break-words text-left text-gray-200 text-sm transition-colors duration-200 hover:text-yellow-500 focus-visible:outline-none'
                                 href={`#${child.id}`}
                                 onClick={handleLinkClick}
                               >

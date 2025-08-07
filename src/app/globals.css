@@ -1,8 +1,10 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Default to dark theme */
+  --background: #0a0a0a;
+  --foreground: #ededed;
+  --accent: #eab308; /* yellow-500 */
 }
 
 @theme inline {
@@ -12,17 +14,28 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
+/* Respect system light preference while favoring dark by default */
+@media (prefers-color-scheme: light) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #ffffff;
+    --foreground: #171717;
   }
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family:
+    var(--font-geist-sans),
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    Segoe UI,
+    Roboto,
+    Helvetica,
+    Arial,
+    "Apple Color Emoji",
+    "Segoe UI Emoji";
 }
 
 body::before {
@@ -30,8 +43,20 @@ body::before {
   position: fixed;
   inset: 0;
   z-index: -1;
-  background: radial-gradient(circle at 20% 20%, #ae930a99, transparent 70%);
+  background: radial-gradient(
+    circle at 20% 20%,
+    color(from var(--accent) srgb r g b / 0.6),
+    transparent 70%
+  );
   filter: blur(80px);
+}
+
+/* Accessible focus styles */
+button:focus-visible,
+a:focus-visible,
+[role="button"]:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
 }
 
 /* Hide scrollbars */

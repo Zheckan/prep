@@ -66,8 +66,9 @@ export const CodeBlock = ({
       backgroundColor = 'rgba(34, 197, 94, 0.15)'; // Green for end lines
       borderLeft = '3px solid rgb(34, 197, 94)';
     } else if (isHighlighted) {
-      backgroundColor = 'rgba(59, 130, 246, 0.15)'; // Blue for regular highlighted lines
-      borderLeft = '3px solid rgb(59, 130, 246)';
+      // Yellow accent for highlighted lines
+      backgroundColor = 'rgba(234, 179, 8, 0.18)';
+      borderLeft = '3px solid rgb(234, 179, 8)';
     }
 
     return {
