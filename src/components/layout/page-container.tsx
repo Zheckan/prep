@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 type WidthPreset = 'narrow' | 'comfortable' | 'wide' | 'full';
 
@@ -28,9 +28,6 @@ export function PageContainer({
   const [width, setWidth] = useState<WidthPreset>(() => initialWidth);
 
   const [headerHeight, setHeaderHeight] = useState<number>(140);
-  const [isSmall, setIsSmall] = useState<boolean>(false);
-  const toggleRef = useRef<HTMLDivElement | null>(null);
-  const [toggleHeight, setToggleHeight] = useState<number>(0);
 
   useEffect(() => {
     if (typeof window === 'undefined') {
@@ -45,54 +42,9 @@ export function PageContainer({
     update();
     const observer = new ResizeObserver(update);
     observer.observe(header);
-    window.addEventListener('scroll', update, { passive: true });
     return () => {
       observer.disconnect();
-      window.removeEventListener('scroll', update);
     };
-  }, []);
-
-  // Measure the toggle element height so we can position it precisely
-  useEffect(() => {
-    if (typeof window === 'undefined') {
-      return;
-    }
-    const element = toggleRef.current;
-    if (!element) {
-      return;
-    }
-
-    const update = () => {
-      const { height } = element.getBoundingClientRect();
-      setToggleHeight(height);
-    };
-
-    update();
-
-    const observer = new ResizeObserver(update);
-    observer.observe(element);
-    window.addEventListener('resize', update, { passive: true });
-    return () => {
-      observer.disconnect();
-      window.removeEventListener('resize', update);
-    };
-  }, []);
-
-  // Track small-screen state so we can force full width on mobile
-  useEffect(() => {
-    if (typeof window === 'undefined') {
-      return;
-    }
-    const mql = window.matchMedia('(max-width: 640px)');
-    const update = () => setIsSmall(mql.matches);
-    update();
-    // Support older Safari
-    if (typeof mql.addEventListener === 'function') {
-      mql.addEventListener('change', update);
-      return () => mql.removeEventListener('change', update);
-    }
-    mql.addListener(update);
-    return () => mql.removeListener(update);
   }, []);
 
   useEffect(() => {
@@ -159,11 +111,10 @@ export function PageContainer({
     <div className='w-full'>
       {allowWidthToggle && (
         <div
-          className='sticky z-40 mx-auto mb-2 hidden w-full justify-center px-6 sm:flex'
-          ref={toggleRef}
+          className='sticky z-40 mx-auto mb-2 hidden w-full translate-y-1/2 justify-center px-6 sm:flex'
           style={{
             // Position relative to the header bottom so it moves 1:1 with header collapse
-            top: headerHeight + toggleHeight / 2,
+            top: headerHeight,
           }}
         >
           <div className='glass inline-flex items-center gap-1 rounded-full p-1 text-sm text-white'>
@@ -188,14 +139,7 @@ export function PageContainer({
         </div>
       )}
 
-      <div
-        className={containerClasses}
-        style={{
-          maxWidth: isSmall ? '100%' : `min(100%, ${presetToMaxWidth[width]})`,
-        }}
-      >
-        {children}
-      </div>
+      <div className={containerClasses}>{children}</div>
     </div>
   );
 }
