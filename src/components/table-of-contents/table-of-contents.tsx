@@ -219,7 +219,7 @@ export const TableOfContents = () => {
         {!open && (
           <motion.div
             animate={{ opacity: 1, x: 0 }}
-            className='pointer-events-none absolute top-0 left-0 w-2 border-white/10 border-r border-b bg-black/30 backdrop-blur-xl backdrop-saturate-150 md:w-3'
+            className='glass pointer-events-none absolute top-0 left-0 w-2 md:w-3'
             exit={{ opacity: 0 }}
             initial={{ opacity: 0, x: -20 }}
             style={{
@@ -232,9 +232,9 @@ export const TableOfContents = () => {
               delay: 0.2,
             }}
           >
-            <div className='h-full w-full bg-gradient-to-r from-black/40 to-transparent' />
+            <div className='h-full w-full bg-gradient-to-r from-black/20 to-transparent' />
             {/* Mobile indicator line */}
-            <div className='absolute inset-y-0 right-0 w-0.1 border-t-0 bg-yellow-500/30 md:hidden' />
+            <div className='absolute inset-y-0 right-0 w-0.5 bg-yellow-500/40 md:hidden' />
           </motion.div>
         )}
 
@@ -244,7 +244,7 @@ export const TableOfContents = () => {
             x: open ? 0 : '-100%',
             opacity: open ? 1 : 0,
           }}
-          className='scrollbar-hide pointer-events-auto relative min-w-0 max-w-sm overflow-y-auto border-white/10 border-r border-b bg-black/40 p-4 text-sm text-white backdrop-blur-xl backdrop-saturate-150 md:border'
+          className='scrollbar-hide glass pointer-events-auto relative min-w-0 max-w-sm overflow-y-auto p-4 text-sm text-white md:border'
           initial={{
             x: '-100%',
             opacity: 0,

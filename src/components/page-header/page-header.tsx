@@ -55,7 +55,7 @@ export const PageHeader = ({
       animate={{
         height: isInitialLoad || !isScrolled ? '140px' : '80px',
       }}
-      className='fixed top-0 right-0 left-0 z-50 border-white/10 border-b bg-black/40 backdrop-blur-xl backdrop-saturate-150'
+      className='glass-strong fixed top-0 right-0 left-0 z-50'
       id='page-header'
       initial={{ height: '140px' }}
       transition={{ duration: 0.3, ease: 'easeInOut' }}

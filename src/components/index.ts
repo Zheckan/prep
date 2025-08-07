@@ -1,4 +1,5 @@
 export * from './code-block';
+export * from './layout';
 export * from './notes-area';
 export * from './page-header';
 export * from './section-card';
