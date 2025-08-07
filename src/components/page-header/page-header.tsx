@@ -4,12 +4,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { BookOpenCheck, House } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
-
-interface PageHeaderProps {
-  title: string;
-  description: string;
-  topicHome?: string;
-}
+import type { PageHeaderProps } from '@/types';
 
 export const PageHeader = ({
   description,
@@ -46,15 +41,24 @@ export const PageHeader = ({
     };
   }, []);
 
+  // Expose current header height as a CSS variable for other components
+  useEffect(() => {
+    if (typeof document === 'undefined') {
+      return;
+    }
+    const current = isInitialLoad || !isScrolled ? '128px' : '72px';
+    document.documentElement.style.setProperty('--page-header-height', current);
+  }, [isInitialLoad, isScrolled]);
+
   return (
     <motion.div
       animate={{
-        height: isInitialLoad || !isScrolled ? '140px' : '80px',
+        height: isInitialLoad || !isScrolled ? '128px' : '72px',
       }}
       className='glass-strong fixed top-0 right-0 left-0 z-50'
       id='page-header'
-      initial={{ height: '140px' }}
-      transition={{ duration: 0.3, ease: 'easeInOut' }}
+      initial={{ height: '128px' }}
+      transition={{ duration: 0.28, ease: 'easeInOut' }}
     >
       <div className='mx-auto h-full max-w-4xl px-6'>
         <div className='flex h-full items-center justify-between'>
@@ -62,7 +66,7 @@ export const PageHeader = ({
             <motion.h1
               className='font-bold text-3xl text-white md:text-4xl'
               layout
-              transition={{ duration: 0.3, ease: 'easeInOut' }}
+              transition={{ duration: 0.25, ease: 'easeInOut' }}
             >
               {title}
             </motion.h1>

@@ -1,12 +1,6 @@
 'use client';
 import { useRouter } from 'next/navigation';
-
-type Section = {
-  href: string;
-  title: string;
-  description: string;
-  inProgress: boolean;
-};
+import type { Section } from '@/types';
 
 const sections: Section[] = [
   {

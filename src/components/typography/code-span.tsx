@@ -1,8 +1,4 @@
-interface CodeSpanProps {
-  children: React.ReactNode;
-  className?: string;
-  size?: 'normal' | 'small';
-}
+import type { CodeSpanProps } from '@/types';
 
 export const CodeSpan = ({
   children,

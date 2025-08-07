@@ -1,7 +1,4 @@
-interface NotesAreaProps {
-  placeholder?: string;
-  minHeight?: string;
-}
+import type { NotesAreaProps } from '@/types';
 
 export const NotesArea = ({
   placeholder = 'Add your notes here...',

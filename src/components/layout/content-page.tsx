@@ -2,16 +2,8 @@
 
 import { PageHeader } from '@/components/page-header';
 import { TableOfContents } from '@/components/table-of-contents';
+import type { ContentPageProps } from '@/types';
 import { PageContainer } from './page-container';
-
-interface ContentPageProps {
-  title: string;
-  description: string;
-  topicHome?: string;
-  children: React.ReactNode;
-  initialWidth?: 'narrow' | 'comfortable' | 'wide' | 'full';
-  allowWidthToggle?: boolean;
-}
 
 export function ContentPage({
   title,
@@ -29,7 +21,7 @@ export function ContentPage({
         topicHome={topicHome}
       />
       {/* Spacer equal to header's maximum height for consistent offset */}
-      <div aria-hidden='true' className='h-[140px]' />
+      <div aria-hidden='true' className='h-[180px]' />
       <TableOfContents />
       <PageContainer
         allowWidthToggle={allowWidthToggle}

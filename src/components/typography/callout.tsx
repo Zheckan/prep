@@ -1,7 +1,4 @@
-interface CalloutProps {
-  children: React.ReactNode;
-  className?: string;
-}
+import type { CalloutProps } from '@/types';
 
 export const Callout = ({ children, className = '' }: CalloutProps) => {
   return (

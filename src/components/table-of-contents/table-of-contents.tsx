@@ -3,18 +3,7 @@
 import { motion } from 'framer-motion';
 import { Pin, PinOff } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
-
-interface TocHeading {
-  id: string;
-  text: string;
-  level: number;
-}
-
-interface TocItem {
-  id: string;
-  text: string;
-  children: TocHeading[];
-}
+import type { TocHeading, TocItem } from '@/types';
 
 export const TableOfContents = () => {
   const [items, setItems] = useState<TocItem[]>([]);
@@ -185,40 +174,44 @@ export const TableOfContents = () => {
   return (
     <nav
       className='pointer-events-none fixed left-0 z-40'
-      style={{ top: headerHeight }}
+      style={{
+        top: `var(--page-header-height, ${headerHeight}px)`,
+        transition: 'top 0.28s ease-in-out',
+      }}
     >
       <div className='relative'>
-        {/* Small trigger zone - always visible */}
-        <button
-          aria-label='Toggle table of contents'
-          className='pointer-events-auto absolute top-0 left-0 w-2 cursor-pointer border-none bg-transparent p-0 md:w-3'
-          onClick={handleTriggerClick}
+        {/* Hover/edge affordance – no explicit button */}
+        <div
+          aria-hidden='true'
+          className='pointer-events-auto absolute top-0 left-0 w-2 md:w-3'
           onMouseEnter={() => setOpen(true)}
           onTouchStart={handleTriggerClick}
-          style={{ height: `calc(100dvh - ${headerHeight}px)` }}
-          type='button'
+          style={{
+            height: `calc(100dvh - var(--page-header-height, ${headerHeight}px))`,
+          }}
         />
 
         {/* Preview hint when closed - same height as open state */}
         {!open && (
           <motion.div
             animate={{ opacity: 1, x: 0 }}
-            className='glass pointer-events-none absolute top-0 left-0 w-2 md:w-3'
+            className='pointer-events-none absolute top-0 left-0 w-2 md:w-3'
             exit={{ opacity: 0 }}
-            initial={{ opacity: 0, x: -20 }}
+            initial={{ opacity: 0, x: -16 }}
             style={{
-              height: `calc(100dvh - ${headerHeight}px)`,
+              height: `calc(100dvh - var(--page-header-height, ${headerHeight}px))`,
             }}
-            transition={{
-              type: 'tween',
-              ease: 'easeInOut',
-              duration: 0.4,
-              delay: 0.2,
-            }}
+            transition={{ type: 'tween', ease: 'easeInOut', duration: 0.35 }}
           >
-            <div className='h-full w-full bg-gradient-to-r from-black/20 to-transparent' />
-            {/* Mobile indicator line */}
-            <div className='absolute inset-y-0 right-0 w-0.5 bg-yellow-500/40 md:hidden' />
+            {/* Soft glow hint */}
+            <div
+              className='h-full w-full opacity-80'
+              style={{
+                background:
+                  'linear-gradient(to right, rgba(255,255,255,0.08), rgba(255,255,255,0))',
+              }}
+            />
+            <div className='absolute inset-y-0 right-0 w-px bg-yellow-500/40 md:hidden' />
           </motion.div>
         )}
 
@@ -228,7 +221,7 @@ export const TableOfContents = () => {
             x: open ? 0 : '-100%',
             opacity: open ? 1 : 0,
           }}
-          className='scrollbar-hide glass pointer-events-auto relative min-w-0 max-w-sm overflow-y-auto p-4 text-sm text-white md:border'
+          className='scrollbar-hide glass pointer-events-auto relative min-w-0 max-w-sm overflow-y-auto p-4 text-sm text-white/95 md:border'
           initial={{
             x: '-100%',
             opacity: 0,
@@ -242,7 +235,7 @@ export const TableOfContents = () => {
             msOverflowStyle: 'none',
             width: 'fit-content',
             minWidth: '240px',
-            height: `calc(100dvh - ${headerHeight}px)`,
+            height: `calc(100dvh - var(--page-header-height, ${headerHeight}px))`,
           }}
           transition={{
             type: 'tween',

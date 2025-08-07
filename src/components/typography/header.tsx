@@ -1,10 +1,5 @@
 import { slugify } from '@/helpers/slugify';
-
-interface HeaderProps {
-  children: React.ReactNode;
-  className?: string;
-  id?: string;
-}
+import type { HeaderProps } from '@/types';
 
 export const Header = ({ children, className = '', id }: HeaderProps) => {
   const text = typeof children === 'string' ? children : '';

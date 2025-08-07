@@ -1,8 +1,4 @@
-interface TextProps {
-  children: React.ReactNode;
-  className?: string;
-  variant?: 'default' | 'muted';
-}
+import type { TextProps } from '@/types';
 
 export const Text = ({
   children,

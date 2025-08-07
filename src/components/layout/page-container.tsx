@@ -1,15 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
-
-type WidthPreset = 'narrow' | 'comfortable' | 'wide' | 'full';
-
-interface PageContainerProps {
-  children: React.ReactNode;
-  className?: string;
-  initialWidth?: WidthPreset;
-  allowWidthToggle?: boolean;
-}
+import type { PageContainerProps, WidthPreset } from '@/types';
 
 const presetToMaxWidth: Record<WidthPreset, string> = {
   narrow: '50vw',
@@ -106,10 +98,12 @@ export function PageContainer({
     <div className='w-full'>
       {allowWidthToggle && (
         <div
-          className='sticky z-40 mx-auto mb-2 hidden w-full translate-y-1/2 justify-center px-6 sm:flex'
+          className='fixed right-0 left-0 z-40 mb-2 hidden justify-center px-6 sm:flex'
           style={{
-            // Position relative to the header bottom so it moves 1:1 with header collapse
-            top: headerHeight,
+            // Track the header with a CSS var, and animate the change
+            top: `var(--page-header-height, ${headerHeight}px)`,
+            transition: 'top 0.28s ease-in-out',
+            transform: 'translateY(50%)',
           }}
         >
           <div className='glass inline-flex items-center gap-1 rounded-full p-1 text-sm text-white'>

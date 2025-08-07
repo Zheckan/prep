@@ -1,10 +1,5 @@
 import { slugify } from '@/helpers/slugify';
-
-interface SubheaderProps {
-  children: React.ReactNode;
-  className?: string;
-  id?: string;
-}
+import type { SubheaderProps } from '@/types';
 
 export const Subheader = ({ children, className = '', id }: SubheaderProps) => {
   const text = typeof children === 'string' ? children : '';

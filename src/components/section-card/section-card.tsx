@@ -1,9 +1,5 @@
 import { slugify } from '@/helpers/slugify';
-
-interface SectionCardProps {
-  title: string;
-  children: React.ReactNode;
-}
+import type { SectionCardProps } from '@/types';
 
 export const SectionCard = ({ title, children }: SectionCardProps) => {
   const id = slugify(title);

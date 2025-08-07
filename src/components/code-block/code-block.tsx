@@ -1,22 +1,13 @@
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { coldarkDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import { parseHighlightLines } from '@/helpers/parse-highlight-lines';
+import type { CodeBlockProps } from '@/types';
 
 // Move regex patterns to top level for better performance
 const COMMENT_REGEX = /^\/\*\s*\w+\s*\*\/\s*\n?/;
 const LEADING_SPACES_REGEX = /^\s+/;
 const TRAILING_SPACES_REGEX = /\s+$/;
 const INDENTATION_REGEX = /^(\s*)/;
-
-interface CodeBlockProps {
-  comment?: string;
-  children?: React.ReactNode;
-  code?: string;
-  language?: string;
-  showLineNumbers?: boolean;
-  highlightLines?: string; // e.g., "1,3,5-7" for highlighting specific lines
-  highlightLinesEnd?: string; // e.g., "1,3,5-7" for highlighting specific lines
-}
 
 export const CodeBlock = ({
   comment,
