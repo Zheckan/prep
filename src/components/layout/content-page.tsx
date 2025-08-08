@@ -17,7 +17,8 @@ export function ContentPage({
     <div
       className='min-h-screen text-white'
       style={{
-        paddingTop: 'var(--page-header-height, 128px)',
+        paddingTop:
+          'var(--content-top-offset, var(--page-header-height, 128px))',
         transition: 'padding-top 0.28s ease-in-out',
       }}
     >

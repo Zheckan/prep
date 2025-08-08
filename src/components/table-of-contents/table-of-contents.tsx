@@ -10,6 +10,7 @@ export const TableOfContents = () => {
   const [open, setOpen] = useState(false);
   const [pinned, setPinned] = useState(false);
   const [headerHeight, setHeaderHeight] = useState(0);
+  const [availableHeight, setAvailableHeight] = useState(0);
   const [isLoaded, setIsLoaded] = useState(false);
   const touchStartRef = useRef<number | null>(null);
   const openRef = useRef(open);
@@ -70,6 +71,7 @@ export const TableOfContents = () => {
       updateHeight();
       resizeObserver = new ResizeObserver(updateHeight);
       resizeObserver.observe(header);
+      window.addEventListener('scroll', updateHeight, { passive: true });
     }
 
     return () => {
@@ -77,8 +79,26 @@ export const TableOfContents = () => {
       if (resizeObserver) {
         resizeObserver.disconnect();
       }
+      if (updateHeight) {
+        window.removeEventListener('scroll', updateHeight);
+      }
     };
   }, []);
+
+  // Track available height for trigger zone (viewport minus header)
+  useEffect(() => {
+    const updateAvailableHeight = () => {
+      const viewportHeight = window.innerHeight;
+      const calculatedHeight = viewportHeight - headerHeight;
+      setAvailableHeight(Math.max(calculatedHeight, 200));
+    };
+
+    updateAvailableHeight();
+    window.addEventListener('resize', updateAvailableHeight);
+    return () => {
+      window.removeEventListener('resize', updateAvailableHeight);
+    };
+  }, [headerHeight]);
 
   useEffect(() => {
     const onTouchStart = (e: TouchEvent) => {
@@ -205,9 +225,9 @@ export const TableOfContents = () => {
           aria-hidden='true'
           className='pointer-events-auto absolute top-0 left-0 w-3 md:w-4'
           onMouseEnter={() => setOpen(true)}
-          onTouchStart={handleTriggerClick}
+          onPointerDown={handleTriggerClick}
           style={{
-            height: `calc(100dvh - var(--page-header-height, ${headerHeight}px))`,
+            height: `${availableHeight}px`,
           }}
         />
 
@@ -219,7 +239,7 @@ export const TableOfContents = () => {
             exit={{ opacity: 0 }}
             initial={{ opacity: 0, x: -16 }}
             style={{
-              height: `calc(100dvh - var(--page-header-height, ${headerHeight}px))`,
+              height: `${availableHeight}px`,
             }}
             transition={{ type: 'tween', ease: 'easeInOut', duration: 0.35 }}
           >
@@ -254,7 +274,7 @@ export const TableOfContents = () => {
             scrollbarWidth: 'none',
             msOverflowStyle: 'none',
             width: 'fit-content',
-            height: `calc(100dvh - var(--page-header-height, ${headerHeight}px))`,
+            height: `${availableHeight}px`,
           }}
           transition={{
             type: 'tween',

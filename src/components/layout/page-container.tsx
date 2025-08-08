@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import type { PageContainerProps, WidthPreset } from '@/types';
 
 const presetToMaxWidth: Record<WidthPreset, string> = {
@@ -30,6 +30,8 @@ export function PageContainer({
   });
 
   const [headerHeight, setHeaderHeight] = useState<number>(120);
+  const [selectorHeight, setSelectorHeight] = useState<number>(0);
+  const selectorRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     if (typeof window === 'undefined') {
@@ -48,6 +50,51 @@ export function PageContainer({
       observer.disconnect();
     };
   }, []);
+
+  // Measure selector pill height
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const el = selectorRef.current;
+    if (!el) return;
+    const update = () => setSelectorHeight(el.getBoundingClientRect().height);
+    update();
+    const ro = new ResizeObserver(update);
+    ro.observe(el);
+    window.addEventListener('resize', update);
+    return () => {
+      ro.disconnect();
+      window.removeEventListener('resize', update);
+    };
+  }, []);
+
+  // Drive a global content top offset that includes selector space on desktop
+  useEffect(() => {
+    if (typeof document === 'undefined' || typeof window === 'undefined') {
+      return;
+    }
+    const mq = window.matchMedia('(min-width: 640px)');
+    const computeAndSet = () => {
+      const isDesktop = mq.matches;
+      let offset = headerHeight;
+      if (isDesktop && allowWidthToggle) {
+        // Keep a stable, non-jumpy offset on desktop; ensure at least 180px
+        const extra = Math.max(16, Math.round(selectorHeight * 0.5));
+        offset = Math.max(180, headerHeight + extra);
+      }
+      document.documentElement.style.setProperty(
+        '--content-top-offset',
+        `${offset}px`
+      );
+    };
+    computeAndSet();
+    const handler = () => computeAndSet();
+    mq.addEventListener?.('change', handler);
+    window.addEventListener('resize', handler);
+    return () => {
+      mq.removeEventListener?.('change', handler);
+      window.removeEventListener('resize', handler);
+    };
+  }, [headerHeight, selectorHeight, allowWidthToggle]);
 
   const applyWidthPreference = (next: WidthPreset) => {
     setWidth(next);
@@ -106,7 +153,10 @@ export function PageContainer({
             transform: 'translateY(50%)',
           }}
         >
-          <div className='glass inline-flex items-center gap-1 rounded-full p-1 text-sm text-white'>
+          <div
+            className='glass inline-flex items-center gap-1 rounded-full p-1 text-sm text-white'
+            ref={selectorRef}
+          >
             {(['narrow', 'comfortable', 'wide', 'full'] as WidthPreset[]).map(
               (preset) => (
                 <button
