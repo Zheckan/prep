@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
+import { WidthSwitcher } from '@/components/width-switcher';
 import type { PageContainerProps, WidthPreset } from '@/types';
 
 const presetToMaxWidth: Record<WidthPreset, string> = {
@@ -97,35 +98,11 @@ export function PageContainer({
   return (
     <div className='w-full'>
       {allowWidthToggle && (
-        <div
-          className='fixed right-0 left-0 z-40 mb-2 hidden justify-center px-6 sm:flex'
-          style={{
-            // Track the header with a CSS var, and animate the change
-            top: `var(--page-header-height, ${headerHeight}px)`,
-            transition: 'top 0.28s ease-in-out',
-            transform: 'translateY(50%)',
-          }}
-        >
-          <div className='glass inline-flex items-center gap-1 rounded-full p-1 text-sm text-white'>
-            {(['narrow', 'comfortable', 'wide', 'full'] as WidthPreset[]).map(
-              (preset) => (
-                <button
-                  aria-pressed={width === preset}
-                  className={`rounded-full px-3 py-1 capitalize transition-colors ${
-                    width === preset
-                      ? 'bg-yellow-500 text-black'
-                      : 'text-zinc-200 hover:text-yellow-500'
-                  }`}
-                  key={preset}
-                  onClick={() => applyWidthPreference(preset)}
-                  type='button'
-                >
-                  {preset}
-                </button>
-              )
-            )}
-          </div>
-        </div>
+        <WidthSwitcher
+          currentWidth={width}
+          headerHeightFallback={headerHeight}
+          onChangeWidth={applyWidthPreference}
+        />
       )}
 
       <div className={containerClasses}>{children}</div>

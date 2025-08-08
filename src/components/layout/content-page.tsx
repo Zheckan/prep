@@ -20,8 +20,6 @@ export function ContentPage({
         title={title}
         topicHome={topicHome}
       />
-      {/* Spacer equal to header's maximum height for consistent offset */}
-      <div aria-hidden='true' className='h-[120px] sm:h-[180px]' />
       <TableOfContents />
       <PageContainer
         allowWidthToggle={allowWidthToggle}

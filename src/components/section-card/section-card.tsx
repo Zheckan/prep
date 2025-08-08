@@ -5,7 +5,7 @@ export const SectionCard = ({ title, children }: SectionCardProps) => {
   const id = slugify(title);
   return (
     <section
-      className='mb-12 rounded-lg border border-zinc-800 bg-zinc-900/90 p-6 backdrop-blur supports-[backdrop-filter]:bg-zinc-900/70'
+      className='mb-12 rounded-lg border border-zinc-800 bg-zinc-900/90 p-6 backdrop-blur supports-[backdrop-filter]:bg-zinc-900/65'
       id={id}
     >
       <h2

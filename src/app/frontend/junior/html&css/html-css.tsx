@@ -24,7 +24,7 @@ export default async function HTMLCSSComponent() {
       title='HTML & CSS Notes'
       topicHome='/frontend/junior'
     >
-      <div className='prose prose-invert prose-zinc max-w-none'>
+      <div className='prose-sm sm:prose-base md:prose-lg prose-invert prose-zinc max-w-none'>
         <SemanticHtmlAndAccessibility />
         <CssFlexbox />
         <CssGrid />
