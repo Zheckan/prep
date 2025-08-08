@@ -20,13 +20,6 @@ export function ContentPage({
         title={title}
         topicHome={topicHome}
       />
-      {/* Mobile spacer follows current header height (0 or 128). Desktop keeps constant offset. */}
-      <div
-        aria-hidden='true'
-        className='block sm:hidden'
-        style={{ height: 'var(--page-header-height, 128px)' }}
-      />
-      <div aria-hidden='true' className='hidden h-[180px] sm:block' />
       <TableOfContents />
       <PageContainer
         allowWidthToggle={allowWidthToggle}

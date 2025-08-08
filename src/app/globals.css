@@ -13,12 +13,31 @@
   --ring: var(--accent);
   /* Current page header height (controlled by PageHeader) */
   --page-header-height: 128px;
+  /* Offset built-in anchor navigation and scrollIntoView to account for sticky header */
+  scroll-padding-top: var(--page-header-height, 128px);
 
   /* Ambient background hues */
   --ambient-1: 255 90 31; /* warm orange */
   --ambient-2: 234 179 8; /* yellow-500 */
   --ambient-3: 168 85 247; /* purple */
   --ambient-4: 14 165 233; /* cyan */
+}
+
+/* Smooth scrolling for anchor navigation; respect reduced motion */
+html {
+  scroll-behavior: smooth;
+}
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+/* Ensure headings with anchors don't hide under the sticky header */
+h2[id],
+h3[id],
+h4[id] {
+  scroll-margin-top: calc(var(--page-header-height, 128px) + 16px);
 }
 
 @theme inline {

@@ -130,23 +130,21 @@ export const TableOfContents = () => {
       setOpen(false);
     }
 
-    // Prevent default navigation and handle scroll offset without URL change
+    // Prevent default navigation and use CSS scroll-margin/scroll-padding
     e.preventDefault();
     const href = e.currentTarget.getAttribute('href');
     if (href?.startsWith('#')) {
       const targetId = href.substring(1);
       const targetElement = document.getElementById(targetId);
       if (targetElement) {
-        // Use max header height (140px) + padding for consistent offset
-        const maxHeaderOffset = 140 + 20;
-        const elementPosition = targetElement.getBoundingClientRect().top;
-        const offsetPosition =
-          elementPosition + window.pageYOffset - maxHeaderOffset;
-
-        window.scrollTo({
-          top: offsetPosition,
-          behavior: 'smooth',
-        });
+        targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        // Update the address bar without triggering a jump
+        if (
+          typeof history !== 'undefined' &&
+          typeof history.replaceState === 'function'
+        ) {
+          history.replaceState(null, '', href);
+        }
       }
     }
   };

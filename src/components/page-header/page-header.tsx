@@ -26,6 +26,7 @@ export const PageHeader = ({
   const downwardAccumPx = useRef(0);
   const upwardAccumPx = useRef(0);
   const isHiddenOnMobileRef = useRef(false);
+  const lastCssHeaderHeight = useRef<string | null>(null);
 
   // Threshold constants for mobile hysteresis
   const JITTER_PX = 5;
@@ -180,28 +181,45 @@ export const PageHeader = ({
     } else {
       current = collapsedHeight;
     }
-    document.documentElement.style.setProperty('--page-header-height', current);
+    if (lastCssHeaderHeight.current !== current) {
+      document.documentElement.style.setProperty(
+        '--page-header-height',
+        current
+      );
+      lastCssHeaderHeight.current = current;
+    }
   }, [isInitialLoad, isScrolled, isHiddenOnMobile, isMobileScreen]);
 
   return (
     <motion.div
       animate={{
         height: ((): string => {
+          if (isHiddenOnMobile) return '0px';
           if (isMobileScreen) return '128px';
           if (isInitialLoad || !isScrolled) return '128px';
           return '72px';
         })(),
-        y: isHiddenOnMobile ? '-100%' : '0%',
       }}
-      className='glass-strong fixed top-0 right-0 left-0 z-50'
+      className='glass-strong sticky top-0 z-50 w-full'
       id='page-header'
-      initial={{ height: '128px', y: '0%' }}
-      style={{ willChange: 'height, transform' }}
-      transition={{ duration: 0.28, ease: 'easeInOut' }}
+      initial={{ height: '128px' }}
+      style={{
+        willChange: 'height',
+        overflow: 'hidden',
+        // Remove bottom border when fully hidden on mobile to avoid a 1px line
+        borderBottomWidth: isHiddenOnMobile ? 0 : 1,
+        transform: 'translateZ(0)',
+        backfaceVisibility: 'hidden',
+        contain: 'layout paint style',
+      }}
+      transition={{
+        duration: 0.2,
+        ease: 'easeOut',
+      }}
     >
       <div className='mx-auto h-full max-w-4xl px-6'>
         <div className='flex h-full items-center justify-between'>
-          <div className='flex-1'>
+          <div className='flex-1 overflow-hidden'>
             <motion.h1
               className='font-bold text-2xl text-white sm:text-3xl md:text-4xl'
               layout={!isMobileScreen}
@@ -215,7 +233,8 @@ export const PageHeader = ({
                   className='text-sm text-zinc-300 sm:text-base'
                   exit={{ opacity: 0, height: 0 }}
                   initial={{ opacity: 1, height: 'auto' }}
-                  transition={{ duration: 0.2, ease: 'easeInOut' }}
+                  layout={!isMobileScreen}
+                  transition={{ duration: 0.18, ease: 'easeOut' }}
                 >
                   {description}
                 </motion.p>
