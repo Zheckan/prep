@@ -103,6 +103,22 @@ export const TableOfContents = () => {
     };
   }, []);
 
+  // Also open on single tap anywhere near the left edge on mobile
+  useEffect(() => {
+    const onTouchTap = (e: TouchEvent) => {
+      if (window.innerWidth >= 768) return;
+      if (e.touches.length !== 1) return;
+      const x = e.touches[0].clientX;
+      if (x < 30) {
+        setOpen(true);
+      }
+    };
+    window.addEventListener('touchstart', onTouchTap, { passive: true });
+    return () => {
+      window.removeEventListener('touchstart', onTouchTap);
+    };
+  }, []);
+
   const handleMouseLeave = () => {
     if (!pinned) {
       setOpen(false);
@@ -139,7 +155,7 @@ export const TableOfContents = () => {
     setOpen(!open);
   };
 
-  // Handle click outside on mobile
+  // Handle click outside on mobile and always unpin when mobile
   useEffect(() => {
     openRef.current = open;
     pinnedRef.current = pinned;
@@ -148,6 +164,10 @@ export const TableOfContents = () => {
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (window.innerWidth >= 768) return;
+      // On mobile ensure menu is unpinned
+      if (pinnedRef.current) {
+        setPinned(false);
+      }
       if (!openRef.current || pinnedRef.current) {
         return;
       }
@@ -183,7 +203,7 @@ export const TableOfContents = () => {
         {/* Hover/edge affordance – no explicit button */}
         <div
           aria-hidden='true'
-          className='pointer-events-auto absolute top-0 left-0 w-2 md:w-3'
+          className='pointer-events-auto absolute top-0 left-0 w-3 md:w-4'
           onMouseEnter={() => setOpen(true)}
           onTouchStart={handleTriggerClick}
           style={{
@@ -221,7 +241,7 @@ export const TableOfContents = () => {
             x: open ? 0 : '-100%',
             opacity: open ? 1 : 0,
           }}
-          className='scrollbar-hide glass pointer-events-auto relative min-w-0 max-w-sm overflow-y-auto p-4 text-sm text-white/95 md:border'
+          className='scrollbar-hide glass pointer-events-auto relative min-w-[260px] max-w-sm overflow-y-auto p-4 text-sm text-white/95 md:border'
           initial={{
             x: '-100%',
             opacity: 0,
@@ -234,7 +254,6 @@ export const TableOfContents = () => {
             scrollbarWidth: 'none',
             msOverflowStyle: 'none',
             width: 'fit-content',
-            minWidth: '240px',
             height: `calc(100dvh - var(--page-header-height, ${headerHeight}px))`,
           }}
           transition={{
