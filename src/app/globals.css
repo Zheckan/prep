@@ -13,8 +13,15 @@
   --ring: var(--accent);
   /* Current page header height (controlled by PageHeader) */
   --page-header-height: 128px;
+}
 
-  /* Ambient background hues */
+html {
+  /* Ensure anchor scrolls don't hide under the fixed header */
+  scroll-padding-top: var(--page-header-height, 128px);
+}
+
+/* Ambient background hues */
+:root {
   --ambient-1: 255 90 31; /* warm orange */
   --ambient-2: 234 179 8; /* yellow-500 */
   --ambient-3: 168 85 247; /* purple */

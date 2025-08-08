@@ -17,7 +17,7 @@ export const PageHeader = ({
   };
 
   const router = useRouter();
-  const [isScrolled, setIsScrolled] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(false);
   const [isInitialLoad, setIsInitialLoad] = useState(true);
   const lastScrollY = useRef(0);
   const [isHiddenOnMobile, setIsHiddenOnMobile] = useState(false);
@@ -144,9 +144,9 @@ export const PageHeader = ({
         rafId = null;
         const currentScrollY = Math.max(0, window.scrollY);
         const delta = currentScrollY - lastScrollY.current;
-        // Avoid toggling collapse state on mobile to reduce flicker; rely on full-hide
+        // Desktop: collapse based on absolute position to avoid flicker
         if (!isMobile.current) {
-          setIsScrolled(currentScrollY > 20 && delta > 0);
+          setIsCollapsed(currentScrollY > 80);
         }
         handleMobileScroll(currentScrollY, delta);
         lastScrollY.current = currentScrollY;
@@ -175,20 +175,20 @@ export const PageHeader = ({
     } else if (isMobileScreen) {
       // On mobile, when visible, keep the header at full height for clear tap targets
       current = expandedHeight;
-    } else if (isInitialLoad || !isScrolled) {
+    } else if (isInitialLoad || !isCollapsed) {
       current = expandedHeight;
     } else {
       current = collapsedHeight;
     }
     document.documentElement.style.setProperty('--page-header-height', current);
-  }, [isInitialLoad, isScrolled, isHiddenOnMobile, isMobileScreen]);
+  }, [isInitialLoad, isCollapsed, isHiddenOnMobile, isMobileScreen]);
 
   return (
     <motion.div
       animate={{
         height: ((): string => {
           if (isMobileScreen) return '128px';
-          if (isInitialLoad || !isScrolled) return '128px';
+          if (isInitialLoad || !isCollapsed) return '128px';
           return '72px';
         })(),
         y: isHiddenOnMobile ? '-100%' : '0%',
@@ -210,7 +210,7 @@ export const PageHeader = ({
               {title}
             </motion.h1>
             <AnimatePresence>
-              {(isInitialLoad || !isScrolled) && (
+              {(isInitialLoad || !isCollapsed) && (
                 <motion.p
                   className='text-sm text-zinc-300 sm:text-base'
                   exit={{ opacity: 0, height: 0 }}

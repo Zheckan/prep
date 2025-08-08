@@ -137,11 +137,11 @@ export const TableOfContents = () => {
       const targetId = href.substring(1);
       const targetElement = document.getElementById(targetId);
       if (targetElement) {
-        // Use max header height (140px) + padding for consistent offset
-        const maxHeaderOffset = 140 + 20;
+        // Use current header height + a small padding for consistent offset
+        const currentHeaderOffset = (headerHeight || 0) + 20;
         const elementPosition = targetElement.getBoundingClientRect().top;
         const offsetPosition =
-          elementPosition + window.pageYOffset - maxHeaderOffset;
+          elementPosition + window.pageYOffset - currentHeaderOffset;
 
         window.scrollTo({
           top: offsetPosition,

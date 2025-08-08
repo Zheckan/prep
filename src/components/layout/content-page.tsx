@@ -14,19 +14,19 @@ export function ContentPage({
   allowWidthToggle = true,
 }: ContentPageProps) {
   return (
-    <div className='min-h-screen text-white'>
+    <div
+      className='min-h-screen text-white'
+      style={{
+        paddingTop: 'var(--page-header-height, 128px)',
+        transition: 'padding-top 0.28s ease-in-out',
+      }}
+    >
       <PageHeader
         description={description}
         title={title}
         topicHome={topicHome}
       />
-      {/* Mobile spacer follows current header height (0 or 128). Desktop keeps constant offset. */}
-      <div
-        aria-hidden='true'
-        className='block sm:hidden'
-        style={{ height: 'var(--page-header-height, 128px)' }}
-      />
-      <div aria-hidden='true' className='hidden h-[180px] sm:block' />
+      {/* Removed hardcoded spacers; content offset handled via padding-top */}
       <TableOfContents />
       <PageContainer
         allowWidthToggle={allowWidthToggle}
