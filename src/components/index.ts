@@ -5,5 +5,6 @@ export * from './notes-area';
 export * from './page-header';
 export * from './section-card';
 export * from './table-of-contents';
+export * from './test';
 export * from './typography';
 export * from './width-switcher';
