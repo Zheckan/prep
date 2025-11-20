@@ -4,7 +4,7 @@ import { Geist, Geist_Mono } from 'next/font/google';
 import { cookies } from 'next/headers';
 import Script from 'next/script';
 import './globals.css';
-import { AmbientBackground } from '@/components';
+import { AmbientBackground } from '../components';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
