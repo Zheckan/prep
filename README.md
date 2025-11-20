@@ -1,5 +1,7 @@
 # This is a repository where will be stored all the notes for preparing for some interviews and playground for me to practice it.
 
+> Be aware that this is also a model-test playground, so don't expect pixel-perfect anything. Most UI is vibe-coded; not in a way that I don't look at the code completely, but in a way "I'm not a designer and I'm not even going to try to fire up Figma". So to not suffer through plain HTML mocks (don't get me wrong, I like them, peak of web performance etc.), they're boring and hard for me to read. Also new models are really good for design now, so it's not like this will be unusable UI.
+
 **Main goal of this repository is for me to prepare for Frontend Junior position. So this is a pretty note and at the same time playground for me to practice.**
 
 Currently information prepared is for Frontend Junior position, in future will be updated for other positions (Frontend Developer, Backend Developer, etc.). Other types of interviews (technical, behavioral, etc.). Other levels of experience (Mid, Senior, etc.).
