@@ -19,7 +19,7 @@
     "dedent": "^1.6.0",
     "framer-motion": "^12.23.0",
     "lucide-react": "^0.523.0",
-    "next": "16.0.1",
+    "next": "16.0.10",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-syntax-highlighter": "^15.6.1"
