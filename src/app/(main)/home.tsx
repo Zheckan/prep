@@ -16,72 +16,55 @@ const sections: Section[] = [
 export default function HomeComponent() {
   const router = useRouter();
 
-  const totalItems = sections.length;
-  const columns = 3;
-
-  const colSpanClasses: { [key: number]: string } = {
-    2: 'md:col-span-2',
-    3: 'md:col-span-3',
-    6: 'md:col-span-6',
-  };
-
   return (
-    <div className='flex min-h-screen flex-col items-center gap-8 py-8 md:justify-center lg:justify-center'>
-      <div className='max-w-6xl px-4 text-center'>
-        <h1 className='text-balance font-bold font-sans text-2xl md:text-3xl lg:text-4xl'>
+    <div className='flex min-h-screen flex-col items-center justify-center px-4 py-16'>
+      <div className='mb-12 text-center'>
+        <p className='mb-2 font-medium text-xs text-yellow-500 uppercase tracking-widest'>
+          Interview preparation
+        </p>
+        <h1 className='text-balance font-bold text-3xl text-white md:text-4xl lg:text-5xl'>
           Any interview prep
         </h1>
+        <p className='mt-3 text-sm text-zinc-500'>
+          Choose a topic to start preparing
+        </p>
       </div>
-      <div className='grid max-w-6xl grid-cols-1 gap-6 px-4 md:grid-cols-6'>
-        {sections.map((section, index) => {
-          const rowNumber = Math.floor(index / columns);
-          const isLastRow =
-            rowNumber === Math.floor((totalItems - 1) / columns);
 
-          const itemsOnLastRow = totalItems % columns;
-          const itemsOnThisRow =
-            isLastRow && itemsOnLastRow > 0 ? itemsOnLastRow : columns;
-
-          const colSpan = Math.round(6 / itemsOnThisRow);
-
-          const className = `rounded-lg border border-zinc-800 bg-zinc-900/90 p-6 shadow-sm transition-colors duration-200 hover:border-zinc-600 ${
-            colSpanClasses[colSpan]
-          }`;
-
-          return (
-            <button
-              className={`${className} flex flex-col text-left`}
-              disabled={section.inProgress}
-              key={`${section.title}-${section.level}`}
-              onClick={() => router.push(section.href)}
-              type='button'
-            >
-              <div className='flex-grow'>
-                <div className='mb-2'>
-                  <h2 className='font-bold text-xl text-zinc-100'>
-                    {section.title}
-                  </h2>
-                  {section.level && (
-                    <span className='font-medium text-sm text-yellow-500'>
-                      {section.level}
-                    </span>
-                  )}
-                  {section.inProgress && (
-                    <span className='ml-2 text-red-400 text-sm'>
-                      (in progress)
-                    </span>
-                  )}
-                </div>
-                <p className='mb-4 text-sm text-zinc-400 leading-relaxed'>
-                  {section.description}
-                </p>
-              </div>
-              <div className='flex items-center font-medium text-sm text-zinc-500'>
-                {section.inProgress ? 'Coming soon...' : 'Start learning →'}
-              </div>
-            </button>
-          );
-        })}
+      <div className='grid w-full max-w-3xl grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3'>
+        {sections.map((section) => (
+          <button
+            className='group flex flex-col rounded-xl border border-zinc-800/60 bg-zinc-900/40 p-6 text-left backdrop-blur-sm transition-all duration-200 hover:border-zinc-700 hover:bg-zinc-900/60'
+            disabled={section.inProgress}
+            key={`${section.title}-${section.level}`}
+            onClick={() => router.push(section.href)}
+            type='button'
+          >
+            <div className='flex-grow'>
+              {section.level && (
+                <span className='mb-2 inline-block rounded-full bg-yellow-500/10 px-2.5 py-0.5 font-medium text-[11px] text-yellow-500'>
+                  {section.level}
+                </span>
+              )}
+              <h2 className='mb-1.5 font-semibold text-lg text-white'>
+                {section.title}
+              </h2>
+              {section.inProgress && (
+                <span className='mb-2 inline-block text-red-400/80 text-xs'>
+                  In progress
+                </span>
+              )}
+              <p className='text-sm text-zinc-400 leading-relaxed'>
+                {section.description}
+              </p>
+            </div>
+            <div className='mt-4 flex items-center font-medium text-sm text-zinc-600 transition-colors group-hover:text-zinc-400'>
+              {section.inProgress ? 'Coming soon' : 'Start learning'}
+              <span className='ml-1 transition-transform group-hover:translate-x-0.5'>
+                &rarr;
+              </span>
+            </div>
+          </button>
+        ))}
       </div>
     </div>
   );

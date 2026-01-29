@@ -5,16 +5,19 @@ export const SectionCard = ({ title, children }: SectionCardProps) => {
   const id = slugify(title);
   return (
     <section
-      className='mb-12 rounded-lg border border-zinc-800 bg-zinc-900/90 p-6 backdrop-blur supports-[backdrop-filter]:bg-zinc-900/65'
+      className='mb-10 rounded-lg border border-zinc-800/60 bg-zinc-900/40 p-5 backdrop-blur-sm sm:p-6'
       id={id}
     >
       <h2
-        className='mb-4 border-zinc-700 border-b pb-2 font-bold text-2xl text-white'
+        className='mb-5 flex items-center gap-3 font-semibold text-white text-xl'
         id={id}
       >
+        <span className='h-5 w-1 rounded-full bg-yellow-500' />
         {title}
       </h2>
-      <div className='space-y-4 text-white leading-relaxed'>{children}</div>
+      <div className='space-y-4 text-[15px] text-zinc-200 leading-relaxed'>
+        {children}
+      </div>
     </section>
   );
 };

@@ -20,13 +20,15 @@ export function ContentPage({
         title={title}
         topicHome={topicHome}
       />
-      <TableOfContents />
-      <PageContainer
-        allowWidthToggle={allowWidthToggle}
-        initialWidth={initialWidth}
-      >
-        {children}
-      </PageContainer>
+      <div className='mx-auto flex max-w-7xl'>
+        <PageContainer
+          allowWidthToggle={allowWidthToggle}
+          initialWidth={initialWidth}
+        >
+          {children}
+        </PageContainer>
+        <TableOfContents />
+      </div>
     </div>
   );
 }

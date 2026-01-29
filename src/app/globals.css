@@ -2,19 +2,24 @@
 
 :root {
   /* Default to dark theme */
-  --background: #0a0a0a;
-  --foreground: #ededed;
+  --background: #09090b;
+  --foreground: #f4f4f5;
   --accent: #eab308; /* yellow-500 */
+  --accent-dim: #a16207; /* yellow-700 */
   --muted: #a1a1aa; /* zinc-400 */
   --muted-foreground: #d4d4d8; /* zinc-300 */
-  --border: rgba(255, 255, 255, 0.08);
-  --glass-bg: rgba(0, 0, 0, 0.1);
-  --glass-strong-bg: rgba(0, 0, 0, 0.22);
+  --border: rgba(255, 255, 255, 0.07);
+  --border-strong: rgba(255, 255, 255, 0.12);
+  --glass-bg: rgba(0, 0, 0, 0.12);
+  --glass-strong-bg: rgba(0, 0, 0, 0.28);
   --ring: var(--accent);
-  /* Current page header height (controlled by PageHeader) */
-  --page-header-height: 128px;
-  /* Offset built-in anchor navigation and scrollIntoView to account for sticky header */
-  scroll-padding-top: var(--page-header-height, 128px);
+
+  /* Layout */
+  --page-header-height: 64px;
+  --toc-width: 260px;
+
+  /* Offset built-in anchor navigation for sticky header */
+  scroll-padding-top: calc(var(--page-header-height) + 24px);
 
   /* Ambient background hues */
   --ambient-1: 255 90 31; /* warm orange */
@@ -37,7 +42,7 @@ html {
 h2[id],
 h3[id],
 h4[id] {
-  scroll-margin-top: calc(var(--page-header-height, 128px) + 16px);
+  scroll-margin-top: calc(var(--page-header-height) + 24px);
 }
 
 @theme inline {
@@ -50,13 +55,14 @@ h4[id] {
 /* Respect system light preference while favoring dark by default */
 @media (prefers-color-scheme: light) {
   :root {
-    --background: #ffffff;
-    --foreground: #171717;
+    --background: #fafafa;
+    --foreground: #18181b;
     --muted: #52525b; /* zinc-600 */
     --muted-foreground: #3f3f46; /* zinc-700 */
-    --border: rgba(0, 0, 0, 0.08);
-    --glass-bg: rgba(255, 255, 255, 0.5);
-    --glass-strong-bg: rgba(255, 255, 255, 0.6);
+    --border: rgba(0, 0, 0, 0.06);
+    --border-strong: rgba(0, 0, 0, 0.12);
+    --glass-bg: rgba(255, 255, 255, 0.55);
+    --glass-strong-bg: rgba(255, 255, 255, 0.7);
   }
 }
 
@@ -87,12 +93,10 @@ body::after {
   background:
     radial-gradient(
       60% 60% at 50% 0%,
-      rgba(255, 255, 255, 0.03),
+      rgba(255, 255, 255, 0.02),
       transparent 70%
-    ),
-    radial-gradient(80% 50% at 50% 100%, rgba(0, 0, 0, 0.25), transparent 70%);
+    ), radial-gradient(80% 50% at 50% 100%, rgba(0, 0, 0, 0.3), transparent 70%);
   pointer-events: none;
-  transition: filter 0.28s ease-in-out;
 }
 
 /* Accessible focus styles */
@@ -113,7 +117,7 @@ a:focus-visible,
 .glass-strong {
   background: var(--glass-strong-bg);
   border-bottom: 1px solid var(--border);
-  backdrop-filter: blur(14px) saturate(160%);
+  backdrop-filter: blur(16px) saturate(160%);
 }
 
 /* Mobile: allow full viewport width */
@@ -123,8 +127,7 @@ a:focus-visible,
   }
 }
 
-/* SSR-safe initial width via data attribute (desktop only to avoid descending specificity with mobile override) */
-/* Runtime inline style from PageContainer drives width; these are fallback for SSR/first paint */
+/* SSR-safe initial width via data attribute (desktop only) */
 @media (min-width: 641px) {
   html[data-content-width="narrow"] .content-container {
     max-width: 50vw;
@@ -148,4 +151,27 @@ a:focus-visible,
 
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
+}
+
+/* Thin scrollbar for TOC */
+.scrollbar-thin {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.1) transparent;
+}
+
+.scrollbar-thin::-webkit-scrollbar {
+  width: 4px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.2);
 }

@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { WidthSwitcher } from '@/components/width-switcher';
 import type { PageContainerProps, WidthPreset } from '@/types';
 
@@ -29,26 +29,6 @@ export function PageContainer({
     }
     return initialWidth;
   });
-
-  const [headerHeight, setHeaderHeight] = useState<number>(120);
-
-  useEffect(() => {
-    if (typeof window === 'undefined') {
-      return;
-    }
-    const header = document.getElementById('page-header');
-    if (!header) {
-      return;
-    }
-
-    const update = () => setHeaderHeight(header.getBoundingClientRect().height);
-    update();
-    const observer = new ResizeObserver(update);
-    observer.observe(header);
-    return () => {
-      observer.disconnect();
-    };
-  }, []);
 
   const applyWidthPreference = (next: WidthPreset) => {
     setWidth(next);
@@ -89,23 +69,23 @@ export function PageContainer({
 
   const containerClasses = useMemo(() => {
     return [
-      'content-container mx-0 sm:mx-auto px-4 py-8',
+      'content-container w-full px-4 sm:px-6 py-8',
       'transition-[max-width] duration-200 ease-in-out',
       className,
     ].join(' ');
   }, [className]);
 
   return (
-    <div className='w-full'>
-      {allowWidthToggle && (
-        <WidthSwitcher
-          currentWidth={width}
-          headerHeightFallback={headerHeight}
-          onChangeWidth={applyWidthPreference}
-        />
-      )}
-
-      <div className={containerClasses}>{children}</div>
-    </div>
+    <main className='min-w-0 flex-1'>
+      <div className={containerClasses}>
+        {allowWidthToggle && (
+          <WidthSwitcher
+            currentWidth={width}
+            onChangeWidth={applyWidthPreference}
+          />
+        )}
+        {children}
+      </div>
+    </main>
   );
 }

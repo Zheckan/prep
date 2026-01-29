@@ -2,10 +2,10 @@ import type { CalloutProps } from '@/types';
 
 export const Callout = ({ children, className = '' }: CalloutProps) => {
   return (
-    <p
-      className={`mb-3 rounded-md border-yellow-500 border-l-4 bg-zinc-800/60 p-3 text-zinc-100 ${className}`}
+    <div
+      className={`mb-3 rounded-lg border border-yellow-500/20 border-l-2 border-l-yellow-500 bg-yellow-500/5 px-4 py-3 text-[14px] text-zinc-200 ${className}`}
     >
       {children}
-    </p>
+    </div>
   );
 };

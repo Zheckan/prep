@@ -6,10 +6,10 @@ export const Header = ({ children, className = '', id }: HeaderProps) => {
   const headerId = id || slugify(text);
   return (
     <h3
-      className={`mb-3 font-bold text-xl underline decoration-2 decoration-yellow-500 underline-offset-4 ${className}`}
+      className={`mb-3 font-semibold text-lg text-white ${className}`}
       id={headerId}
     >
-      {children}
+      <span className='border-yellow-500/60 border-b pb-0.5'>{children}</span>
     </h3>
   );
 };
