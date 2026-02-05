@@ -57,7 +57,6 @@ export const TableOfContents = () => {
       setIsLoaded(true);
     };
 
-    // Initial update with delay to ensure content is rendered
     const timeoutId = setTimeout(updateTOC, 0);
 
     const header = document.getElementById('page-header');
@@ -103,7 +102,6 @@ export const TableOfContents = () => {
     };
   }, []);
 
-  // Also open on single tap anywhere near the left edge on mobile
   useEffect(() => {
     const onTouchTap = (e: TouchEvent) => {
       if (window.innerWidth >= 768) return;
@@ -130,7 +128,6 @@ export const TableOfContents = () => {
       setOpen(false);
     }
 
-    // Prevent default navigation and use CSS scroll-margin/scroll-padding
     e.preventDefault();
     const href = e.currentTarget.getAttribute('href');
     if (href?.startsWith('#')) {
@@ -138,7 +135,6 @@ export const TableOfContents = () => {
       const targetElement = document.getElementById(targetId);
       if (targetElement) {
         targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        // Update the address bar without triggering a jump
         if (
           typeof history !== 'undefined' &&
           typeof history.replaceState === 'function'
@@ -153,7 +149,6 @@ export const TableOfContents = () => {
     setOpen(!open);
   };
 
-  // Handle click outside on mobile and always unpin when mobile
   useEffect(() => {
     openRef.current = open;
     pinnedRef.current = pinned;
@@ -162,7 +157,6 @@ export const TableOfContents = () => {
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (window.innerWidth >= 768) return;
-      // On mobile ensure menu is unpinned
       if (pinnedRef.current) {
         setPinned(false);
       }
@@ -184,7 +178,6 @@ export const TableOfContents = () => {
     };
   }, []);
 
-  // Don't render until content is loaded to prevent flickering
   if (!isLoaded) {
     return null;
   }
@@ -198,7 +191,6 @@ export const TableOfContents = () => {
       }}
     >
       <div className='relative'>
-        {/* Hover/edge affordance – no explicit button */}
         <div
           aria-hidden='true'
           className='pointer-events-auto absolute top-0 left-0 w-3 md:w-4'
@@ -209,7 +201,6 @@ export const TableOfContents = () => {
           }}
         />
 
-        {/* Preview hint when closed - same height as open state */}
         {!open && (
           <motion.div
             animate={{ opacity: 1, x: 0 }}
@@ -221,25 +212,23 @@ export const TableOfContents = () => {
             }}
             transition={{ type: 'tween', ease: 'easeInOut', duration: 0.35 }}
           >
-            {/* Soft glow hint */}
             <div
-              className='h-full w-full opacity-80'
+              className='h-full w-full opacity-60'
               style={{
                 background:
-                  'linear-gradient(to right, color-mix(in srgb, rgba(255, 255, 255, 0.3) 100%, var(--glass-strong-bg) 20%), transparent)',
+                  'linear-gradient(to right, rgba(99, 102, 241, 0.3), transparent)',
               }}
             />
             <div className='absolute inset-y-0 right-0 w-px md:hidden' />
           </motion.div>
         )}
 
-        {/* Main menu */}
         <motion.div
           animate={{
             x: open ? 0 : '-100%',
             opacity: open ? 1 : 0,
           }}
-          className='scrollbar-hide glass pointer-events-auto relative min-w-[260px] max-w-sm overflow-y-auto p-4 text-sm text-white/95 md:border'
+          className='scrollbar-hide glass pointer-events-auto relative min-w-[260px] max-w-sm overflow-y-auto p-4 text-[var(--foreground)] text-sm md:border'
           initial={{
             x: '-100%',
             opacity: 0,
@@ -261,25 +250,23 @@ export const TableOfContents = () => {
           }}
         >
           <div className='relative'>
-            {/* Pin icon aligned with first section */}
             <button
               className='-right-2 absolute top-0 hidden md:block'
               onClick={() => setPinned(!pinned)}
               type='button'
             >
               {pinned ? (
-                <PinOff className='fill-white' size={18} />
+                <PinOff className='fill-[var(--accent-light)]' size={18} />
               ) : (
-                <Pin size={18} />
+                <Pin className='text-[var(--muted)]' size={18} />
               )}
             </button>
 
             <ul className='space-y-3 pr-8'>
               {items.map((section) => (
                 <li key={section.id}>
-                  {/* Level 1: SectionCard (h2) */}
                   <a
-                    className='block break-words text-left font-bold text-white transition-colors duration-200 hover:text-[var(--accent)] focus-visible:outline-none'
+                    className='block break-words text-left font-bold text-[var(--foreground)] transition-colors duration-200 hover:text-[var(--accent-light)] focus-visible:outline-none'
                     href={`#${section.id}`}
                     onClick={handleLinkClick}
                   >
@@ -287,26 +274,23 @@ export const TableOfContents = () => {
                   </a>
 
                   {section.children.length > 0 && (
-                    <ul className='mt-2 space-y-1 border-zinc-600 border-l pl-4'>
+                    <ul className='mt-2 space-y-1 border-[var(--border)] border-l pl-4'>
                       {section.children.map((child) => {
-                        // Check if this is a Header (h3) or Subheader (h4)
                         const isSubheader = child.level === 4;
 
                         return (
                           <li key={child.id}>
                             {isSubheader ? (
-                              /* Level 3: Subheader (h4) with double border */
                               <a
-                                className='block break-words border-zinc-600 border-l pl-4 text-left text-xs text-zinc-400 leading-relaxed transition-colors duration-200 hover:text-[var(--accent)] focus-visible:outline-none'
+                                className='block break-words border-[var(--border)] border-l pl-4 text-left text-[var(--muted)] text-xs leading-relaxed transition-colors duration-200 hover:text-[var(--accent-light)] focus-visible:outline-none'
                                 href={`#${child.id}`}
                                 onClick={handleLinkClick}
                               >
                                 {child.text}
                               </a>
                             ) : (
-                              /* Level 2: Header (h3) */
                               <a
-                                className='block break-words text-left text-gray-200 text-sm transition-colors duration-200 hover:text-[var(--accent)] focus-visible:outline-none'
+                                className='block break-words text-left text-[var(--muted-foreground)] text-sm transition-colors duration-200 hover:text-[var(--accent-light)] focus-visible:outline-none'
                                 href={`#${child.id}`}
                                 onClick={handleLinkClick}
                               >

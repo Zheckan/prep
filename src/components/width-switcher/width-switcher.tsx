@@ -14,7 +14,6 @@ export function WidthSwitcher({
   onChangeWidth,
   headerHeightFallback = 120,
 }: WidthSwitcherProps) {
-  // Track live header height via ResizeObserver as a fallback when the CSS var is not yet set
   const [headerHeight, setHeaderHeight] =
     useState<number>(headerHeightFallback);
 
@@ -38,15 +37,15 @@ export function WidthSwitcher({
         transform: 'translateY(50%)',
       }}
     >
-      <div className='glass inline-flex items-center gap-1 rounded-full p-1 text-sm text-white'>
+      <div className='glass inline-flex items-center gap-1 rounded-full p-1 text-[var(--foreground)] text-sm'>
         {(['narrow', 'comfortable', 'wide', 'full'] as WidthPreset[]).map(
           (preset) => (
             <button
               aria-pressed={currentWidth === preset}
               className={`rounded-full px-3 py-1 capitalize transition-colors ${
                 currentWidth === preset
-                  ? 'bg-yellow-500 text-black'
-                  : 'text-zinc-200 hover:text-yellow-500'
+                  ? 'bg-[var(--accent)] text-white'
+                  : 'text-[var(--muted)] hover:text-[var(--accent-light)]'
               }`}
               key={preset}
               onClick={() => onChangeWidth(preset)}

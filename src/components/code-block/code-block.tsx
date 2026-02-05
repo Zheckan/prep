@@ -3,7 +3,6 @@ import { coldarkDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import { parseHighlightLines } from '@/helpers/parse-highlight-lines';
 import type { CodeBlockProps } from '@/types';
 
-// Move regex patterns to top level for better performance
 const COMMENT_REGEX = /^\/\*\s*\w+\s*\*\/\s*\n?/;
 const LEADING_SPACES_REGEX = /^\s+/;
 const TRAILING_SPACES_REGEX = /\s+$/;
@@ -45,7 +44,6 @@ export const CodeBlock = ({
   const highlightedLines = parseHighlightLines(highlightLines);
   const highlightedLinesEnd = parseHighlightLines(highlightLinesEnd);
 
-  // Line props function for highlighting
   const getLineProps = (lineNumber: number) => {
     const isHighlighted = highlightedLines.includes(lineNumber);
     const isHighlightedEnd = highlightedLinesEnd.includes(lineNumber);
@@ -54,12 +52,11 @@ export const CodeBlock = ({
     let borderLeft = 'none';
 
     if (isHighlightedEnd) {
-      backgroundColor = 'rgba(34, 197, 94, 0.15)'; // Green for end lines
-      borderLeft = '3px solid rgb(34, 197, 94)';
+      backgroundColor = 'rgba(52, 211, 153, 0.12)';
+      borderLeft = '3px solid rgb(52, 211, 153)';
     } else if (isHighlighted) {
-      // Yellow accent for highlighted lines
-      backgroundColor = 'rgba(234, 179, 8, 0.18)';
-      borderLeft = '3px solid rgb(234, 179, 8)';
+      backgroundColor = 'rgba(99, 102, 241, 0.15)';
+      borderLeft = '3px solid rgb(99, 102, 241)';
     }
 
     return {
@@ -76,9 +73,9 @@ export const CodeBlock = ({
   };
 
   return (
-    <div className='mb-4 overflow-hidden rounded-lg border border-zinc-700 bg-zinc-900'>
+    <div className='mb-4 overflow-hidden rounded-xl border border-[var(--border)] bg-[var(--surface-1)]'>
       {comment && (
-        <div className='border-zinc-700 border-b bg-zinc-800 px-4 py-2 text-gray-400 text-sm'>
+        <div className='border-[var(--border)] border-b bg-[var(--surface-2)] px-4 py-2 text-[var(--muted)] text-sm'>
           {`/* ${comment} */`}
         </div>
       )}
