@@ -1,38 +1,32 @@
 'use client';
 
-import { motion } from 'framer-motion';
-import { Pin, PinOff } from 'lucide-react';
-import { useEffect, useRef, useState } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
+import { List, Pin, PinOff, X } from 'lucide-react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import type { TocHeading, TocItem } from '@/types';
 
 export const TableOfContents = () => {
   const [items, setItems] = useState<TocItem[]>([]);
   const [open, setOpen] = useState(false);
   const [pinned, setPinned] = useState(false);
-  const [headerHeight, setHeaderHeight] = useState(0);
+  const [activeId, setActiveId] = useState<string>('');
   const [isLoaded, setIsLoaded] = useState(false);
-  const touchStartRef = useRef<number | null>(null);
-  const openRef = useRef(open);
-  const pinnedRef = useRef(pinned);
+  const navRef = useRef<HTMLDivElement>(null);
+  const observerRef = useRef<IntersectionObserver | null>(null);
 
+  // Build TOC from headings
   useEffect(() => {
     const getHeadingLevel = (tagName: string): number => {
-      if (tagName === 'H2') {
-        return 2;
-      }
-      if (tagName === 'H3') {
-        return 3;
-      }
+      if (tagName === 'H2') return 2;
+      if (tagName === 'H3') return 3;
       return 4;
     };
 
-    const createTocItem = (el: HTMLElement): TocHeading => {
-      return {
-        id: el.id,
-        text: el.textContent || '',
-        level: getHeadingLevel(el.tagName),
-      };
-    };
+    const createTocItem = (el: HTMLElement): TocHeading => ({
+      id: el.id,
+      text: el.textContent || '',
+      level: getHeadingLevel(el.tagName),
+    });
 
     const updateTOC = () => {
       const headings = Array.from(
@@ -40,10 +34,8 @@ export const TableOfContents = () => {
       );
 
       const mapped: TocItem[] = [];
-
       for (const el of headings) {
         const item = createTocItem(el);
-
         if (item.level === 2) {
           mapped.push({ id: item.id, text: item.text, children: [] });
         } else {
@@ -57,29 +49,63 @@ export const TableOfContents = () => {
       setIsLoaded(true);
     };
 
-    // Initial update with delay to ensure content is rendered
     const timeoutId = setTimeout(updateTOC, 0);
+    return () => clearTimeout(timeoutId);
+  }, []);
 
-    const header = document.getElementById('page-header');
-    let resizeObserver: ResizeObserver | null = null;
-    let updateHeight: (() => void) | null = null;
+  // Active section tracking via IntersectionObserver
+  useEffect(() => {
+    if (!isLoaded || items.length === 0) return;
 
-    if (header) {
-      updateHeight = () =>
-        setHeaderHeight(header.getBoundingClientRect().height);
-      updateHeight();
-      resizeObserver = new ResizeObserver(updateHeight);
-      resizeObserver.observe(header);
+    const allIds = items.flatMap((item) => [
+      item.id,
+      ...item.children.map((c) => c.id),
+    ]);
+
+    const headingElements = allIds
+      .map((id) => document.getElementById(id))
+      .filter(Boolean) as HTMLElement[];
+
+    if (headingElements.length === 0) return;
+
+    observerRef.current = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            setActiveId(entry.target.id);
+          }
+        }
+      },
+      {
+        rootMargin: '-20% 0px -70% 0px',
+        threshold: 0,
+      }
+    );
+
+    for (const el of headingElements) {
+      observerRef.current.observe(el);
     }
 
     return () => {
-      clearTimeout(timeoutId);
-      if (resizeObserver) {
-        resizeObserver.disconnect();
+      observerRef.current?.disconnect();
+    };
+  }, [isLoaded, items]);
+
+  // Close on click outside (using ref, not fragile query)
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (pinned) return;
+      if (!open) return;
+      if (navRef.current && !navRef.current.contains(event.target as Node)) {
+        setOpen(false);
       }
     };
-  }, []);
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [open, pinned]);
 
+  // Mobile swipe to open
+  const touchStartRef = useRef<number | null>(null);
   useEffect(() => {
     const onTouchStart = (e: TouchEvent) => {
       if (window.innerWidth < 768) {
@@ -103,183 +129,132 @@ export const TableOfContents = () => {
     };
   }, []);
 
-  // Also open on single tap anywhere near the left edge on mobile
+  // Disable pinning on mobile
   useEffect(() => {
-    const onTouchTap = (e: TouchEvent) => {
-      if (window.innerWidth >= 768) return;
-      if (e.touches.length !== 1) return;
-      const x = e.touches[0].clientX;
-      if (x < 30) {
-        setOpen(true);
-      }
+    const mq = window.matchMedia('(max-width: 767px)');
+    const handleChange = () => {
+      if (mq.matches && pinned) setPinned(false);
     };
-    window.addEventListener('touchstart', onTouchTap, { passive: true });
-    return () => {
-      window.removeEventListener('touchstart', onTouchTap);
-    };
-  }, []);
+    handleChange();
+    mq.addEventListener('change', handleChange);
+    return () => mq.removeEventListener('change', handleChange);
+  }, [pinned]);
 
-  const handleMouseLeave = () => {
-    if (!pinned) {
-      setOpen(false);
-    }
-  };
-
-  const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    if (!pinned) {
-      setOpen(false);
-    }
-
-    // Prevent default navigation and use CSS scroll-margin/scroll-padding
-    e.preventDefault();
-    const href = e.currentTarget.getAttribute('href');
-    if (href?.startsWith('#')) {
-      const targetId = href.substring(1);
-      const targetElement = document.getElementById(targetId);
-      if (targetElement) {
-        targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        // Update the address bar without triggering a jump
-        if (
-          typeof history !== 'undefined' &&
-          typeof history.replaceState === 'function'
-        ) {
+  const handleLinkClick = useCallback(
+    (e: React.MouseEvent<HTMLAnchorElement>) => {
+      if (!pinned) setOpen(false);
+      e.preventDefault();
+      const href = e.currentTarget.getAttribute('href');
+      if (href?.startsWith('#')) {
+        const targetId = href.substring(1);
+        const targetElement = document.getElementById(targetId);
+        if (targetElement) {
+          targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
           history.replaceState(null, '', href);
         }
       }
-    }
-  };
+    },
+    [pinned]
+  );
 
-  const handleTriggerClick = () => {
-    setOpen(!open);
-  };
+  const isActive = (id: string) => activeId === id;
 
-  // Handle click outside on mobile and always unpin when mobile
-  useEffect(() => {
-    openRef.current = open;
-    pinnedRef.current = pinned;
-  }, [open, pinned]);
+  const isParentActive = (section: TocItem) =>
+    activeId === section.id || section.children.some((c) => c.id === activeId);
 
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (window.innerWidth >= 768) return;
-      // On mobile ensure menu is unpinned
-      if (pinnedRef.current) {
-        setPinned(false);
-      }
-      if (!openRef.current || pinnedRef.current) {
-        return;
-      }
-      const target = event.target as Element;
-      const tocNav = document.querySelector('nav[style*="top:"]');
-      const tocContent = tocNav?.querySelector('.scrollbar-hide');
-
-      if (tocContent && !tocContent.contains(target)) {
-        setOpen(false);
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, []);
-
-  // Don't render until content is loaded to prevent flickering
-  if (!isLoaded) {
-    return null;
-  }
+  if (!isLoaded) return null;
 
   return (
-    <nav
-      className='pointer-events-none fixed left-0 z-40'
-      style={{
-        top: `var(--page-header-height, ${headerHeight}px)`,
-        transition: 'top 0.28s ease-in-out',
-      }}
-    >
-      <div className='relative'>
-        {/* Hover/edge affordance – no explicit button */}
-        <div
-          aria-hidden='true'
-          className='pointer-events-auto absolute top-0 left-0 w-3 md:w-4'
-          onMouseEnter={() => setOpen(true)}
-          onTouchStart={handleTriggerClick}
-          style={{
-            height: `calc(100dvh - var(--page-header-height, ${headerHeight}px))`,
-          }}
-        />
+    <>
+      {/* Toggle button - visible on mobile and desktop when TOC is closed */}
+      <button
+        aria-label='Open table of contents'
+        className={`fixed left-4 z-50 rounded-lg p-2 transition-all duration-200 ${
+          open ? 'pointer-events-none opacity-0' : 'opacity-100'
+        } glass hover:bg-[var(--surface-2)]`}
+        onClick={() => setOpen(true)}
+        style={{
+          top: 'calc(var(--page-header-height, 128px) + 12px)',
+          transition: 'top 0.28s ease-in-out, opacity 0.2s ease',
+        }}
+        type='button'
+      >
+        <List className='text-[var(--foreground-muted)]' size={18} />
+      </button>
 
-        {/* Preview hint when closed - same height as open state */}
-        {!open && (
+      {/* Backdrop on mobile */}
+      <AnimatePresence>
+        {open && (
           <motion.div
-            animate={{ opacity: 1, x: 0 }}
-            className='pointer-events-none absolute top-0 left-0 w-2 md:w-3'
+            animate={{ opacity: 1 }}
+            className='fixed inset-0 z-40 bg-black/40 md:hidden'
             exit={{ opacity: 0 }}
-            initial={{ opacity: 0, x: -16 }}
-            style={{
-              height: `calc(100dvh - var(--page-header-height, ${headerHeight}px))`,
+            initial={{ opacity: 0 }}
+            onClick={() => {
+              if (!pinned) setOpen(false);
             }}
-            transition={{ type: 'tween', ease: 'easeInOut', duration: 0.35 }}
-          >
-            {/* Soft glow hint */}
-            <div
-              className='h-full w-full opacity-80'
-              style={{
-                background:
-                  'linear-gradient(to right, color-mix(in srgb, rgba(255, 255, 255, 0.3) 100%, var(--glass-strong-bg) 20%), transparent)',
-              }}
-            />
-            <div className='absolute inset-y-0 right-0 w-px md:hidden' />
-          </motion.div>
+          />
         )}
+      </AnimatePresence>
 
-        {/* Main menu */}
-        <motion.div
-          animate={{
-            x: open ? 0 : '-100%',
-            opacity: open ? 1 : 0,
-          }}
-          className='scrollbar-hide glass pointer-events-auto relative min-w-[260px] max-w-sm overflow-y-auto p-4 text-sm text-white/95 md:border'
-          initial={{
-            x: '-100%',
-            opacity: 0,
-          }}
-          onBlur={handleMouseLeave}
-          onFocus={() => setOpen(true)}
-          onMouseEnter={() => setOpen(true)}
-          onMouseLeave={handleMouseLeave}
-          style={{
-            scrollbarWidth: 'none',
-            msOverflowStyle: 'none',
-            width: 'fit-content',
-            height: `calc(100dvh - var(--page-header-height, ${headerHeight}px))`,
-          }}
-          transition={{
-            type: 'tween',
-            ease: 'easeInOut',
-            duration: 0.3,
-          }}
-        >
-          <div className='relative'>
-            {/* Pin icon aligned with first section */}
-            <button
-              className='-right-2 absolute top-0 hidden md:block'
-              onClick={() => setPinned(!pinned)}
-              type='button'
-            >
-              {pinned ? (
-                <PinOff className='fill-white' size={18} />
-              ) : (
-                <Pin size={18} />
-              )}
-            </button>
+      {/* TOC panel */}
+      <AnimatePresence>
+        {open && (
+          <motion.nav
+            animate={{ x: 0, opacity: 1 }}
+            className='scrollbar-hide glass fixed left-0 z-50 overflow-y-auto p-5 text-sm md:max-w-xs'
+            exit={{ x: '-100%', opacity: 0 }}
+            initial={{ x: '-100%', opacity: 0 }}
+            ref={navRef}
+            style={{
+              top: 'var(--page-header-height, 128px)',
+              height: 'calc(100dvh - var(--page-header-height, 128px))',
+              width: 'min(300px, 85vw)',
+              transition: 'top 0.28s ease-in-out',
+            }}
+            transition={{
+              type: 'tween',
+              ease: 'easeInOut',
+              duration: 0.25,
+            }}
+          >
+            {/* Header row */}
+            <div className='mb-4 flex items-center justify-between'>
+              <span className='font-semibold text-[var(--foreground-muted)] text-xs uppercase tracking-widest'>
+                Contents
+              </span>
+              <div className='flex items-center gap-1'>
+                <button
+                  aria-label={
+                    pinned ? 'Unpin table of contents' : 'Pin table of contents'
+                  }
+                  className='hidden rounded-md p-1.5 text-[var(--foreground-muted)] transition-colors hover:bg-[var(--surface-2)] hover:text-[var(--accent)] md:block'
+                  onClick={() => setPinned(!pinned)}
+                  type='button'
+                >
+                  {pinned ? <PinOff size={14} /> : <Pin size={14} />}
+                </button>
+                <button
+                  aria-label='Close table of contents'
+                  className='rounded-md p-1.5 text-[var(--foreground-muted)] transition-colors hover:bg-[var(--surface-2)] hover:text-[var(--foreground)]'
+                  onClick={() => setOpen(false)}
+                  type='button'
+                >
+                  <X size={14} />
+                </button>
+              </div>
+            </div>
 
-            <ul className='space-y-3 pr-8'>
+            {/* TOC tree */}
+            <ul className='space-y-2'>
               {items.map((section) => (
                 <li key={section.id}>
-                  {/* Level 1: SectionCard (h2) */}
                   <a
-                    className='block break-words text-left font-bold text-white transition-colors duration-200 hover:text-[var(--accent)] focus-visible:outline-none'
+                    className={`block rounded-md px-2 py-1.5 font-medium text-sm transition-all duration-150 ${
+                      isParentActive(section)
+                        ? 'bg-[var(--accent-glow)] text-[var(--accent)]'
+                        : 'text-[var(--foreground)] hover:bg-[var(--surface-2)] hover:text-[var(--accent)]'
+                    }`}
                     href={`#${section.id}`}
                     onClick={handleLinkClick}
                   >
@@ -287,32 +262,24 @@ export const TableOfContents = () => {
                   </a>
 
                   {section.children.length > 0 && (
-                    <ul className='mt-2 space-y-1 border-zinc-600 border-l pl-4'>
+                    <ul className='mt-1 ml-3 space-y-0.5 border-[var(--border)] border-l pl-3'>
                       {section.children.map((child) => {
-                        // Check if this is a Header (h3) or Subheader (h4)
                         const isSubheader = child.level === 4;
-
                         return (
                           <li key={child.id}>
-                            {isSubheader ? (
-                              /* Level 3: Subheader (h4) with double border */
-                              <a
-                                className='block break-words border-zinc-600 border-l pl-4 text-left text-xs text-zinc-400 leading-relaxed transition-colors duration-200 hover:text-[var(--accent)] focus-visible:outline-none'
-                                href={`#${child.id}`}
-                                onClick={handleLinkClick}
-                              >
-                                {child.text}
-                              </a>
-                            ) : (
-                              /* Level 2: Header (h3) */
-                              <a
-                                className='block break-words text-left text-gray-200 text-sm transition-colors duration-200 hover:text-[var(--accent)] focus-visible:outline-none'
-                                href={`#${child.id}`}
-                                onClick={handleLinkClick}
-                              >
-                                {child.text}
-                              </a>
-                            )}
+                            <a
+                              className={`block rounded-md px-2 py-1 transition-all duration-150 ${
+                                isSubheader ? 'text-xs' : 'text-sm'
+                              } ${isSubheader ? 'ml-2' : ''} ${
+                                isActive(child.id)
+                                  ? 'bg-[var(--accent-glow)] text-[var(--accent)]'
+                                  : 'text-[var(--foreground-muted)] hover:bg-[var(--surface-1)] hover:text-[var(--accent)]'
+                              }`}
+                              href={`#${child.id}`}
+                              onClick={handleLinkClick}
+                            >
+                              {child.text}
+                            </a>
                           </li>
                         );
                       })}
@@ -321,9 +288,9 @@ export const TableOfContents = () => {
                 </li>
               ))}
             </ul>
-          </div>
-        </motion.div>
-      </div>
-    </nav>
+          </motion.nav>
+        )}
+      </AnimatePresence>
+    </>
   );
 };

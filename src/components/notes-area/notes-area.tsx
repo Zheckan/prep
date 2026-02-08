@@ -6,9 +6,9 @@ export const NotesArea = ({
 }: NotesAreaProps) => {
   return (
     <div
-      className={`${minHeight} border border-zinc-700 bg-zinc-800 p-4 text-gray-50`}
+      className={`${minHeight} rounded-xl border border-[var(--border-strong)] border-dashed bg-[var(--surface-1)] p-4 text-[var(--foreground)]`}
     >
-      <p className='italic'>{placeholder}</p>
+      <p className='text-[var(--foreground-muted)] italic'>{placeholder}</p>
     </div>
   );
 };

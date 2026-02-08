@@ -9,7 +9,7 @@ export const CodeSpan = ({
 
   return (
     <code
-      className={`rounded bg-zinc-800/80 px-2 py-1 font-mono text-yellow-500 ${sizeClass} ${className}`}
+      className={`rounded-md bg-[var(--surface-3)] px-2 py-1 font-mono text-[var(--accent)] ${sizeClass} ${className}`}
     >
       {children}
     </code>

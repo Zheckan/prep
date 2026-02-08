@@ -5,7 +5,10 @@ export const Text = ({
   className = '',
   variant = 'default',
 }: TextProps) => {
-  const variantClass = variant === 'muted' ? 'text-zinc-300' : 'text-white';
+  const variantClass =
+    variant === 'muted'
+      ? 'text-[var(--foreground-muted)]'
+      : 'text-[var(--foreground)]';
 
   return <p className={`mb-3 ${variantClass} ${className}`}>{children}</p>;
 };

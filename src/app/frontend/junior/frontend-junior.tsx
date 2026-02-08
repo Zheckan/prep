@@ -1,4 +1,7 @@
 'use client';
+
+import { motion } from 'framer-motion';
+import { ArrowLeft, ArrowRight, CheckCircle2, Clock } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import type { Section } from '@/types';
 
@@ -36,68 +39,128 @@ const sections: Section[] = [
   },
 ];
 
+const container = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: { staggerChildren: 0.08, delayChildren: 0.15 },
+  },
+};
+
+const cardVariant = {
+  hidden: { opacity: 0, y: 16 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.4, ease: 'easeOut' as const },
+  },
+};
+
 export default function FrontendJunior() {
   const router = useRouter();
 
-  const totalItems = sections.length;
-  const columns = 3;
-
-  const colSpanClasses: { [key: number]: string } = {
-    2: 'md:col-span-2',
-    3: 'md:col-span-3',
-    6: 'md:col-span-6',
-  };
+  const completedCount = sections.filter((s) => !s.inProgress).length;
 
   return (
-    <div className='flex min-h-screen flex-col items-center gap-8 py-8 md:justify-center lg:justify-center'>
-      <div className='max-w-6xl px-4 text-center'>
-        <h1 className='text-balance font-bold font-sans text-2xl md:text-3xl lg:text-4xl'>
-          Junior Frontend Developer Preparation
-        </h1>
-        <p className='mb-4 text-sm text-zinc-400 leading-relaxed'>
-          (in development, &apos;in progress&apos; parts are not completed)
-        </p>
-      </div>
-      <div className='grid max-w-6xl grid-cols-1 gap-6 px-4 md:grid-cols-6'>
-        {sections.map((section, index) => {
-          const rowNumber = Math.floor(index / columns);
-          const isLastRow =
-            rowNumber === Math.floor((totalItems - 1) / columns);
+    <div className='min-h-screen px-4 py-12 sm:py-20'>
+      <div className='mx-auto max-w-4xl'>
+        {/* Back nav */}
+        <motion.button
+          animate={{ opacity: 1, x: 0 }}
+          className='mb-8 flex items-center gap-2 text-[var(--foreground-muted)] text-sm transition-colors hover:text-[var(--accent)]'
+          initial={{ opacity: 0, x: -10 }}
+          onClick={() => router.push('/')}
+          transition={{ duration: 0.3 }}
+          type='button'
+        >
+          <ArrowLeft size={16} />
+          Back to home
+        </motion.button>
 
-          const itemsOnLastRow = totalItems % columns;
-          const itemsOnThisRow =
-            isLastRow && itemsOnLastRow > 0 ? itemsOnLastRow : columns;
+        {/* Header */}
+        <motion.div
+          animate={{ opacity: 1, y: 0 }}
+          className='mb-10'
+          initial={{ opacity: 0, y: 20 }}
+          transition={{ duration: 0.5 }}
+        >
+          <h1 className='mb-3 font-bold text-3xl sm:text-4xl md:text-5xl'>
+            <span className='text-gradient'>Junior Frontend</span>
+            <br />
+            <span className='text-[var(--foreground)]'>Developer Prep</span>
+          </h1>
+          <div className='flex items-center gap-4'>
+            <p className='text-[var(--foreground-muted)]'>
+              {completedCount} of {sections.length} topics available
+            </p>
+            <div className='h-1.5 w-24 overflow-hidden rounded-full bg-[var(--surface-2)]'>
+              <div
+                className='h-full rounded-full bg-[var(--accent)]'
+                style={{
+                  width: `${(completedCount / sections.length) * 100}%`,
+                }}
+              />
+            </div>
+          </div>
+        </motion.div>
 
-          const colSpan = Math.round(6 / itemsOnThisRow);
-
-          const className = `rounded-lg border border-zinc-800 bg-zinc-900/90 p-6 shadow-sm transition-colors duration-200 hover:border-zinc-600 ${
-            colSpanClasses[colSpan]
-          }`;
-
-          return (
-            <button
-              className={`${className} flex flex-col text-left`}
+        {/* Topic grid */}
+        <motion.div
+          animate='show'
+          className='grid gap-3 sm:grid-cols-2'
+          initial='hidden'
+          variants={container}
+        >
+          {sections.map((section, index) => (
+            <motion.button
+              className={`surface-card-hover group relative flex flex-col p-5 text-left sm:p-6 ${
+                section.inProgress ? 'cursor-default opacity-60' : ''
+              }`}
+              disabled={section.inProgress}
               key={section.title}
-              onClick={() => router.push(section.href)}
+              onClick={() => !section.inProgress && router.push(section.href)}
               type='button'
+              variants={cardVariant}
+              whileHover={section.inProgress ? {} : { scale: 1.01 }}
+              whileTap={section.inProgress ? {} : { scale: 0.99 }}
             >
-              <div className='flex-grow'>
-                <h2 className='mb-3 font-bold text-xl text-zinc-100'>
-                  {section.title}{' '}
-                  {section.inProgress && (
-                    <span className='text-red-400'>(in progress)</span>
-                  )}
-                </h2>
-                <p className='mb-4 text-sm text-zinc-400 leading-relaxed'>
-                  {section.description}
-                </p>
+              {/* Status badge */}
+              <div className='mb-3 flex items-center justify-between'>
+                <span className='font-mono text-[var(--foreground-muted)] text-xs'>
+                  {String(index + 1).padStart(2, '0')}
+                </span>
+                {section.inProgress ? (
+                  <span className='flex items-center gap-1 text-[var(--foreground-muted)] text-xs'>
+                    <Clock size={12} />
+                    Coming soon
+                  </span>
+                ) : (
+                  <span className='flex items-center gap-1 text-[var(--success)] text-xs'>
+                    <CheckCircle2 size={12} />
+                    Available
+                  </span>
+                )}
               </div>
-              <div className='flex items-center font-medium text-sm text-zinc-500'>
-                Learn more →
-              </div>
-            </button>
-          );
-        })}
+
+              <h2 className='mb-2 font-bold text-[var(--foreground)] text-lg'>
+                {section.title}
+              </h2>
+              <p className='mb-4 flex-1 text-[var(--foreground-muted)] text-sm leading-relaxed'>
+                {section.description}
+              </p>
+
+              {!section.inProgress && (
+                <div className='flex items-center gap-1 font-medium text-[var(--accent)] text-sm'>
+                  Start learning
+                  <ArrowRight
+                    className='transition-transform group-hover:translate-x-1'
+                    size={14}
+                  />
+                </div>
+              )}
+            </motion.button>
+          ))}
+        </motion.div>
       </div>
     </div>
   );

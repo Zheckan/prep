@@ -11,50 +11,52 @@ const presetToMaxWidth: Record<WidthPreset, string> = {
   full: '100vw',
 };
 
+const VALID_PRESETS = new Set<string>(Object.keys(presetToMaxWidth));
+const STORAGE_KEY = 'prep:content-width';
+const COOKIE_KEY = 'prep-content-width';
+
+function readPersistedWidth(): WidthPreset | null {
+  if (typeof window === 'undefined') return null;
+  try {
+    const fromStorage = window.localStorage.getItem(STORAGE_KEY);
+    if (fromStorage && VALID_PRESETS.has(fromStorage)) {
+      return fromStorage as WidthPreset;
+    }
+  } catch {
+    /* ignore */
+  }
+  const attr = document.documentElement.dataset.contentWidth;
+  if (attr && VALID_PRESETS.has(attr)) {
+    return attr as WidthPreset;
+  }
+  return null;
+}
+
 export function PageContainer({
   children,
   className = '',
   initialWidth = 'comfortable',
   allowWidthToggle = true,
 }: PageContainerProps) {
-  const storageKey = 'prep:content-width';
-  const [width, setWidth] = useState<WidthPreset>(() => {
-    if (typeof document !== 'undefined') {
-      const attr = document.documentElement.dataset.contentWidth as
-        | WidthPreset
-        | undefined;
-      if (attr && attr in presetToMaxWidth) {
-        return attr;
-      }
-    }
-    return initialWidth;
-  });
+  const [width, setWidth] = useState<WidthPreset>(initialWidth);
+  const [hydrated, setHydrated] = useState(false);
 
-  const [headerHeight, setHeaderHeight] = useState<number>(120);
-
+  // Sync with persisted value once on mount (intentionally ignoring width to avoid re-running)
   useEffect(() => {
-    if (typeof window === 'undefined') {
-      return;
+    const persisted = readPersistedWidth();
+    if (persisted) {
+      setWidth(persisted);
+      document.documentElement.dataset.contentWidth = persisted;
     }
-    const header = document.getElementById('page-header');
-    if (!header) {
-      return;
-    }
-
-    const update = () => setHeaderHeight(header.getBoundingClientRect().height);
-    update();
-    const observer = new ResizeObserver(update);
-    observer.observe(header);
-    return () => {
-      observer.disconnect();
-    };
+    setHydrated(true);
+    // biome-ignore lint/correctness/useExhaustiveDependencies: mount-only effect
   }, []);
 
   const applyWidthPreference = (next: WidthPreset) => {
     setWidth(next);
     try {
       if (typeof window !== 'undefined') {
-        window.localStorage.setItem(storageKey, next);
+        window.localStorage.setItem(STORAGE_KEY, next);
       }
       document.documentElement.dataset.contentWidth = next;
       if ('cookieStore' in globalThis) {
@@ -72,18 +74,18 @@ export function PageContainer({
         if (cookieStore) {
           cookieStore
             .set({
-              name: 'prep-content-width',
+              name: COOKIE_KEY,
               value: next,
               path: '/',
               expires,
             })
             .catch(() => {
-              /* ignore Cookie Store failures */
+              /* Cookie Store write failure is non-critical */
             });
         }
       }
     } catch {
-      /* ignore SSR/storage write errors */
+      /* ignore */
     }
   };
 
@@ -97,14 +99,12 @@ export function PageContainer({
 
   return (
     <div className='w-full'>
-      {allowWidthToggle && (
+      {allowWidthToggle && hydrated && (
         <WidthSwitcher
           currentWidth={width}
-          headerHeightFallback={headerHeight}
           onChangeWidth={applyWidthPreference}
         />
       )}
-
       <div className={containerClasses}>{children}</div>
     </div>
   );

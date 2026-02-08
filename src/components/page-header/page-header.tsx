@@ -11,11 +11,6 @@ export const PageHeader = ({
   title,
   topicHome,
 }: PageHeaderProps) => {
-  type MediaQueryListWithLegacy = MediaQueryList & {
-    addListener: (listener: (e: MediaQueryListEvent) => void) => void;
-    removeListener: (listener: (e: MediaQueryListEvent) => void) => void;
-  };
-
   const router = useRouter();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isInitialLoad, setIsInitialLoad] = useState(true);
@@ -28,7 +23,6 @@ export const PageHeader = ({
   const isHiddenOnMobileRef = useRef(false);
   const lastCssHeaderHeight = useRef<string | null>(null);
 
-  // Threshold constants for mobile hysteresis
   const JITTER_PX = 5;
   const HIDE_THRESHOLD_PX = 24;
   const SHOW_THRESHOLD_PX = 64;
@@ -84,13 +78,11 @@ export const PageHeader = ({
         resetNonMobileState();
         return;
       }
-
       const absDelta = Math.abs(delta);
       if (absDelta <= JITTER_PX) {
         maybeResetAtTop(currentScrollY);
         return;
       }
-
       if (delta > 0) {
         accumulateDown(delta);
         maybeHideOnMobile(currentScrollY);
@@ -98,7 +90,6 @@ export const PageHeader = ({
         accumulateUp(delta);
         maybeShowOnMobile();
       }
-
       maybeResetAtTop(currentScrollY);
     },
     [
@@ -111,7 +102,6 @@ export const PageHeader = ({
     ]
   );
 
-  // Track mobile breakpoint to enable full hide behavior on small screens
   useEffect(() => {
     if (typeof window === 'undefined') return;
     const mq: MediaQueryList = window.matchMedia('(max-width: 639px)');
@@ -120,22 +110,12 @@ export const PageHeader = ({
       setIsMobileScreen(mq.matches);
     };
     setMobileFlag();
-    const hasModernListener = typeof mq.addEventListener === 'function';
-    if (hasModernListener) {
-      mq.addEventListener('change', setMobileFlag);
-    } else {
-      (mq as MediaQueryListWithLegacy).addListener(setMobileFlag);
-    }
+    mq.addEventListener('change', setMobileFlag);
     return () => {
-      if (hasModernListener) {
-        mq.removeEventListener('change', setMobileFlag);
-      } else {
-        (mq as MediaQueryListWithLegacy).removeListener(setMobileFlag);
-      }
+      mq.removeEventListener('change', setMobileFlag);
     };
   }, []);
 
-  // Scroll listener with rAF batching
   useEffect(() => {
     if (typeof window === 'undefined') return;
     let rafId: number | null = null;
@@ -145,7 +125,6 @@ export const PageHeader = ({
         rafId = null;
         const currentScrollY = Math.max(0, window.scrollY);
         const delta = currentScrollY - lastScrollY.current;
-        // Avoid toggling collapse state on mobile to reduce flicker; rely on full-hide
         if (!isMobile.current) {
           setIsScrolled(currentScrollY > 20 && delta > 0);
         }
@@ -153,7 +132,6 @@ export const PageHeader = ({
         lastScrollY.current = currentScrollY;
       });
     };
-
     setIsInitialLoad(false);
     onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
@@ -163,18 +141,14 @@ export const PageHeader = ({
     };
   }, [handleMobileScroll]);
 
-  // Expose current header height as a CSS variable for other components
   useEffect(() => {
-    if (typeof document === 'undefined') {
-      return;
-    }
+    if (typeof document === 'undefined') return;
     const expandedHeight = '128px';
     const collapsedHeight = '72px';
     let current: string;
     if (isHiddenOnMobile) {
       current = '0px';
     } else if (isMobileScreen) {
-      // On mobile, when visible, keep the header at full height for clear tap targets
       current = expandedHeight;
     } else if (isInitialLoad || !isScrolled) {
       current = expandedHeight;
@@ -206,7 +180,6 @@ export const PageHeader = ({
       style={{
         willChange: 'height',
         overflow: 'hidden',
-        // Remove bottom border when fully hidden on mobile to avoid a 1px line
         borderBottomWidth: isHiddenOnMobile ? 0 : 1,
         transform: 'translateZ(0)',
         backfaceVisibility: 'hidden',
@@ -217,11 +190,11 @@ export const PageHeader = ({
         ease: 'easeOut',
       }}
     >
-      <div className='mx-auto h-full max-w-4xl px-6'>
+      <div className='mx-auto h-full max-w-5xl px-6'>
         <div className='flex h-full items-center justify-between'>
           <div className='flex-1 overflow-hidden'>
             <motion.h1
-              className='font-bold text-2xl text-white sm:text-3xl md:text-4xl'
+              className='font-bold text-2xl text-gradient sm:text-3xl md:text-4xl'
               layout={!isMobileScreen}
               transition={{ duration: 0.25, ease: 'easeInOut' }}
             >
@@ -230,7 +203,7 @@ export const PageHeader = ({
             <AnimatePresence>
               {(isInitialLoad || !isScrolled) && (
                 <motion.p
-                  className='text-sm text-zinc-300 sm:text-base'
+                  className='text-[var(--foreground-muted)] text-sm sm:text-base'
                   exit={{ opacity: 0, height: 0 }}
                   initial={{ opacity: 1, height: 'auto' }}
                   layout={!isMobileScreen}
@@ -241,24 +214,24 @@ export const PageHeader = ({
               )}
             </AnimatePresence>
           </div>
-          <div className='flex items-center gap-4'>
+          <div className='flex items-center gap-3'>
             {topicHome && (
               <button
                 aria-label='Go to topic home'
-                className='rounded-md p-1 text-white transition-colors hover:text-yellow-500'
+                className='rounded-lg p-2 text-[var(--foreground-muted)] transition-colors hover:bg-[var(--surface-2)] hover:text-[var(--accent)]'
                 onClick={() => router.push(topicHome)}
                 type='button'
               >
-                <BookOpenCheck size={24} />
+                <BookOpenCheck size={20} />
               </button>
             )}
             <button
               aria-label='Go to home page'
-              className='rounded-md p-1 text-white transition-colors hover:text-yellow-500'
+              className='rounded-lg p-2 text-[var(--foreground-muted)] transition-colors hover:bg-[var(--surface-2)] hover:text-[var(--accent)]'
               onClick={() => router.push('/')}
               type='button'
             >
-              <House size={24} />
+              <House size={20} />
             </button>
           </div>
         </div>

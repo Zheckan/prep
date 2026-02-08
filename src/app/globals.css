@@ -1,29 +1,49 @@
 @import "tailwindcss";
 
 :root {
-  /* Default to dark theme */
-  --background: #0a0a0a;
-  --foreground: #ededed;
-  --accent: #eab308; /* yellow-500 */
-  --muted: #a1a1aa; /* zinc-400 */
-  --muted-foreground: #d4d4d8; /* zinc-300 */
-  --border: rgba(255, 255, 255, 0.08);
-  --glass-bg: rgba(0, 0, 0, 0.1);
-  --glass-strong-bg: rgba(0, 0, 0, 0.22);
+  /* ── Core palette ── */
+  --background: #09090b;
+  --background-secondary: #0f0f14;
+  --foreground: #f4f4f5;
+  --foreground-muted: #a1a1aa;
+
+  /* ── Accent: indigo → violet gradient endpoints ── */
+  --accent: #818cf8; /* indigo-400 */
+  --accent-strong: #6366f1; /* indigo-500 */
+  --accent-glow: rgba(99, 102, 241, 0.25);
+
+  /* ── Secondary accent: emerald (success, highlights) ── */
+  --success: #34d399;
+  --success-bg: rgba(52, 211, 153, 0.12);
+
+  /* ── Surface layers ── */
+  --surface-0: rgba(255, 255, 255, 0.02);
+  --surface-1: rgba(255, 255, 255, 0.04);
+  --surface-2: rgba(255, 255, 255, 0.06);
+  --surface-3: rgba(255, 255, 255, 0.09);
+
+  /* ── Borders ── */
+  --border: rgba(255, 255, 255, 0.06);
+  --border-strong: rgba(255, 255, 255, 0.12);
+  --border-accent: rgba(129, 140, 248, 0.3);
+
+  /* ── Glass ── */
+  --glass-bg: rgba(15, 15, 22, 0.6);
+  --glass-strong-bg: rgba(15, 15, 22, 0.8);
+
+  /* ── Misc ── */
   --ring: var(--accent);
-  /* Current page header height (controlled by PageHeader) */
   --page-header-height: 128px;
-  /* Offset built-in anchor navigation and scrollIntoView to account for sticky header */
   scroll-padding-top: var(--page-header-height, 128px);
 
-  /* Ambient background hues */
-  --ambient-1: 255 90 31; /* warm orange */
-  --ambient-2: 234 179 8; /* yellow-500 */
-  --ambient-3: 168 85 247; /* purple */
-  --ambient-4: 14 165 233; /* cyan */
+  /* ── Ambient mesh gradient hues ── */
+  --mesh-1: #4f46e5; /* indigo-600 */
+  --mesh-2: #7c3aed; /* violet-600 */
+  --mesh-3: #06b6d4; /* cyan-500 */
+  --mesh-4: #8b5cf6; /* violet-500 */
 }
 
-/* Smooth scrolling for anchor navigation; respect reduced motion */
+/* ── Smooth scroll ── */
 html {
   scroll-behavior: smooth;
 }
@@ -33,13 +53,14 @@ html {
   }
 }
 
-/* Ensure headings with anchors don't hide under the sticky header */
+/* ── Heading anchor offset ── */
 h2[id],
 h3[id],
 h4[id] {
-  scroll-margin-top: calc(var(--page-header-height, 128px) + 16px);
+  scroll-margin-top: calc(var(--page-header-height, 128px) + 24px);
 }
 
+/* ── Tailwind v4 theme ── */
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -47,19 +68,33 @@ h4[id] {
   --font-mono: var(--font-geist-mono);
 }
 
-/* Respect system light preference while favoring dark by default */
+/* ── Light mode ── */
 @media (prefers-color-scheme: light) {
   :root {
-    --background: #ffffff;
-    --foreground: #171717;
-    --muted: #52525b; /* zinc-600 */
-    --muted-foreground: #3f3f46; /* zinc-700 */
-    --border: rgba(0, 0, 0, 0.08);
-    --glass-bg: rgba(255, 255, 255, 0.5);
-    --glass-strong-bg: rgba(255, 255, 255, 0.6);
+    --background: #fafafa;
+    --background-secondary: #f4f4f5;
+    --foreground: #18181b;
+    --foreground-muted: #71717a;
+    --accent: #6366f1;
+    --accent-strong: #4f46e5;
+    --accent-glow: rgba(99, 102, 241, 0.15);
+    --surface-0: rgba(0, 0, 0, 0.01);
+    --surface-1: rgba(0, 0, 0, 0.03);
+    --surface-2: rgba(0, 0, 0, 0.05);
+    --surface-3: rgba(0, 0, 0, 0.08);
+    --border: rgba(0, 0, 0, 0.06);
+    --border-strong: rgba(0, 0, 0, 0.12);
+    --border-accent: rgba(99, 102, 241, 0.25);
+    --glass-bg: rgba(255, 255, 255, 0.7);
+    --glass-strong-bg: rgba(255, 255, 255, 0.85);
+    --mesh-1: #c7d2fe;
+    --mesh-2: #ddd6fe;
+    --mesh-3: #a5f3fc;
+    --mesh-4: #c4b5fd;
   }
 }
 
+/* ── Body ── */
 body {
   background: var(--background);
   color: var(--foreground);
@@ -76,26 +111,7 @@ body {
     "Segoe UI Emoji";
 }
 
-/* Image + gradient background is rendered via AmbientBackground component */
-
-/* subtle vignette to highlight glass layers */
-body::after {
-  content: "";
-  position: fixed;
-  inset: 0;
-  z-index: -1;
-  background:
-    radial-gradient(
-      60% 60% at 50% 0%,
-      rgba(255, 255, 255, 0.03),
-      transparent 70%
-    ),
-    radial-gradient(80% 50% at 50% 100%, rgba(0, 0, 0, 0.25), transparent 70%);
-  pointer-events: none;
-  transition: filter 0.28s ease-in-out;
-}
-
-/* Accessible focus styles */
+/* ── Focus styles ── */
 button:focus-visible,
 a:focus-visible,
 [role="button"]:focus-visible {
@@ -103,28 +119,50 @@ a:focus-visible,
   outline-offset: 2px;
 }
 
-/* Glass utility classes */
+/* ── Glass utilities ── */
 .glass {
   background: var(--glass-bg);
   border: 1px solid var(--border);
-  backdrop-filter: blur(12px) saturate(140%);
+  backdrop-filter: blur(16px) saturate(150%);
+  -webkit-backdrop-filter: blur(16px) saturate(150%);
 }
 
 .glass-strong {
   background: var(--glass-strong-bg);
-  border-bottom: 1px solid var(--border);
-  backdrop-filter: blur(14px) saturate(160%);
+  border-bottom: 1px solid var(--border-strong);
+  backdrop-filter: blur(20px) saturate(170%);
+  -webkit-backdrop-filter: blur(20px) saturate(170%);
 }
 
-/* Mobile: allow full viewport width */
+/* ── Surface cards ── */
+.surface-card {
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+
+.surface-card-hover {
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  transition: all 0.2s ease;
+}
+
+.surface-card-hover:hover {
+  background: var(--surface-2);
+  border-color: var(--border-accent);
+  box-shadow:
+    0 0 0 1px var(--accent-glow),
+    0 8px 32px -8px rgba(99, 102, 241, 0.12);
+}
+
+/* ── Width presets (desktop only) ── */
 @media (max-width: 640px) {
   .content-container {
     max-width: 100vw;
   }
 }
 
-/* SSR-safe initial width via data attribute (desktop only to avoid descending specificity with mobile override) */
-/* Runtime inline style from PageContainer drives width; these are fallback for SSR/first paint */
 @media (min-width: 641px) {
   html[data-content-width="narrow"] .content-container {
     max-width: 50vw;
@@ -140,7 +178,7 @@ a:focus-visible,
   }
 }
 
-/* Hide scrollbars */
+/* ── Scrollbar hide ── */
 .scrollbar-hide {
   -ms-overflow-style: none;
   scrollbar-width: none;
@@ -148,4 +186,24 @@ a:focus-visible,
 
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
+}
+
+/* ── Gradient text utility ── */
+.text-gradient {
+  background: linear-gradient(
+    135deg,
+    var(--accent) 0%,
+    #a78bfa 50%,
+    #c084fc 100%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ── Glow effect ── */
+.glow-accent {
+  box-shadow:
+    0 0 20px var(--accent-glow),
+    0 0 60px rgba(99, 102, 241, 0.08);
 }

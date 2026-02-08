@@ -18,7 +18,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: 'Prep',
-  description: 'Prep for interviews and practice',
+  description: 'Interview preparation platform for developers',
 };
 
 export default async function RootLayout({
