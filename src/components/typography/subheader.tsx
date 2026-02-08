@@ -7,7 +7,7 @@ export const Subheader = ({ children, className = '', id }: SubheaderProps) => {
 
   return (
     <h4
-      className={`mb-2 font-extrabold text-lg text-zinc-100 uppercase tracking-wide ${className}`}
+      className={`mb-2 font-bold text-[var(--foreground)] text-base uppercase tracking-wider ${className}`}
       id={headerId}
     >
       {children}

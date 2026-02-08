@@ -11,6 +11,8 @@ const presetToMaxWidth: Record<WidthPreset, string> = {
   full: '100vw',
 };
 
+const validPresets = new Set<string>(Object.keys(presetToMaxWidth));
+
 export function PageContainer({
   children,
   className = '',
@@ -18,19 +20,25 @@ export function PageContainer({
   allowWidthToggle = true,
 }: PageContainerProps) {
   const storageKey = 'prep:content-width';
-  const [width, setWidth] = useState<WidthPreset>(() => {
-    if (typeof document !== 'undefined') {
-      const attr = document.documentElement.dataset.contentWidth as
-        | WidthPreset
-        | undefined;
-      if (attr && attr in presetToMaxWidth) {
-        return attr;
-      }
-    }
-    return initialWidth;
-  });
+  const [width, setWidth] = useState<WidthPreset>(initialWidth);
 
   const [headerHeight, setHeaderHeight] = useState<number>(120);
+
+  // Sync width state from localStorage/data-attribute after hydration
+  useEffect(() => {
+    // First check localStorage (most reliable client-side)
+    const stored = localStorage.getItem(storageKey);
+    if (stored && validPresets.has(stored)) {
+      setWidth(stored as WidthPreset);
+      document.documentElement.dataset.contentWidth = stored;
+      return;
+    }
+    // Fallback to data attribute set by boot script or SSR cookie
+    const attr = document.documentElement.dataset.contentWidth;
+    if (attr && validPresets.has(attr)) {
+      setWidth(attr as WidthPreset);
+    }
+  }, []);
 
   useEffect(() => {
     if (typeof window === 'undefined') {

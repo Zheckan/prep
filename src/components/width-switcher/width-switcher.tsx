@@ -1,5 +1,6 @@
 'use client';
 
+import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import type { WidthPreset } from '@/types';
 
@@ -9,12 +10,13 @@ type WidthSwitcherProps = {
   headerHeightFallback?: number;
 };
 
+const presets: WidthPreset[] = ['narrow', 'comfortable', 'wide', 'full'];
+
 export function WidthSwitcher({
   currentWidth,
   onChangeWidth,
   headerHeightFallback = 120,
 }: WidthSwitcherProps) {
-  // Track live header height via ResizeObserver as a fallback when the CSS var is not yet set
   const [headerHeight, setHeaderHeight] =
     useState<number>(headerHeightFallback);
 
@@ -38,24 +40,37 @@ export function WidthSwitcher({
         transform: 'translateY(50%)',
       }}
     >
-      <div className='glass inline-flex items-center gap-1 rounded-full p-1 text-sm text-white'>
-        {(['narrow', 'comfortable', 'wide', 'full'] as WidthPreset[]).map(
-          (preset) => (
+      <div className='glass relative inline-flex items-center gap-0.5 rounded-full p-1 text-xs'>
+        {presets.map((preset) => {
+          const isActive = currentWidth === preset;
+          return (
             <button
-              aria-pressed={currentWidth === preset}
-              className={`rounded-full px-3 py-1 capitalize transition-colors ${
-                currentWidth === preset
-                  ? 'bg-yellow-500 text-black'
-                  : 'text-zinc-200 hover:text-yellow-500'
+              aria-pressed={isActive}
+              className={`relative z-10 rounded-full px-3 py-1.5 capitalize transition-colors duration-200 ${
+                isActive
+                  ? 'text-[#0b0f1a]'
+                  : 'text-[var(--muted)] hover:text-[var(--foreground)]'
               }`}
               key={preset}
               onClick={() => onChangeWidth(preset)}
               type='button'
             >
+              {isActive && (
+                <motion.div
+                  className='absolute inset-0 rounded-full bg-[var(--accent)]'
+                  layoutId='width-indicator'
+                  style={{ zIndex: -1 }}
+                  transition={{
+                    type: 'spring',
+                    stiffness: 400,
+                    damping: 30,
+                  }}
+                />
+              )}
               {preset}
             </button>
-          )
-        )}
+          );
+        })}
       </div>
     </div>
   );

@@ -1,26 +1,32 @@
 @import "tailwindcss";
 
 :root {
-  /* Default to dark theme */
-  --background: #0a0a0a;
-  --foreground: #ededed;
-  --accent: #eab308; /* yellow-500 */
-  --muted: #a1a1aa; /* zinc-400 */
-  --muted-foreground: #d4d4d8; /* zinc-300 */
-  --border: rgba(255, 255, 255, 0.08);
-  --glass-bg: rgba(0, 0, 0, 0.1);
-  --glass-strong-bg: rgba(0, 0, 0, 0.22);
+  /* ─── Design System: Deep Navy + Emerald/Cyan Accent ─── */
+  --background: #0b0f1a;
+  --background-secondary: #111827;
+  --foreground: #e8edf5;
+  --accent: #34d399; /* emerald-400 */
+  --accent-secondary: #06b6d4; /* cyan-500 */
+  --accent-gradient: linear-gradient(135deg, #06b6d4, #34d399);
+  --muted: #94a3b8; /* slate-400 */
+  --muted-foreground: #cbd5e1; /* slate-300 */
+  --border: rgba(148, 163, 184, 0.1);
+  --border-strong: rgba(148, 163, 184, 0.2);
+  --glass-bg: rgba(15, 23, 42, 0.6);
+  --glass-strong-bg: rgba(15, 23, 42, 0.85);
+  --card-bg: rgba(15, 23, 42, 0.5);
   --ring: var(--accent);
+
   /* Current page header height (controlled by PageHeader) */
   --page-header-height: 128px;
-  /* Offset built-in anchor navigation and scrollIntoView to account for sticky header */
+  /* Offset anchor navigation for sticky header */
   scroll-padding-top: var(--page-header-height, 128px);
 
-  /* Ambient background hues */
-  --ambient-1: 255 90 31; /* warm orange */
-  --ambient-2: 234 179 8; /* yellow-500 */
-  --ambient-3: 168 85 247; /* purple */
-  --ambient-4: 14 165 233; /* cyan */
+  /* Ambient background hues - deep blues and teals */
+  --ambient-1: 6 182 212; /* cyan-500 */
+  --ambient-2: 52 211 153; /* emerald-400 */
+  --ambient-3: 99 102 241; /* indigo-500 */
+  --ambient-4: 139 92 246; /* violet-500 */
 }
 
 /* Smooth scrolling for anchor navigation; respect reduced motion */
@@ -37,12 +43,17 @@ html {
 h2[id],
 h3[id],
 h4[id] {
-  scroll-margin-top: calc(var(--page-header-height, 128px) + 16px);
+  scroll-margin-top: calc(var(--page-header-height, 128px) + 24px);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-accent: var(--accent);
+  --color-accent-secondary: var(--accent-secondary);
+  --color-muted: var(--muted);
+  --color-border: var(--border);
+  --color-card-bg: var(--card-bg);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
@@ -50,13 +61,16 @@ h4[id] {
 /* Respect system light preference while favoring dark by default */
 @media (prefers-color-scheme: light) {
   :root {
-    --background: #ffffff;
-    --foreground: #171717;
-    --muted: #52525b; /* zinc-600 */
-    --muted-foreground: #3f3f46; /* zinc-700 */
-    --border: rgba(0, 0, 0, 0.08);
-    --glass-bg: rgba(255, 255, 255, 0.5);
-    --glass-strong-bg: rgba(255, 255, 255, 0.6);
+    --background: #f8fafc;
+    --background-secondary: #f1f5f9;
+    --foreground: #0f172a;
+    --muted: #64748b;
+    --muted-foreground: #475569;
+    --border: rgba(15, 23, 42, 0.08);
+    --border-strong: rgba(15, 23, 42, 0.15);
+    --glass-bg: rgba(248, 250, 252, 0.7);
+    --glass-strong-bg: rgba(248, 250, 252, 0.9);
+    --card-bg: rgba(241, 245, 249, 0.7);
   }
 }
 
@@ -76,9 +90,7 @@ body {
     "Segoe UI Emoji";
 }
 
-/* Image + gradient background is rendered via AmbientBackground component */
-
-/* subtle vignette to highlight glass layers */
+/* Subtle vignette overlay */
 body::after {
   content: "";
   position: fixed;
@@ -86,11 +98,15 @@ body::after {
   z-index: -1;
   background:
     radial-gradient(
-      60% 60% at 50% 0%,
-      rgba(255, 255, 255, 0.03),
-      transparent 70%
+      ellipse 80% 50% at 50% 0%,
+      rgba(6, 182, 212, 0.03),
+      transparent 60%
     ),
-    radial-gradient(80% 50% at 50% 100%, rgba(0, 0, 0, 0.25), transparent 70%);
+    radial-gradient(
+      ellipse 60% 40% at 50% 100%,
+      rgba(0, 0, 0, 0.3),
+      transparent 70%
+    );
   pointer-events: none;
   transition: filter 0.28s ease-in-out;
 }
@@ -107,13 +123,40 @@ a:focus-visible,
 .glass {
   background: var(--glass-bg);
   border: 1px solid var(--border);
-  backdrop-filter: blur(12px) saturate(140%);
+  backdrop-filter: blur(16px) saturate(150%);
+  -webkit-backdrop-filter: blur(16px) saturate(150%);
 }
 
 .glass-strong {
   background: var(--glass-strong-bg);
   border-bottom: 1px solid var(--border);
-  backdrop-filter: blur(14px) saturate(160%);
+  backdrop-filter: blur(20px) saturate(170%);
+  -webkit-backdrop-filter: blur(20px) saturate(170%);
+}
+
+/* Card glass variant */
+.glass-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  backdrop-filter: blur(12px) saturate(130%);
+  -webkit-backdrop-filter: blur(12px) saturate(130%);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.glass-card:hover {
+  border-color: var(--border-strong);
+  background: rgba(15, 23, 42, 0.65);
+  box-shadow:
+    0 8px 32px rgba(6, 182, 212, 0.08),
+    0 0 0 1px var(--border-strong);
+}
+
+/* Accent gradient text utility */
+.text-gradient {
+  background: var(--accent-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 /* Mobile: allow full viewport width */
@@ -123,8 +166,7 @@ a:focus-visible,
   }
 }
 
-/* SSR-safe initial width via data attribute (desktop only to avoid descending specificity with mobile override) */
-/* Runtime inline style from PageContainer drives width; these are fallback for SSR/first paint */
+/* SSR-safe initial width via data attribute (desktop only) */
 @media (min-width: 641px) {
   html[data-content-width="narrow"] .content-container {
     max-width: 50vw;
@@ -148,4 +190,27 @@ a:focus-visible,
 
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
+}
+
+/* Thin styled scrollbar for TOC */
+.scrollbar-thin {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(148, 163, 184, 0.2) transparent;
+}
+
+.scrollbar-thin::-webkit-scrollbar {
+  width: 4px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.2);
+  border-radius: 2px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb:hover {
+  background: rgba(148, 163, 184, 0.4);
 }
