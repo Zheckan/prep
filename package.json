@@ -7,9 +7,9 @@
     "dev": "bun next dev --turbopack",
     "build": "bun next build",
     "start": "bun next start",
-    "lint": "bun x ultracite@latest lint",
-    "format": "bun x ultracite@latest format",
-    "format:check": "bun x ultracite@latest format .",
+    "lint": "bun x ultracite@5.0.31 lint",
+    "format": "bun x ultracite@5.0.31 format",
+    "format:check": "bun x ultracite@5.0.31 format .",
     "prepare": "husky",
     "test": "bun jest"
   },
