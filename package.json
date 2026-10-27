@@ -19,7 +19,7 @@
     "dedent": "^1.6.0",
     "framer-motion": "^12.23.0",
     "lucide-react": "^0.523.0",
-    "next": "16.3.8",
+    "next": "16.4.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-syntax-highlighter": "^15.6.1"
@@ -46,7 +46,7 @@
   "overrides": {
     "@babel/core": "7.29.6",
     "@tootallnate/once": "2.0.1",
-    "@vitest/mocker": "4.1.11",
+    "@vitest/mocker": "4.1.12",
     "baseline-browser-mapping": "2.11.0",
     "brace-expansion": "1.1.21",
     "browserslist": "4.28.7",
@@ -62,7 +62,7 @@
     "prismjs": "1.30.0",
     "rollup": "4.59.0",
     "sharp": "0.35.5",
-    "vite": "7.3.5",
+    "vite": "7.3.7",
     "vitest": "4.1.11",
     "ws": "8.21.0"
   }
